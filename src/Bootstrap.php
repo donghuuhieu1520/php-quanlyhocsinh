@@ -25,9 +25,9 @@ $injector = include('Dependencies.php');
 
 $request = $injector->make('Http\HttpRequest');
 $response = $injector->make('Http\HttpResponse');
+$routes = include('Routes.php');
 
 $routeDefinitionCallback = function (\FastRoute\RouteCollector $r) {
-  $routes = include('Routes.php');
   foreach ($routes as $route) {
     $r->addRoute($route[0], $route[1], $route[2]);
   }
