@@ -4,15 +4,15 @@ namespace App\Controllers;
 
 use Http\Request;
 use Http\Response;
-use App\Template\Renderer;
+use App\Template\FrontendRenderer;
 
 class Homepage
 {
     private $request;
     private $response;
     private $renderer;
-
-    public function __construct(Request $request, Response $response, Renderer $renderer)
+  
+    public function __construct(Request $request, Response $response, FrontendRenderer $renderer)
     {
       $this->request = $request;
       $this->response = $response;
@@ -23,9 +23,10 @@ class Homepage
     {
       $data = [
         'name' => $this->request->getParameter('name', 'stranger'),
+        'menuItems' => [['href' => '/', 'text' => 'Homepage']],
       ];
 
-      $html = $this->renderer->render('Homepage', $data);
+      $html = $this->renderer->render("Homepage", $data);
       $this->response->setContent($html);
     }
 }

@@ -14,7 +14,16 @@ $injector->define('Http\HttpRequest', [
   
 $injector->alias('Http\Response', 'Http\HttpResponse');
 $injector->share('Http\HttpResponse');
-$injector->alias('App\Template\Renderer', 'App\Template\MustacheRenderer');
+
+
+$injector->delegate('\Twig\Environment', function () use ($injector) {
+  $loader = new Twig_Loader_Filesystem(dirname(__DIR__) . '/templates');
+  $twig = new Twig_Environment($loader);
+  return $twig;
+});
+
+$injector->alias('App\Template\Renderer', 'App\Template\TwigRenderer');
+$injector->alias('App\Template\FrontendRenderer', 'App\Template\FrontendTwigRenderer');
 
 $injector->define('Mustache_Engine', [
   ':options' => [
@@ -24,5 +33,11 @@ $injector->define('Mustache_Engine', [
   ],
 ]);
 
+$injector->define('App\Page\FilePageReader', [
+  ':pageFolder' => __DIR__ . '/../pages',
+]);
+
+$injector->alias('App\Page\PageReader', 'App\Page\FilePageReader');
+$injector->share('App\Page\FilePageReader');
   
 return $injector;
