@@ -22,8 +22,17 @@ $injector->delegate('\Twig\Environment', function () use ($injector) {
   return $twig;
 });
 
-$injector->alias('App\Template\Renderer', 'App\Template\TwigRenderer');
-$injector->alias('App\Template\FrontendRenderer', 'App\Template\FrontendTwigRenderer');
+$injector->delegate('\Doctrine\ORM\EntityManager', function () use ($injector) {
+  $configuration = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/Entities'], true, null, null, false);
+  $connection_parameters = include('Config/connection.php');
+  $em = \Doctrine\ORM\EntityManager::create($connection_parameters['mysql'], $configuration);
+  return $em;
+});
+
+$injector->share('\Doctrine\ORM\EntityManager');
+
+$injector->alias('App\Template\IRenderer', 'App\Template\TwigRenderer');
+$injector->alias('App\Template\IAdminRenderer', 'App\Template\AdminTwigRenderer');
 
 $injector->define('Mustache_Engine', [
   ':options' => [
@@ -32,12 +41,5 @@ $injector->define('Mustache_Engine', [
     ]),
   ],
 ]);
-
-$injector->define('App\Page\FilePageReader', [
-  ':pageFolder' => __DIR__ . '/../pages',
-]);
-
-$injector->alias('App\Page\PageReader', 'App\Page\FilePageReader');
-$injector->share('App\Page\FilePageReader');
   
 return $injector;

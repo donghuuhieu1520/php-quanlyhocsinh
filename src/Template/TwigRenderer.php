@@ -4,7 +4,7 @@ namespace App\Template;
 
 use \Twig\Environment;
 
-class TwigRenderer implements Renderer
+class TwigRenderer implements IRenderer
 {
   private $renderer;
 

@@ -4,7 +4,7 @@ namespace App\Template;
 
 use Mustache_Engine;
 
-class MustacheRenderer implements Renderer
+class MustacheRenderer implements IRenderer
 {
     private $engine;
 

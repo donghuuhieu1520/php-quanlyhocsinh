@@ -27,7 +27,7 @@ $request = $injector->make('Http\HttpRequest');
 $response = $injector->make('Http\HttpResponse');
 $routes = include('Routes.php');
 
-$routeDefinitionCallback = function (\FastRoute\RouteCollector $r) {
+$routeDefinitionCallback = function (\FastRoute\RouteCollector $r) use ($routes) {
   foreach ($routes as $route) {
     $r->addRoute($route[0], $route[1], $route[2]);
   }
@@ -61,3 +61,4 @@ foreach ($response->getHeaders() as $header) {
 }
 
 echo $response->getContent();
+
