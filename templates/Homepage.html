@@ -1,5 +1,225 @@
-{% extends "Layout.html" %}
-{% block content %}
-    <h1>Hello World</h1>
-    Hello {{ name }}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <link href="http://thpt-pdien.thuathienhue.edu.vn/imgs/Logo_Banner/c-fakepathfavicon.ico.ico" rel="shortcut icon" type="image/x-icon" /> 
+  <title>Đăng nhập hệ thống</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/sweetalert2@7.2.0/dist/sweetalert2.all.js"></script>
+  <link href="/css/snackbar/snackbar.css" rel="stylesheet">
+  <link href="/css/snackbar/material.css" rel="stylesheet">
+  <link href="/css/jquery.autocomplete.css" rel="stylesheet">  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/homepage.css">
+</head>
+<body>
+<nav class="navbar navbar-inverse" style="border-radius: 0px;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://thpt-pdien.thuathienhue.edu.vn"><i class="glyphicon glyphicon-home"></i>THPT Phong Điền</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav" id="nav-left">
+        <li class="active" id="li-dangnhaphethong" ><a href="/"> <i class="fa fa-sign-in"></i> Đăng nhập hệ thống<span class="sr-only">(current)</span></a></li>
+        <li><a href="#"><i class="fa fa-newspaper-o"></i> Giới thiệu</a></li>
+        <li id="li-dangnhapquantri"><a href="login"><i class="fa fa-user-secret"></i> Đăng nhập quản trị</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" id="nav-login-btn">
+        <button class="btn btn-success navbar-btn" id="btn-login">
+          <span class="fa-stack fa-xs">
+            <i class="fa fa-circle fa-stack-2x i-background" style="color:#fff " ></i>
+            <i class="fa fa-sign-in fa-stack-1x i-content" style="color: #5cb85c" ></i>
+          </span> Đăng nhập
+        </button>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div class="container" style="height: 600px;">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="profile-userpic">
+        <img src="http://thpt-pdien.thuathienhue.edu.vn/imgs/Logo_Banner/c-fakepathlogo.png.png">
+        <p id="p-greeting" data-text-show="1" style="font-weight: bold;"><i class="fa fa-quote-left"></i> TRANG THEO DÕI NỀ NẾP TRƯỜNG THPT PHONG ĐIỀN <i class="fa fa-quote-right"></i></p>  
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="col-sm-12 col-lg-8 col-md-12" id="box-login">
+        <div class="row" style="padding-top: 50px; ">
+          <div class="col-lg-12 col-sm-12 col-md-12">
+            <div class="form-group col-lg-9 col-sm-9 col-md-9" id="input">
+              <input type="text" class="form-control inputhocsinh" placeholder="Họ và tên học sinh" maxlength="255" name="ID" id="ID">
+            </div> 
+            <div class="form-group col-lg-3 col-sm-3 col-md-3">
+              <button class="btn btn-default" id="btn-tracuu"><i class="fa fa-search"></i> Tra cứu</button>
+            </div>
+          </div>
+        </div>
+        <br>
+      </div>
+      <br>
+      <br>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <div class="row" >
+      <div class="col-lg-12 col-sm-12 col-xs-12  col-md-12">
+        <div class="col-lg-4 col-sm-6 col-xs-6 col-md-6">
+          <p style="color:#89898b; padding-top: 20px;"><i class="fa fa-map-marker"></i> 22,   Văn Lang, thị trấn Phong Điền, Phong Điền, Thừa Thiên Huế</p>
+          <p style="color:#89898b"><i class="fa fa-phone"></i> 01234567891</p>
+          <p style="color:#89898b"><i class="fa fa-envelope"></i> donghuuhieu1520@gmail.com</p>
+        </div>
+        <div class="col-lg-4 col-sm-0 col-xs-0 col-md-0" style="text-align: center">
+        </div>
+        <div class="col-lg-4 col-sm-6 col-xs-6 col-md-6" style="text-align: center">
+          <p style="padding-top: 20px">
+            <a href="https://www.facebook.com/hieu.it2k" class="a-media-social">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x i-background" style="color:#4267b2 " ></i>
+                <i class="fa fa-facebook fa-stack-1x i-content" style="color: #fff" ></i>
+              </span>
+            </a> 
+            <a href="https://twitter.com/huuhieu_1520" class="a-media-social">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x i-background" style="color: #36b9ff" ></i>
+                <i class="fa fa-twitter fa-stack-1x i-content" style="color: #fff"></i>
+              </span>
+            </a>
+          </p>
+          <p style="color:#89898b">Bản quyền thuộc về © 2017 by Đồng Hữu Hiếu</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<div id="snackbar"><i class="fa fa-times"></i> Vui lòng nhập đủ thông tin!</div>
+<div id="myModal" class="modal fade-scale"  role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content" style="border-radius: 0px">
+      <div class="modal-header" style="background-color:#222222">
+        <button type="button" class="close" data-dismiss="modal" id="btn-close-modal"><i class="fa fa-times"></i></button>
+        <h4 class="modal-title" style=" color:#fff">
+          <span class="fa-stack fa-xs">
+            <i class="fa fa-circle fa-stack-2x i-background" style="color:#4267b2 " ></i>
+            <i class="fa fa-user-secret fa-stack-1x i-content" style="color: #fff" ></i>
+          </span>Quản trị viên</h4>
+      </div>
+      <div class="modal-body" style="background-color: #f4f4f4">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2">
+            <form class="form-group" role="form">
+              <br>
+              <div class="form-group input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input type="text" class="form-control input-modal-login" placeholder="Tài khoản quản trị" maxlength="255" name="account" id="account">
+              </div>
+              <div class="form-group input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input type="password" class="form-control input-modal-login" placeholder="Mật khẩu" maxlength="30" name="pass" id="pass">
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2">
+            <div class="checkbox checkbox-success checkbox-inline" style="padding-bottom: 10px;">
+                <button type="button" class="btn btn-success" style="width: 100%" name="btn-search" id="btn-log-in"><i class="glyphicon glyphicon-check" id="stt-btn-login"></i> Đăng nhập</button>
+            </div>  
+          </div>  
+        </div>
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/js/jquery-1.11.0.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bootbox.min.js"></script>
+<script src="/js/snackbar.js"></script>
+<script src="/js/jquery.autocomplete.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#btn-login').click(function(){
+      window.location = "login";
+    })
+   $('#ID').on('focus', function() {
+    $('#box-login').addClass('shadow');
+  });
+  $('#ID').on('blur', function() {
+    $('#box-login').removeClass('shadow');
+  });
+  setInterval(function() {
+    var text_showing = $('#p-greeting').attr('data-text-show');
+    if (text_showing == "1") {
+      $('#p-greeting').hide().fadeIn(1000);
+      $('#p-greeting').html(`
+        <i class="fa fa-quote-left"></i> ĐIỀN TÊN HỌC SINH CẦN TRA CỨU VÀO Ô TÌM KIẾM
+        <i class="fa fa-quote-right"></i>
+      `);
+      $('#p-greeting').attr('data-text-show', '2');
+    } else if (text_showing == "2") {
+      $('#p-greeting').hide().fadeIn(1000);
+      $('#p-greeting').html(`
+        <i class="fa fa-quote-left"></i>TRANG THEO DÕI NỀ NẾP TRƯỜNG THPT PHONG ĐIỀN
+        <i class="fa fa-quote-right"></i>
+      `);
+      $('#p-greeting').attr('data-text-show', '1');
+    }
+  }, 5000);
+  $('#pass').keydown(function(e){
+    var kepressed = e.which;
+    if(kepressed === 13) {
+      $('#btn-log-in').click();
+    }
+  });
+  $('#ID').keydown(function(e){
+    var kepressed = e.which;
+    if (kepressed === 13) {
+      $('#btn-tracuu').click();
+    }
+  });
+  $('#btn-tracuu').click(function() {
+    const search = {
+      name: $('#ID').val(),
+      class: ''
+    };
+
+    $.ajax({
+      url: 'student/search',
+      type: 'POST',
+      dataType: 'text',
+      data: search,
+      beforeSend: function() {
+        $('#btn-tracuu').html('<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Tra cứu');
+      },
+      success: function(response) {
+        response = response.split('|');
+        if(response[0] == 'notfound') {
+          $('#btn-tracuu').html('<i class="fa fa-search"></i> Tra cứu')
+          swal('Thông báo', 'Hệ thống không tìm thấy học sinh mà bạn tra cứu ! Vui lòng kiểm tra lại', 'warning');
+        } else if (response[0] == 'plural') {
+          window.location.href = "search_result";
+        } else if (response[0] == 'single') {
+          window.location.href = `/tracuudiem/index?mahs=${response[1]}`;
+        }
+      }
+    });
+  });
+})
+</script>
+</body>
+</html>

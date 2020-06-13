@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <link href="http://thpt-pdien.thuathienhue.edu.vn/imgs/Logo_Banner/c-fakepathfavicon.ico.ico" rel="shortcut icon" type="image/x-icon" /> 
+  <title>Đăng nhập hệ thống</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/sweetalert2@7.2.0/dist/sweetalert2.all.js"></script>
+  <link href="/css/snackbar/snackbar.css" rel="stylesheet">
+  <link href="/css/snackbar/material.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+ <body class="text-center">
+    <form class="form-signin" onsubmit="event.preventDefault();">
+      <span class="fa-stack fa-lg fa-3x">
+        <i class="fa fa-circle fa-stack-2x i-background" style="color:#4267b2; text-align: center; "></i>
+        <i class="fa fa-graduation-cap fa-stack-1x i-content" style="color: #fff"></i>
+    </span>
+      <h1 class="h3 mb-3 font-weight-normal">Đăng nhập để tiếp tục</h1>
+      <label for="inputEmail" class="sr-only">Tài khoản quản trị</label>
+      <input type="text" id="inp-account" class="form-control" placeholder="Tài khoản quản trị" >
+      <label for="inputPassword" class="sr-only">Mật khẩu</label>
+      <div class="input-group">
+      <input type="password" id="inp-pass" class="form-control" placeholder="Mật khẩu">
+      <span class="input-group-btn">
+          <button class="btn btn-default btn-lg text-muted" id="btn-show-pass" type="button" style="height: 44px; font-size: 14px;">Hiện</button>
+      </span>
+    </div>
+      <div class="checkbox checkbox-success checkbox-inline" style="padding-bottom: 10px; padding-top: 10px;">
+               <input type="checkbox" id="remember"><label class="text-muted"  for="remember"> Ghi nhớ đăng nhập</label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" id="btn-login" type="submit">Đăng nhập</button>
+      <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+    </form>
+
+<script src="/js/jquery-1.11.0.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bootbox.min.js"></script>
+<script src="/js/snackbar.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#inp-pass').keydown(function(e){
+      var kepressed = e.which;
+      if(kepressed===13){
+          $('#btn-login').click();
+      }
+    })
+    $('#inp-account').keydown(function(e){
+      var kepressed = e.which;
+      if(kepressed===13) {
+        $('#btn-login').click();
+      }
+    });
+    $('#btn-show-pass').click(function(){
+      var inp_pass_type = $('#inp-pass').attr('type');
+      if (inp_pass_type == 'password') {
+        $('#inp-pass').attr('type', 'text');
+        $('#btn-show-pass').html('Ẩn')
+      } else {
+        $('#inp-pass').attr('type', 'password');
+        $('#btn-show-pass').html('Hiện')
+      }
+    });
+    $('#btn-login').click(function() {
+      var account = $('#inp-account').val()
+      var password = $('#inp-pass').val();
+      if (account === '' || password === '') {
+        $('.snackbar').click()
+        $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Vui lòng nhập đủ thông tin!'}); 
+      } else {
+        $.ajax({
+          url: "/login",
+          type: 'POST',
+          dataType: "json",
+          data: {
+            account: account, password: password
+          },
+          beforeSend: function(){
+            $('#btn-login').attr('disabled', 'disabled');
+          },
+          success: function(response){
+            if (response.success === true) {
+              window.location = '/dashboard';
+            } else {
+              swal('Thông báo', response.message, 'error');
+              $('#btn-login').removeAttr('disabled');
+            }
+          }
+        });
+      }    
+    });
+  })
+</script>
+</body>
+
+</html>
