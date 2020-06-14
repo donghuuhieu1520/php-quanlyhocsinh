@@ -85,7 +85,7 @@
           },
           success: function(response){
             if (response.success === true) {
-              window.location = '/dashboard';
+              window.location = '/admin/dashboard';
             } else {
               swal('Thông báo', response.message, 'error');
               $('#btn-login').removeAttr('disabled');

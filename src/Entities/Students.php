@@ -1,115 +1,44 @@
 <?php
-namespace src\Entities;
+
+namespace App\Entities;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
-* @ORM\Entity
-* @ORM\Table(name="students")
-*/
+ * @ORM\Entity
+ */
 class Students
 {
-  /** 
-   * @ORM\Id
-   * @ORM\Column(type="integer")
-   * @ORM\GeneratedValue
-   */
-  protected $id;
-  /** 
-   * @ORM\Column(type="string") 
-   */
-  protected $last_name;
-  /** 
-   * @ORM\Column(type="string") 
-   */
-  protected $fist_name;
-
-  /**
-   * many students belong to one class
-   * @ORM\ManyToOne(targetEntity="Classes", inversedBy="students")
-   * @ORM\JoinColumn(name="class_id", referencedColumnName="id", nullable=false)
-   * @var \App\Entities\Classes
-   */
-  protected $class;
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
 
     /**
-     * Get id.
-     *
-     * @return int
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $first_name;
 
     /**
-     * Set lastName.
-     *
-     * @param string $lastName
-     *
-     * @return Students
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    public function setLastName($lastName)
-    {
-        $this->last_name = $lastName;
-
-        return $this;
-    }
+    private $last_name;
 
     /**
-     * Get lastName.
-     *
-     * @return string
+     * @ORM\Column(type="string", length=12, nullable=true)
      */
-    public function getLastName()
-    {
-        return $this->last_name;
-    }
+    private $phone;
 
     /**
-     * Set fistName.
-     *
-     * @param string $fistName
-     *
-     * @return Students
+     * @ORM\OneToMany(targetEntity="App\Entities\StudentsToRules", mappedBy="student")
      */
-    public function setFistName($fistName)
-    {
-        $this->fist_name = $fistName;
-
-        return $this;
-    }
+    private $studentsToRules;
 
     /**
-     * Get fistName.
-     *
-     * @return string
+     * @ORM\ManyToOne(targetEntity="App\Entities\Classes", inversedBy="students")
+     * @ORM\JoinColumn(name="class_id", referencedColumnName="id", nullable=false)
      */
-    public function getFistName()
-    {
-        return $this->fist_name;
-    }
-
-    /**
-     * Set class.
-     *
-     * @param \src\Entities\Classes $class
-     *
-     * @return Students
-     */
-    public function setClass(\src\Entities\Classes $class)
-    {
-        $this->class = $class;
-
-        return $this;
-    }
-
-    /**
-     * Get class.
-     *
-     * @return \src\Entities\Classes
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
+    private $class;
 }

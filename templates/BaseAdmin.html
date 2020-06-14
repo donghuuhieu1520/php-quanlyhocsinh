@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://thpt-pdien.thuathienhue.edu.vn/imgs/Logo_Banner/c-fakepathfavicon.ico.ico" rel="shortcut icon" type="image/x-icon" />
+    <title>{% block title %}{% endblock %}</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/admin.css">
+    <style type="text/css">
+        .text-center{
+            text-align: center;
+        }
+        #table-modal-detail{
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+<div id="wrapper">
+<!-- Navigation -->
+<nav class="navbar navbar-default" id="navbar1st" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="http://thpt-pdien.thuathienhue.edu.vn/">
+            <img src="https://marketplace.canva.com/MAB3jUnOhX8/1/thumbnail/canva-building-icon-school-and-education-design--MAB3jUnOhX8.png" style="height: 30px; margin-top: -10px"> Quản lý nề nếp
+        </a>
+    </div>
+    <!-- Top Menu Items -->
+    <ul class="nav navbar-right navbar-user">
+        <li class="dropdown" style="float: right">
+            <a href="#" class="dropdown-toggle" id="account" data-toggle="dropdown"><i class="fa fa-th-large"></i>&nbsp;{{ account.name }}<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li class="li-a-doimatkhau">
+                    <a href="doimatkhau.php"><i class="fa fa-fw fa-lock"></i> Đổi mật khẩu</a>
+                </li>
+                <li class="6">
+                    <a href="cauhinhvipham.php"><i class="fa fa-fw fa-wrench"></i> Cấu hình vi phạm</a>
+                </li>
+                <li class="5">
+                    <a href="nhatkyhoatdong.php"><i class="fa fa-fw fa-book"></i> Nhật ký hoạt động</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <form action="/admin/logout" method="post">
+                        <button type="submit"><i class="fa fa-fw fa-power-off"></i> Đăng xuất</button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<nav class="navbar navbar-inverse" role="navigation" id="navbar2nd">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"  style="border: none;">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="fa fa-bars" style="color: green"></span>
+        </button>
+    </div>
+    <!-- Top Menu Items -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse" style="border: none;" >
+        <ul class="nav navbar-nav">
+            <li class="1">
+                <a href="timkiemvipham.php" >
+                    <span class="fa-stack fa-xs">
+                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#1abc9c " ></i>
+                        <i class="fa fa-search fa-stack-1x i-content" style="color: #fff" ></i>
+                    </span> Tra cứu nề nếp
+                    <span style="display: none" class="label label-danger lb-numnotice">
+                        <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                    </span>
+                </a>
+            </li>
+            <li class="2">
+                <a href="capnhatvipham.php"><span class="fa-stack fa-xs">
+                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#6ab04c" ></i>
+                        <i class="fa fa-edit fa-stack-1x i-content" style="color: #fff" ></i>
+                    </span> Cập nhật vi phạm
+                </a>
+            </li>
+            <li class="nav-item-sms">
+                <a href="quanlytinnhan.php"><span class="fa-stack fa-xs">
+                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#3498db " ></i>
+                        <i class="fa fa-envelope fa-stack-1x i-content" style="color: #fff" ></i>
+                    </span> Quản lý tin nhắn SMS
+                </a>
+            </li>
+            <li class="7">
+                <a href="tongquanhethong.php"><span class="fa-stack fa-xs">
+                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#9b59b6 " ></i>
+                        <i class="fa fa-dashboard fa-stack-1x i-content" style="color: #fff" ></i>
+                    </span> Tổng quan hệ thống
+                </a>
+            </li>
+            <li class="3">
+                <a href="/admin/students" class="dropdown-toggle" data-toggle="dropdown"><span class="fa-stack fa-xs">
+                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#e67e22 " ></i>
+                        <i class="fa fa-group fa-stack-1x i-content" style="color: #fff" ></i>
+                    </span> Quản lý học sinh <i class="fa fa-fw fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu second" style="position: absolute; display: none;">
+                    {% for class in manage_classes %}
+                        <li><a href="#">{{ class.name }}</a></li>
+                    {% endfor %}
+                </ul>
+                <ul class="dropdown-menu col-lg-12 first">
+                    <li>
+                        <a href="danhsachhocsinh.php" id="a-danhsachhocsinh"><i class="fa fa-group" aria-hidden="true"></i> Danh sách học sinh <i class="fa fa-caret-right"></i></a>
+                    </li>
+                    <li>
+                        <a href="quanlyhocsinh_themhocsinh.php"><i class="fa fa-user-plus" aria-hidden="true"></i> Thêm học sinh mới</a>
+                    </li>
+                    <li>
+                        <a href="quanlyhocsinh_chinhsuahocsinh.php"><i class="fa fa-flag" aria-hidden="true"></i> Cập nhật thông tin</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="4">
+                <a href="quanlytaikhoan.php"><span class="fa-stack fa-xs">
+                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#ff7979" ></i>
+                        <i class="fa fa-database fa-stack-1x i-content" style="color: #fff" ></i>
+                    </span> Quản lý tài khoản
+                </a>
+            </li>
+            <li class="thongtinhocsinh">
+                <a href="thongtinhocsinh.php" ><span class="fa-stack fa-xs">
+                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#f0932b" ></i>
+                        <i class="fa fa-group fa-stack-1x i-content" style="color: #fff" ></i>
+                    </span> Thông tin học sinh</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+    {% block content %}
+    {% endblock %}
+</div>
+<script type="text/javascript">
+    $( window ).resize(function() {
+        $('.second').css('left', $('.first').css('width'));
+    });
+    $('.second').css('left', $('.first').css('width'));
+    function direct(classchosen){
+        $('.second').hide();
+        if (typeof(Storage) !== "undefined") {
+            localStorage.classchosen = classchosen;
+            $(location).attr('href','danhsachhocsinh.php')
+        } else {
+            $(location).attr('href','danhsachhocsinh.php')
+        }
+    };
+    $('#a-danhsachhocsinh').mouseenter(function(){
+        $('.second').show();
+    })
+    $('#a-danhsachhocsinh').mouseleave(function(){
+        $('.second').hide();
+    })
+    $('.second').mouseenter(function(){
+        $('.second').show();
+    })
+    $('.second').mouseleave(function(){
+        $('.second').hide();
+    })
+</script>
+{% block script %}
+{% endblock %}
+</body>

@@ -23,7 +23,7 @@ class Login extends BaseController
     public function show()
     {
       if ($this->isLoggedIn()) {
-        $this->response->redirect('/dashboard/admin');
+        $this->backToAdminDashboard();
         return;
       }
       $html = $this->renderer->render("Login");
@@ -34,22 +34,29 @@ class Login extends BaseController
     {
       $body = $this->request->getParameters();
       $account = $this->em->getRepository('App\Entities\Accounts')
-                          ->findOneBy(['username' => $body['account']]);
+          ->findOneBy(['username' => $body['account']]);
+
       if ($account !== NULL) {
         if ($account->getPassword() == $body['password']) {
-          $_SESSION['account_id'] = $account->getId();
-          $accountRoles = $account->getRoles();
-          $_SESSION['manage_classes'] = $accountRoles->map(function ($role) {
-            return $role->getClass()->getId();
-          });
+          $_SESSION['account_login'] = [
+              'id' => $account->getId(),
+              'name' => $account->getName()
+          ];
+          $classesToAccount = $account->getClassesToAccounts();
+          $_SESSION['manage_classes'] = $classesToAccount
+              ->map(function ($classToAccount) {
+                $class = $classToAccount->getClass();
+                return [
+                    'id' => $class->getId(),
+                    'name' => $class->getName()
+                ];
+              })
+              ->toArray();
           $this->response->setContent(json_encode([ 'success' => true ]));
           return;
         }
       }
 
-      $this->response->setContent(json_encode([
-        'success' => false,
-        'message' => 'Account or password is invalid'
-      ]));
+      $this->response->setContent(json_encode([ 'success' => false, 'message' => 'Account or password is invalid' ]));
     }
 }

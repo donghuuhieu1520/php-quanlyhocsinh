@@ -1,8 +1,7 @@
 <?php
-require_once './src/Database/Bootstrap.php';
+// cli-config.php
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
-$helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($entity_manager)
-));
+require_once "src/Database/Bootstrap.php";
 
-return $helperSet;
+return ConsoleRunner::createHelperSet($entity_manager);

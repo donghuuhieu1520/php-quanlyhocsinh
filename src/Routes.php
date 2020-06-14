@@ -4,6 +4,7 @@ return [
     ['GET', '/', ['App\Controllers\Homepage', 'show']],
     ['GET', '/login', ['App\Controllers\Login', 'show']],
     ['POST', '/login', ['App\Controllers\Login', 'doLogin']],
-    // ['GET', '/{slug}', ['App\Controllers\Page', 'show']],
-    ['GET', '/classes', ['App\Controllers\Admin\Students', 'show']],
+    ['GET', '/admin/dashboard', ['App\Controllers\Admin\Dashboard', 'show']],
+    ['POST', '/admin/logout', ['App\Controllers\Admin\Dashboard', 'logout']],
+    ['GET', '/admin/classes/{classId}/students', ['App\Controllers\Admin\Class', 'showStudentList']],
 ];

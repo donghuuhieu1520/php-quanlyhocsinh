@@ -1,5 +1,8 @@
 <?php declare(strict_types = 1);
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
+
 $injector = new \Auryn\Injector;
 
 $injector->alias('Http\Request', 'Http\HttpRequest');
@@ -22,17 +25,24 @@ $injector->delegate('\Twig\Environment', function () use ($injector) {
   return $twig;
 });
 
-$injector->delegate('\Doctrine\ORM\EntityManager', function () use ($injector) {
-  $configuration = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration([__DIR__ . '/Entities'], true, null, null, false);
-  $connection_parameters = include('Config/connection.php');
-  $em = \Doctrine\ORM\EntityManager::create($connection_parameters['mysql'], $configuration);
-  return $em;
-});
+$injector
+    ->delegate('\Doctrine\ORM\EntityManager', function () use ($injector) {
+        $configuration = Setup::createAnnotationMetadataConfiguration(
+            [__DIR__ . '/Entities'], true, null, null, false);
+        $connection_parameters = [
+            'dbname' => $_ENV['DB_NAME'],
+            'user' => $_ENV['DB_USER'],
+            'password' => $_ENV['DB_PASS'],
+            'host' => $_ENV['DB_HOST'],
+            'driver' => $_ENV['DB_DRIVER'],
+            'driverOptions'	=> ['1002'=> "SET NAMES 'UTF8' COLLATE 'utf8_general_ci'"]
+        ];
+        return EntityManager::create($connection_parameters, $configuration);
+    })
+    ->share('\Doctrine\ORM\EntityManager');
 
-$injector->share('\Doctrine\ORM\EntityManager');
-
-$injector->alias('App\Template\IRenderer', 'App\Template\TwigRenderer');
 $injector->alias('App\Template\IAdminRenderer', 'App\Template\AdminTwigRenderer');
+$injector->alias('App\Template\IRenderer', 'App\Template\TwigRenderer');
 
 $injector->define('Mustache_Engine', [
   ':options' => [

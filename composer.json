@@ -24,7 +24,9 @@
     "twig/twig": "~1.0",
     "doctrine/orm": "2.*",
     "symfony/yaml": "2.*",
-    "firebase/php-jwt": "^5.2"
+    "firebase/php-jwt": "^5.2",
+    "fightbulc/moment": "^1.32",
+    "symfony/dotenv": "^5.1"
   },
   "autoload": {
       "psr-4": {

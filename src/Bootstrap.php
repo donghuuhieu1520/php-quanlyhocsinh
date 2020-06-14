@@ -2,18 +2,27 @@
 
 namespace App;
 
+use FastRoute\Dispatcher;
+use FastRoute\RouteCollector;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
+use function FastRoute\simpleDispatcher;
+use Symfony\Component\Dotenv\Dotenv;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 error_reporting(E_ALL);
 
-$environment = 'development';
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__.'/../.env');
+$environment = $_ENV['ENVIRONMENT'];
 
 /**
 * Register the error handler
 */
-$whoops = new \Whoops\Run;
+$whoops = new Run;
 if ($environment !== 'production') {
-    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    $whoops->pushHandler(new PrettyPageHandler);
 } else {
     $whoops->pushHandler(function($e){
         echo 'Todo: Friendly error page and send an email to the developer';
@@ -25,28 +34,27 @@ $injector = include('Dependencies.php');
 
 $request = $injector->make('Http\HttpRequest');
 $response = $injector->make('Http\HttpResponse');
+
 $routes = include('Routes.php');
 
-$routeDefinitionCallback = function (\FastRoute\RouteCollector $r) use ($routes) {
+$dispatcher = simpleDispatcher(function (RouteCollector $r) use ($routes) {
   foreach ($routes as $route) {
     $r->addRoute($route[0], $route[1], $route[2]);
   }
-};
-
-$dispatcher = \FastRoute\simpleDispatcher($routeDefinitionCallback);
+});
 
 $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getPath());
 
 switch ($routeInfo[0]) {
-  case \FastRoute\Dispatcher::NOT_FOUND:
+  case Dispatcher::NOT_FOUND:
     $response->setContent('404 - Page not found');
     $response->setStatusCode(404);
     break;
-  case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+  case Dispatcher::METHOD_NOT_ALLOWED:
     $response->setContent('405 - Method not allowed');
     $response->setStatusCode(405);
     break;
-  case \FastRoute\Dispatcher::FOUND:
+  case Dispatcher::FOUND:
     $className = $routeInfo[1][0];
     $method = $routeInfo[1][1];
     $vars = $routeInfo[2];
@@ -61,4 +69,3 @@ foreach ($response->getHeaders() as $header) {
 }
 
 echo $response->getContent();
-

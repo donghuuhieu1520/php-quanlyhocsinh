@@ -8,8 +8,18 @@ use Doctrine\ORM\EntityManager;
 
 class BaseController
 {
+  /**
+   * @var Request
+   */
   protected $request;
+
+  /**
+   * @var Response
+   */
   protected $response;
+  /**
+   * @var EntityManager
+   */
   protected $em;
 
   protected function __construct(Request $req, Response $res, EntityManager $em)
@@ -19,9 +29,41 @@ class BaseController
     $this->em = $em;
   }
 
+  /**
+   * Check if whether this request has logged in as an admin
+   * @return bool
+   */
   protected function isLoggedIn() : bool
   {
-    return isset($_SESSION['account_id']);
+    return isset($_SESSION['account_login']);
+  }
+  /**
+   * Check if whether this request has logged in as a student
+   * @return bool
+   */
+  protected function isStudentLogin() : bool
+  {
+    return isset($_SESSION['student_login']);
+  }
+
+  protected function backToLogin()
+  {
+    return $this->response->redirect('/login');
+  }
+
+  protected function backToAdminDashboard()
+  {
+    return $this->response->redirect('/admin/dashboard');
+  }
+
+  protected function backToStudentPage()
+  {
+    return $this->response->redirect('/student');
+  }
+
+  protected function backToHomePage()
+  {
+    return $this->response->redirect('/');
   }
 }
 
