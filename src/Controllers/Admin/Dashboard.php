@@ -5,18 +5,14 @@ namespace App\Controllers\Admin;
 use Http\Request;
 use Http\Response;
 use App\Template\IAdminRenderer;
-use App\Controllers\BaseController;
 use Doctrine\ORM\EntityManager;
 use App\Helper\Now;
 
-class Dashboard extends BaseController
+class Dashboard extends BaseAdminController
 {
-  private $renderer;
-
-  public function __construct(Request $request, Response $response, IAdminRenderer $renderer, EntityManager $em)
+  public function __construct(Request $request, Response $response, EntityManager $em,  IAdminRenderer $renderer)
   {
-    parent::__construct($request, $response, $em);
-    $this->renderer = $renderer;
+    parent::__construct($request, $response, $em, $renderer);
   }
 
   /**

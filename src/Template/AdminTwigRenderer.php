@@ -16,7 +16,6 @@ class AdminTwigRenderer implements IAdminRenderer
     public function render($template, $data = []) : string
     {
         $data = array_merge($data, [
-            'menuItems' => [['href' => '/', 'text' => 'Homepage']],
             'manage_classes' => array_map(function ($class) {
                 return [
                     'id' => $class['id'],

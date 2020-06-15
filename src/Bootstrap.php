@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helper\Router;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 use Whoops\Handler\PrettyPageHandler;
@@ -35,7 +36,9 @@ $injector = include('Dependencies.php');
 $request = $injector->make('Http\HttpRequest');
 $response = $injector->make('Http\HttpResponse');
 
-$routes = include('Routes.php');
+require_once 'Routes.php';
+
+$routes = Router::getRoutes();
 
 $dispatcher = simpleDispatcher(function (RouteCollector $r) use ($routes) {
   foreach ($routes as $route) {

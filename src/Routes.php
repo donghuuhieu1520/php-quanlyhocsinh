@@ -1,10 +1,9 @@
 <?php declare(strict_types = 1);
 
-return [
-    ['GET', '/', ['App\Controllers\Homepage', 'show']],
-    ['GET', '/login', ['App\Controllers\Login', 'show']],
-    ['POST', '/login', ['App\Controllers\Login', 'doLogin']],
-    ['GET', '/admin/dashboard', ['App\Controllers\Admin\Dashboard', 'show']],
-    ['POST', '/admin/logout', ['App\Controllers\Admin\Dashboard', 'logout']],
-    ['GET', '/admin/classes/{classId}/students', ['App\Controllers\Admin\Class', 'showStudentList']],
-];
+use App\Helper\Router;
+
+Router::get('/', 'App\Controllers\Homepage@show');
+Router::get('/login', 'App\Controllers\Login@show');
+Router::post('/login', 'App\Controllers\Login@doLogin');
+Router::get('/admin/dashboard', 'App\Controllers\Admin\Dashboard@show');
+Router::post('/admin/logout', 'App\Controllers\Admin\Dashboard@logout');
