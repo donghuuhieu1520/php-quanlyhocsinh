@@ -36,10 +36,9 @@ $injector = include('Dependencies.php');
 $request = $injector->make('Http\HttpRequest');
 $response = $injector->make('Http\HttpResponse');
 
-require_once 'Routes.php';
-
-$routes = Router::getRoutes();
-
+$router = require_once  __DIR__ . '/Routes/index.php';
+$router->get('/404', 'App\Controllers\Defaultpage@show404');
+$routes = $router->getRoutes();
 $dispatcher = simpleDispatcher(function (RouteCollector $r) use ($routes) {
   foreach ($routes as $route) {
     $r->addRoute($route[0], $route[1], $route[2]);
@@ -50,8 +49,7 @@ $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getPath());
 
 switch ($routeInfo[0]) {
   case Dispatcher::NOT_FOUND:
-    $response->setContent('404 - Page not found');
-    $response->setStatusCode(404);
+    $response->redirect('/404');
     break;
   case Dispatcher::METHOD_NOT_ALLOWED:
     $response->setContent('405 - Method not allowed');
