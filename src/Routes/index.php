@@ -5,7 +5,7 @@ namespace App\Routes;
 use App\Helper\Router;
 
 return (new Router())
-    ->get('/', 'App\Controllers\Homepage@show')
+    ->get('/', 'App\Controllers\Homepage@show', 'showHomepage')
     ->get('/index.php', 'App\Controllers\Homepage@show')
     ->useRoute('/login', include(__DIR__ . '/login.php'))
     ->useRoute('/admin', include(__DIR__ . '/admin.php'))

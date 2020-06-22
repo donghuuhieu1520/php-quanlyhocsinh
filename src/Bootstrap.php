@@ -36,8 +36,7 @@ $injector = include('Dependencies.php');
 $request = $injector->make('Http\HttpRequest');
 $response = $injector->make('Http\HttpResponse');
 
-$router = include(__DIR__ . '/Routes/index.php');
-$router->get('/404', 'App\Controllers\Defaultpage@show404');
+$router = $injector->make('App\Helper\Router');
 $routes = $router->getRoutes();
 $dispatcher = simpleDispatcher(function (RouteCollector $r) use ($routes) {
   foreach ($routes as $route) {

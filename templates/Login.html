@@ -74,7 +74,7 @@
         $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Vui lòng nhập đủ thông tin!'}); 
       } else {
         $.ajax({
-          url: "/login",
+          url: "{{ routes.doLogin }}",
           type: 'POST',
           dataType: "json",
           data: {
@@ -85,7 +85,7 @@
           },
           success: function(response){
             if (response.success === true) {
-              window.location = '/admin/dashboard';
+              window.location = '{{ routes.showDashboard }}';
             } else {
               swal('Thông báo', response.message, 'error');
               $('#btn-login').removeAttr('disabled');
