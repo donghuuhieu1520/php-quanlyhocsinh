@@ -3,7 +3,6 @@
 
 namespace App\Helper;
 
-
 class Router
 {
   private array $routes;
@@ -13,16 +12,31 @@ class Router
     $this->routes = [];
   }
 
-  public function get(string $uri, string $handler)
+  private function _addToRoute(string $method, string $uri, string $handler, string $name)
   {
-    $this->routes[] = ['GET', $uri, explode('@', $handler)];
+    if (Alfred::isValidIndentifier($name)) {
+      $this->routes[$name] = [$method, $uri, explode('@', $handler)];
+    } else {
+      $this->routes[] = [$method, $uri, explode('@', $handler)];
+    }
     return $this;
   }
 
-  public function post(string $uri, string $handler)
+  public function get(string $uri, string $handler, string $name = '')
   {
-    $this->routes[] = ['POST', $uri, explode('@', $handler)];
-    return $this;
+    return $this->_addToRoute("GET", $uri, $handler, $name);
+  }
+
+  public function post(string $uri, string $handler, string $name = '')
+  {
+    return $this->_addToRoute("POST", $uri, $handler, $name);
+  }
+
+  public function getNames()
+  {
+    return array_map(function ($route) {
+      return $route[1];
+    }, $this->getRoutes());
   }
 
   public function getRoutes()
