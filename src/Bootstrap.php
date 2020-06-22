@@ -36,7 +36,7 @@ $injector = include('Dependencies.php');
 $request = $injector->make('Http\HttpRequest');
 $response = $injector->make('Http\HttpResponse');
 
-$router = require_once  __DIR__ . '/Routes/index.php';
+$router = include(__DIR__ . '/Routes/index.php');
 $router->get('/404', 'App\Controllers\Defaultpage@show404');
 $routes = $router->getRoutes();
 $dispatcher = simpleDispatcher(function (RouteCollector $r) use ($routes) {

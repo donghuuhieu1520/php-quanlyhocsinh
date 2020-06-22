@@ -29,7 +29,7 @@ class Router
   {
     // Remove trailing slash
     return array_map(function ($route) {
-      if (substr($route[1], -1) === '/') {
+      if (strlen($route[1]) !== 1 && substr($route[1], -1) === '/') {
         $route[1] = substr($route[1], 0, strlen($route[1]) - 1);
         $this->routes[] = $route;
       }
