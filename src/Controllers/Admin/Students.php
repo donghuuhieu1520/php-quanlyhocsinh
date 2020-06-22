@@ -6,7 +6,7 @@ use Http\Request;
 use Http\Response;
 use App\Template\IAdminRenderer;
 use Doctrine\ORM\EntityManager;
-use App\Helper\Now;
+use function _\some;
 
 class Students extends BaseAdminController
 {
@@ -19,17 +19,24 @@ class Students extends BaseAdminController
   /**
    * Show the student list page
    */
-  public function showStudentList($param)
+  public function show($param)
   {
-    $classId = $param['classId'];
     if (!$this->isLoggedIn()) {
       $this->backToLogin();
-      return;
     }
 
-    $class = $this->getManagedClasses();
+    $classIds = array_map(function ($class) {
+      return $class['id'];
+    }, $this->getManagedClasses());
 
-    $html = $this->renderer->render('Dashboard', $data);
-    $this->response->setContent($html);
+    if (some($classIds, function ($id) use ($param) { return $id === $param['classId']; })) {
+     
+    }
+
+    $students = $this->em->getRepository('App\Entities\Students')->findBy([
+       'class' =>
+    ]);
+
+    $this->response->setContent("hello");
   }
 }
