@@ -108,7 +108,7 @@
                 </a>
                 <ul class="dropdown-menu second" style="position: absolute; display: none;">
                     {% for class in manage_classes %}
-                        <li><a href="#">{{ class.name }}</a></li>
+                        <li><a href="{{ routes.adminShowStudentByClass }}/{{ class.id }}">{{ class.name }}</a></li>
                     {% endfor %}
                 </ul>
                 <ul class="dropdown-menu col-lg-12 first">
