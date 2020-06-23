@@ -30,10 +30,4 @@ class Rules
      * @ORM\OneToMany(targetEntity="App\Entities\StudentsToRules", mappedBy="rule")
      */
     private $studentsToRules;
-
-    /**
-     * 
-     * 
-     */
-    private $students;
 }

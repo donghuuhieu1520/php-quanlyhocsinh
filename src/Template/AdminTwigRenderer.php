@@ -8,7 +8,6 @@ use App\Helper\Router;
 class AdminTwigRenderer implements IAdminRenderer
 {
   private $renderer;
-  private $routes;
 
   public function __construct(Environment $renderer, Router $router)
   {
