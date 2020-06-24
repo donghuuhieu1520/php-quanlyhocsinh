@@ -30,6 +30,6 @@ class AdminTwigRenderer implements IAdminRenderer
       ],
       'routes' => $this->routes
     ]);
-    return $this->renderer->render("$template.html", $data);
+    return $this->renderer->render("admin/$template.html", $data);
   }
 }

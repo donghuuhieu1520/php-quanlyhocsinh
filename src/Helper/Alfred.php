@@ -4,6 +4,8 @@
 namespace App\Helper;
 
 
+use Http\Response;
+
 class Alfred
 {
   public static function isValidIndentifier (string $str) : bool
@@ -24,5 +26,16 @@ class Alfred
             return false;
     }
     return true;
+  }
+
+  public static function apiResponseWithSuccess(Response $res, $data)
+  {
+    $data = [
+        'success' => true,
+        'payload' => $data
+    ];
+
+    $res->setHeader('Content-type', 'Application/json');
+    return $res->setContent(json_encode($data));
   }
 }

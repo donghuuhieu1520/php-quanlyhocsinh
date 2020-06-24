@@ -32,6 +32,11 @@ class Students
     private $phone;
 
     /**
+     * @ORM\Column(type="boolean", length=12, nullable=true)
+     */
+    private $gender;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entities\StudentsToRules", mappedBy="student")
      */
     private $studentsToRules;
@@ -41,4 +46,102 @@ class Students
      * @ORM\JoinColumn(name="class_id", referencedColumnName="id", nullable=false)
      */
     private $class;
+
+  /**
+   * @return mixed
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getFirstName()
+  {
+    return $this->first_name;
+  }
+
+  /**
+   * @param mixed $first_name
+   */
+  public function setFirstName($first_name): void
+  {
+    $this->first_name = $first_name;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getLastName()
+  {
+    return $this->last_name;
+  }
+
+  /**
+   * @param mixed $last_name
+   */
+  public function setLastName($last_name): void
+  {
+    $this->last_name = $last_name;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getClass()
+  {
+    return $this->class;
+  }
+
+  /**
+   * @param mixed $class
+   */
+  public function setClass($class): void
+  {
+    $this->class = $class;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getPhone()
+  {
+    return $this->phone;
+  }
+
+  /**
+   * @param mixed $phone
+   */
+  public function setPhone($phone): void
+  {
+    $this->phone = $phone;
+  }
+
+  public function getRawData()
+  {
+    return [
+      'id' => $this->id,
+      'name' => $this->first_name . ' ' . $this->last_name,
+      'gender' => $this->gender,
+      'class' => $this->class->getName()
+    ];
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getGender()
+  {
+    return $this->gender;
+  }
+
+  /**
+   * @param mixed $gender
+   */
+  public function setGender($gender): void
+  {
+    $this->gender = $gender;
+  }
 }

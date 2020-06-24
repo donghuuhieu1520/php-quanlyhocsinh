@@ -1,0 +1,30 @@
+@media only screen and (max-width: 425px) {
+    #div_choose_class{
+        width: 100%;
+    }
+    #div-se-semester{
+        width: 100%;
+    }
+}
+.btn-download {
+    border-radius: 2%;
+}
+.link {
+    cursor: pointer;
+}
+
+.link:hover {
+    text-decoration: none;
+}
+#overlay {
+    left: 50%;
+    position: absolute;
+    margin-left: -100px;
+    width: 200px;
+    text-align: center;
+    display: none;
+    margin-top: -10px;
+    background: #000;
+    color: #FFF;
+    opacity: 0.8;
+}
