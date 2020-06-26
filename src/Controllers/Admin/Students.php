@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin;
 
+use Doctrine\ORM\ORMException;
 use Http\Request;
 use Http\Response;
 use App\Template\IAdminRenderer;
@@ -18,12 +19,8 @@ class Students extends BaseAdminController
   }
 
   private function _retrieveStudent(int $requestClassId) {
-    $classIds = array_map(function ($class) {
-      return $class['id'];
-    }, $this->getManagedClasses());
-
-    // Check if class Id is belong to account's classes managaged
-    if (!some($classIds, function ($id) use ($requestClassId) { return $id === $requestClassId; })) {
+    $hasAccess = $this->checkAccessOnClass($requestClassId);
+    if (!$hasAccess) {
       return [];
     }
 
@@ -42,6 +39,52 @@ class Students extends BaseAdminController
     $students = $this->_retrieveStudent($requestClassId);
 
     return Alfred::apiResponseWithSuccess($this->response, $students);
+  }
+
+  public function showAdd()
+  {
+    if (!$this->isLoggedIn()) {
+      return $this->backToLogin();
+    }
+
+    $html = $this->renderer->render('showAddStudentToClass', []);
+    return $this->response->setContent($html);
+  }
+
+  public function add()
+  {
+    if (!$this->isLoggedIn()) {
+      return Alfred::apiResponseNotLogin($this->response);
+    }
+
+    $studentInfo = $this->request->getParameters();
+
+    $hasAccess = $this->checkAccessOnClass($studentInfo['classId']);
+    if (!$hasAccess) {
+      return Alfred::apiResponseNotAllow($this->response);
+    }
+
+    $targetClass = $this->em->getRepository('App\Entities\Classes')->find($studentInfo['classId']);
+
+    if ($targetClass == null) {
+      return Alfred::apiResponseWithError($this->response, "Class is not found");
+    }
+
+    $newStudent = new \App\Entities\Students();
+    $newStudent->setClass($targetClass);
+    $newStudent->setFirstName($studentInfo['firstName']);
+    $newStudent->setLastName($studentInfo['lastName']);
+    $newStudent->setPhone($studentInfo['phone']);
+    $newStudent->setGender($studentInfo['gender']);
+
+    try {
+      $this->em->persist($newStudent);
+      $this->em->flush();
+    } catch (ORMException $e) {
+      return Alfred::apiResponseInternalError($this->response);
+    }
+
+    return Alfred::apiResponseWithSuccess($this->response, $newStudent->getRawData());
   }
 
   /**

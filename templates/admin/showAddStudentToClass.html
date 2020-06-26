@@ -1,0 +1,370 @@
+{% extends "admin/BaseAdmin.html" %}
+{% block title %}Thêm học sinh mới{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/css/admin/addStudentToClass.css">
+{% endblock %}
+{% block content %}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <i class="fa fa-user-plus"></i> Thêm mới học sinh
+                </h1>
+            </div>
+        </div>
+        <!-- /.row -->
+        <div class="alert alert-success" id="alert" style="display: none;">
+            You successfully read this important alert message.
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="glyphicon glyphicon-plus-sign"></i> Thêm mới học sinh</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form>
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-sm-6 form-group">
+                                        <label>Họ và tên đệm</label>
+                                        <input type="text" placeholder="Ví dụ: Ngô Bảo" class="form-control" id="inp-hovatendem" required="" maxlength="50">
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <label>Tên học sinh</label>
+                                        <input type="text" placeholder="Ví dụ: Châu" class="form-control" id="inp-ten" required="" maxlength="10">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6 form-group">
+                                        <label>Gioi tinh</label>
+                                        <select class="form-control se_field" id="se_gender_field">
+                                            <option value="1">Nam</option>
+                                            <option value="0">Nu</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <label>So dien thoai</label>
+                                        <input type="text" placeholder="Ví dụ: 0981925281" class="form-control" id="inp-sodienthoai" required="" maxlength="50">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6 form-group">
+                                        <label>Lop</label>
+                                        <select class="form-control se_field" id="se_class_field">
+                                            {% for class in manage_classes %}
+                                            <option value="{{ class.id }}"> {{ class.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="button" class="btn btn-primary" id="btn-addone"><i class="glyphicon glyphicon-check"></i> Thêm</button>
+
+                                <span class="text-muted pull-right">
+                                        <i class="glyphicon glyphicon-list"></i> Danh sách học sinh hiện có?
+                                        <a  href="danhsachhocsinh.php">Xem</a>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><img src="/img/xls_icon.png" style="width: 7%;" alt="xls"> Thêm từ file excel</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-12 form-group">
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Tên tệp</th>
+                                            <th>Ngày</th>
+                                            <th>Xem</th>
+                                            <th>Xóa</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbody_showlist_file">
+                                        <?php GETLISTFILE();  ?>
+                                        </tbody>
+                                    </table>
+                                    <button type="button" class="btn btn-success" id="btn-upload" data-toggle ="modal" data-target="#modal-upload"><i class="glyphicon glyphicon-paperclip"></i> Tải lên tệp mới</button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div id="modal-upload" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"><i class="fa fa-upload"></i> Tải lên tập tin (*.xls)</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form-upload" method="post" action="quanlyhocsinh_xulyfileupload.php" enctype="multipart/form-data">
+
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Chon file</label>
+                                    <input type="file" class="form-control-file"  name="file" id="select-file" aria-describedby="fileHelp">
+                                    <small id="fileHelp" class="form-text text-muted">Tệp tải lên bắt buộc phải có định dạng (*.xls), có kích thước dưới 3 mb. Ngoài ra, để hệ thống có thể lọc được thông tin học sinh, tệp bắt buộc phải có cấu trúc giống như mẫu được quy định sẵn. <a class="link" style="cursor: pointer">Tìm hiểu thêm</a></small>
+                                    <br>
+                                    <div class="progress" style="display: none;">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;" id="bar"><span id="percent">0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <span class="text-danger" id="span-notification">&nbsp;</span>
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="submit" class="btn btn-primary" id="submit-upload" name="btn-upload">Bắt đầu tải lên</button>
+                            </form>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="modal-viewlist" class="modal fade" role="dialog">
+                <div class="modal-dialog modal-lg">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" id="modal-file-title"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Họ tên</th>
+                                        <th>Lớp</th>
+                                        <th>Mật khẩu</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody-list">
+                                    <tr id="tr-icon-loading" class="text-success" style="display: none;"><td colspan="4" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></td></tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="quanlyhocsinh_themhocsinh_addmore.php" method="POST">
+                                <label class="text-muted pull-left"><input type="checkbox" name="checkbox-delete" id="checkbox-delete" value="1"> <span style="font-weight: normal">Xóa file này sau khi thêm học sinh</span></label>
+                                <button type="submit" class="btn btn-primary" id="submit-addmore" name="btn-addmore" data-toggle="tooltip" title="Danh sách học sinh trên sẽ được thêm vào CSDL">Thêm</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- /#page-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+<div id="snackbar" style="background-color: green;"><i class="fa fa-spinner fa-pulse fa-fw"></i> Vui lòng đợi!</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    $('.3').attr('class', 'active');
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#submit-addmore').click(function(){
+            $(this).html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Thêm')
+        })
+
+        $('.btn-delete-file').click(function(){
+            var filedeletename =  $(this).val();
+            $.ajax({
+                url: "",
+                type: "post",
+                dataType: "text",
+                data:
+                    {
+                        filedeletename: filedeletename
+                    },
+                success: function(xoafilexlsthanhcong)
+                {
+
+                    $('#tbody_showlist_file').html(xoafilexlsthanhcong);
+                }
+            });
+        });
+        $('.btn-view-file').click(function(){
+            $('#tbody-list').html('<tr id="tr-icon-loading" style="display: none;"><td colspan="4" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></td></tr>');
+            var fileviewname =  $(this).val();
+            $('#tr-icon-loading').show();
+            $('#modal-file-title').html('<img src="../img/xls_icon.png" style="width: 7%;" alt="xls"> '+fileviewname);
+            $('#modal-viewlist').modal('toggle');
+
+            $.ajax({
+                url: "quanlyhocsinh_xemfilexls.php",
+                type: "post",
+                dataType: "text",
+                data:
+                    {
+                        fileviewname: fileviewname
+                    },
+                success: function(xemfilexls)
+                {
+                    $('#tbody-list').html(xemfilexls);
+                }
+            });
+        });
+        $('#btn-addone').click(function(){
+            var firstName = $('#inp-ten').val();
+            var lastName = $('#inp-hovatendem').val();
+            var phone = $('#inp-sodienthoai').val();
+            var classId = $('#se_class_field').val();
+            var gender = $('#se_gender_field').val();
+            if (_.isEmpty(firstName) ||
+                _.isEmpty(lastName) ||
+                _.isEmpty(phone) ||
+                _.isEmpty(classId) ||
+                _.isEmpty(gender)
+            ) {
+                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> Vui lòng điền đầy đủ thông tin!'});
+            } else {
+                console.log({ firstName, lastName, phone, classId, gender });
+                $.ajax({
+                    url: "{{ routes.apiAddStudentToClass }}",
+                    type: "POST",
+                    dataType: "json",
+                    data: { firstName, lastName, phone, classId, gender },
+                    beforeSend: function(){
+                        $('#btn-addone').html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Thêm');
+                    },
+                    success: function({ success, payload, message }){
+                        if (success) {
+                            $('#alert').html('<p>Them thanh cong</p>');
+                            $('#alert').prop('class', 'alert alert-success');
+                            $('#alert').show();
+                        } else {
+                            $('#alert').html(`<p>${message}</p>`);
+                            $('#alert').prop('class', 'alert alert-error');
+                            $('#alert').show();
+                        }
+                        $('#inp-ten').val('');
+                        $('#inp-hovatendem').val('');
+                        $('#inp-tenlop').val('');
+                    },
+                    complete: function(){
+                        $('#btn-addone').html('<i class="glyphicon glyphicon-check"></i> Thêm');
+                    }
+                })
+            }
+        })
+
+    })
+    $('input[type="file"]').change(function(e){
+        var fileName = e.target.files[0].name;
+
+        var fileExtension = fileName.split('.').pop().toUpperCase();
+        var fileSize = e.target.files[0].size;
+        if(fileExtension!="XLS")
+        {
+            $('#span-notification').html('<i class="glyphicon glyphicon-info-sign"></i> Tệp phải có phần mở rộng là *.xls !');
+            $('#span-notification').prop('class', 'text-danger');
+            $('#span-notification').show();
+            $('#submit-upload').attr('disabled', '');
+        }else if(fileSize>3000000)
+        {
+            $('#span-notification').html('<i class="glyphicon glyphicon-info-sign"></i> Tệp có dung lượng vượt quá 3 Mb !');
+            $('#span-notification').prop('class', 'text-danger');
+            $('#span-notification').show();
+            $('#submit-upload').attr('disabled', '');
+        }
+        else{
+            $('#span-notification').html('&nbsp;');
+            $('#submit-upload').removeAttr('disabled');
+        }
+    });
+
+
+    var bar = document.getElementById('bar')
+    var percent = document.getElementById('percent')
+    var percentValue = "0%";
+    var fileInput = document.getElementById('select-file');
+    var span_notification = document.getElementById('span-notification');
+    var form = document.getElementById('form-upload');
+
+    form.addEventListener('submit', function(evt) {
+        // Chan khong cho form tao submit
+        evt.preventDefault();
+        bar.setAttribute('style', 'width: ' + percentValue);
+        bar.setAttribute('aria-valuenow', 0);
+        // Ajax upload
+        var file = fileInput.files[0];
+
+        if(file==undefined)
+        {
+            $('#span-notification').html('<i class="glyphicon glyphicon-info-sign"></i> Bạn chưa chọn file!');
+
+        }else
+        {
+            $('.progress').show();
+            // fd dung de luu gia tri goi len
+            var fd = new FormData();
+            fd.append('file', file);
+
+            // xhr dung de goi data bang ajax
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'quanlyhocsinh_xulyfileupload.php', true);
+
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    var percentValue =  Math.round((e.loaded / e.total) * 100) + '%';
+                    var percentValueint = Math.round((e.loaded / e.total) * 100);
+
+                    percent.innerHTML  = percentValue;
+                    bar.setAttribute('style', 'width: ' + percentValue);
+                    bar.setAttribute('aria-valuenow', percentValueint);
+                }
+            };
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    span_notification.innerHTML = this.response;
+                    span_notification.setAttribute('class', 'text-success');
+                    $('#tbody_showlist_file').load('quanlyhocsinh_listfile.php');
+                };
+            };
+
+            xhr.send(fd);
+        }
+
+    }, false);
+
+</script>
+
+{% endblock %}
