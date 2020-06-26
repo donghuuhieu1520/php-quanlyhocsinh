@@ -38,4 +38,48 @@ class Alfred
     $res->setHeader('Content-type', 'Application/json');
     return $res->setContent(json_encode($data));
   }
+
+  public static function apiResponseWithError(Response $res, $message)
+  {
+    $data = [
+        'success' => false,
+        'message' => $message
+    ];
+
+    $res->setHeader('Content-type', 'Application/json');
+    return $res->setContent(json_encode($data));
+  }
+
+  public static function apiResponseNotLogin(Response $res)
+  {
+    $data = [
+        'success' => false,
+        'message' => 'You are not login'
+    ];
+
+    $res->setHeader('Content-type', 'Application/json');
+    return $res->setContent(json_encode($data));
+  }
+
+  public static function apiResponseNotAllow(Response $res)
+  {
+    $data = [
+        'success' => false,
+        'message' => 'You are not allow'
+    ];
+
+    $res->setHeader('Content-type', 'Application/json');
+    return $res->setContent(json_encode($data));
+  }
+
+  public static function apiResponseInternalError(Response $res)
+  {
+    $data = [
+        'success' => false,
+        'message' => 'Error has occurred! Please try again'
+    ];
+
+    $res->setHeader('Content-type', 'Application/json');
+    return $res->setContent(json_encode($data));
+  }
 }

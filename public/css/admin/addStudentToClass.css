@@ -1,0 +1,41 @@
+.btn{
+    border-radius: 0px;
+}
+input[type=text], .se_field{
+    border: none;
+    box-shadow: none;
+    border-bottom: 3px dotted #ccc;
+    border-radius: 0px;
+    -webkit-transition: 0.5s;
+    -transition: 0.5s;
+}
+input[type=text]:focus, .se_field:hover{
+    box-shadow: none;
+    border-radius: 0px;
+    border-bottom: 3px solid #428bca;
+
+}
+label{
+    color: #428bca;
+}
+.panel-green {
+    border-color: #5cb85c;
+}
+
+.panel-green .panel-heading {
+    border-color: #5cb85c;
+    color: #fff;
+    background-color: #5cb85c;
+}
+
+.panel-green a {
+    color: #d9534f;
+}
+
+.panel-green a:hover {
+    color: #b52b27;
+}
+.table-responsive{
+    max-height: 500px;
+    overflow-y: auto;
+}
