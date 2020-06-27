@@ -124,8 +124,12 @@ class Students
     return [
       'id' => $this->id,
       'name' => $this->first_name . ' ' . $this->last_name,
+      'firstName' => $this->first_name,
+      'lastName' => $this->last_name,
       'gender' => $this->gender,
-      'class' => $this->class->getName()
+      'class' => $this->class->getName(),
+      'phone' => $this->phone,
+      'classId' => $this->class->getId()
     ];
   }
 

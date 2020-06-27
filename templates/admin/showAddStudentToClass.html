@@ -256,7 +256,6 @@
             ) {
                 $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> Vui lòng điền đầy đủ thông tin!'});
             } else {
-                console.log({ firstName, lastName, phone, classId, gender });
                 $.ajax({
                     url: "{{ routes.apiAddStudentToClass }}",
                     type: "POST",
