@@ -27,6 +27,16 @@ class Router
     return $this->_addToRoute("GET", $uri, $handler, $name);
   }
 
+  public function delete(string $uri, string $handler, string $name = '')
+  {
+    return $this->_addToRoute("DELETE", $uri, $handler, $name);
+  }
+
+  public function put(string $uri, string $handler, string $name = '')
+  {
+    return $this->_addToRoute("PUT", $uri, $handler, $name);
+  }
+
   public function post(string $uri, string $handler, string $name = '')
   {
     return $this->_addToRoute("POST", $uri, $handler, $name);

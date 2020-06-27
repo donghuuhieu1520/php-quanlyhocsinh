@@ -87,6 +87,78 @@ class Students extends BaseAdminController
     return Alfred::apiResponseWithSuccess($this->response, $newStudent->getRawData());
   }
 
+  public function update($param)
+  {
+    if (!$this->isLoggedIn()) {
+      return Alfred::apiResponseNotLogin($this->response);
+    }
+
+    $studentId = $param['studentId'];
+    $studentInfo = $this->request->getParameters();
+
+    $hasAccess = $this->checkAccessOnClass($studentInfo['classId']);
+    if (!$hasAccess) {
+      return Alfred::apiResponseNotAllow($this->response);
+    }
+
+    $targetClass = $this->em->getRepository('App\Entities\Classes')->find($studentInfo['classId']);
+
+    if ($targetClass == null) {
+      return Alfred::apiResponseWithError($this->response, "Class is not found");
+    }
+
+    $myStudent = $this->em->getRepository('App\Entities\Students')
+                        ->findOneBy([ 'id' => $studentId ]);
+
+    if ($myStudent == null) {
+      return Alfred::apiResponseWithError($this->response, 'Student is not found');
+    }
+
+    $myStudent->setFirstName($studentInfo['firstName']);
+    $myStudent->setLastName($studentInfo['lastName']);
+    $myStudent->setPhone($studentInfo['phone']);
+    $myStudent->setGender($studentInfo['gender'] == 1);
+    $myStudent->setClass($targetClass);
+
+    try {
+      $this->em->flush();
+    } catch (ORMException $e) {
+      return Alfred::apiResponseInternalError($this->response);
+    }
+
+    return Alfred::apiResponseWithSuccess($this->response, $myStudent->getRawData());
+  }
+
+  public function delete ($param) {
+    if (!$this->isLoggedIn()) {
+      return Alfred::apiResponseNotLogin($this->response);
+    }
+
+    $studentId = (int)$param['studentId'];
+
+    $student = $this->em->getRepository('App\Entities\Students')
+        ->findOneBy([ 'id' => $studentId ]);
+
+    if ($student == null) {
+      return Alfred::apiResponseWithError($this->response, 'Student is not found');
+    }
+
+    $hasAccess = $this->checkAccessOnClass($student->getClass()->getId());
+
+    if (!$hasAccess) {
+      return Alfred::apiResponseNotAllow($this->response);
+    }
+
+    try {
+      $this->em->remove($student);
+      $this->em->flush();
+    } catch (ORMException $e) {
+      return Alfred::apiResponseWithError($this->response, 'Error has occurred. Please try later');
+    }
+
+    return Alfred::apiResponseWithSuccess($this->response, $studentId);
+  }
+
   /**
    * Show the student list page
    */

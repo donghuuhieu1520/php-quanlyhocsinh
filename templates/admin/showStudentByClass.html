@@ -56,24 +56,104 @@
                             <tr id="tr-header">
                                 <th>STT</th>
                                 <th>Mahs</th>
-                                <th>Họ tên</th>
+                                <th>Họ va ten lot</th>
+                                <th>Ten</th>
                                 <th>Lớp</th>
                                 <th>Gioi tinh</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-students">
                         {% for student in students %}
-                            <tr>
+                            <tr class="row-student">
                                 <td>{{ loop.index }}</td>
                                 <td>{{ student.id }}</td>
-                                <td>{{ student.name }}</td>
+                                <td>{{ student.firstName }}</td>
+                                <td>{{ student.lastName }}</td>
                                 <td>{{ student.class }}</td>
                                 <td>{{ student.gender ? 'Nam' : 'Nu' }}</td>
+                                <td>
+                                    <button
+                                        class="btn btn-danger btn-delete-student"
+                                        data-studentId="{{ student.id }}">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    <button
+                                        class="btn btn-info btn-update-student"
+                                        data-studentId="{{ student.id }}"
+                                        data-studentFirstName="{{ student.firstName }}"
+                                        data-studentLastName="{{ student.lastName }}"
+                                        data-studentClassId="{{ student.class }}"
+                                        data-studentPhone="{{ student.phone }}"
+                                        data-studentGender="{{ student.gender }}">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal-update-student" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Cap nhat thong tin hoc sinh</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <label>Ho va ten dem</label>
+                                <input type="text" class="form-control" id="input-modal-firstName" placeholder="Dien ho va ten dem hoc sinh">
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <label>Ten</label>
+                                <input type="text" class="form-control" id="input-modal-lastName" placeholder="Dien ten hoc sinh">
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <label>So dien thoai</label>
+                                <input type="text" class="form-control" id="input-modal-phone" placeholder="Nhap so dien thoai">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <label>Lop</label>
+                                <select class="form-control" id="se-modal-class">
+                                    {% for class in manage_classes %}
+                                    <option value="{{ class.id }}"> {{ class.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <label>Gioi tinh</label>
+                                <select class="form-control" id="se-modal-gender">
+                                    <option value="1">Nam</option>
+                                    <option value="0">Nu</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="btn-modal-update-student"><i class="fa fa-save"></i> Cap nhat</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -85,6 +165,104 @@
 </script>
 <script>
     $(document).on('ready', function () {
+        $(document).on('click', '.btn-delete-student', function (e) {
+            var button = $(this);
+            var studentId = button.attr('data-studentId');
+            bootbox.confirm({
+                title: "Xoa hoc sinh",
+                message: "Ban co chac muon xoa hoc sinh nay khong",
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Cancel'
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Confirm'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: `/api/v1/admin/students/${studentId}`,
+                            method: 'delete',
+                            dataType: 'json',
+                            beforeSend () {
+                                button.html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+                                button.prop('disabled', true);
+                            },
+                            success ({ success, payload, message }) {
+                                if (success) {
+                                    $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Xoa thanh cong'});
+                                    button.closest('tr').hide();
+                                } else {
+                                    $.snackbar({content: `<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-success"></i></span> ${message}` });
+                                }
+                            },
+
+                            complete () {
+                                button.html('<i class="fa fa-trash"></i>');
+                                button.prop('disabled', false);
+                            }
+                        })
+                    }
+                }
+            });
+        });
+        $(document).on('click', '.btn-update-student', function (e) {
+            var button = $(this);
+            var studentId = button.attr('data-studentId');
+
+            $('#input-modal-firstName').val(button.attr('data-studentFirstName'));
+            $('#input-modal-lastName').val(button.attr('data-studentLastName'))
+            $('#input-modal-phone').val(button.attr('data-studentPhone'));
+            $('#se-modal-class option[value='+ button.attr('data-studentClassId') +']').attr('selected','selected');
+            $('#se-modal-gender option[value='+ button.attr('data-studentGender') +']').attr('selected','selected');
+            $('#btn-modal-update-student').attr('data-studentId', button.attr('data-studentId'));
+            $('#modal-update-student').modal();
+        });
+
+        $('#btn-modal-update-student').click(function () {
+            var button = $(this);
+            var studentId = button.attr('data-studentId');
+            var firstName = $('#input-modal-firstName').val();
+            var lastName = $('#input-modal-lastName').val();
+            var phone = $('#input-modal-phone').val();
+            var classId = $('#se-modal-class').val();
+            var gender = $('#se-modal-gender').val();
+
+            if (_.isEmpty(firstName) ||
+                _.isEmpty(lastName) ||
+                _.isEmpty(phone) ||
+                _.isEmpty(classId) ||
+                _.isEmpty(gender)
+            ) {
+                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> Vui lòng điền đầy đủ thông tin!'});
+            } else {
+                $.ajax({
+                    url: `/api/v1/admin/students/${studentId}`,
+                    type: "POST",
+                    dataType: "json",
+                    data: { firstName, lastName, phone, classId, gender },
+                    beforeSend: function(){
+                        button.html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Cap nhat');
+                        button.prop('disabled', true);
+                    },
+                    success: function({ success, payload, message }){
+                        if (success) {
+                            $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Cap nhat thanh cong'});
+                            $('#modal-update-student').modal('hide');
+                        } else {
+                            $.snackbar({content: `<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> ${message}`});
+                        }
+
+                    },
+                    complete: function(){
+                        button.html('<i class="fa fa-save"></i> Cap nhat');
+                        button.prop('disabled', false);
+                    }
+                });
+            }
+        });
+
         $('#btn-search-class').click(function(){
             var classId = $('#se_class').val();
             if(!classId === undefined) {
@@ -108,7 +286,7 @@
                             var html;
                             if (students.length === 0) {
                                 html = `
-                                    <tr><td colspan="5" style="text-align: center">No students found</td></tr>
+                                    <tr><td colspan="7" style="text-align: center">No students found</td></tr>
                                 `
                             } else {
                                 html = students.map((student, index) => {
@@ -116,9 +294,27 @@
                                         <tr>
                                             <td>${++index}</td>
                                             <td>${student.id}</td>
-                                            <td>${student.name}</td>
+                                            <td>${student.firstName}</td>
+                                            <td>${student.lastName}</td>
                                             <td>${student.class}</td>
                                             <td>${student.gender ? 'Nam' : 'Nu'}</td>
+                                            <td>
+                                                <button
+                                                    class="btn btn-danger btn-delete-student"
+                                                    data-studentId="${student.id}">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-info btn-update-student"
+                                                    data-studentId=${student.id}
+                                                    data-studentFirstName=${student.firstName}
+                                                    data-studentLastName=${student.lastName}
+                                                    data-studentClassId=${student.class}
+                                                    data-studentPhone=${student.phone}
+                                                    data-studentGender=${student.gender}>
+                                                    <i class="fa fa-pencil"></i>
+                                                </button>
+                                            </td>
                                         </tr>
                                     `;
                                 });
