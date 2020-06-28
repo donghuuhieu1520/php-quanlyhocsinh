@@ -65,13 +65,13 @@
                         </thead>
                         <tbody id="tbody-students">
                         {% for student in students %}
-                            <tr class="row-student">
+                            <tr class="row-student" id="row-student-{{ loop.index }}">
                                 <td>{{ loop.index }}</td>
-                                <td>{{ student.id }}</td>
-                                <td>{{ student.firstName }}</td>
-                                <td>{{ student.lastName }}</td>
-                                <td>{{ student.class }}</td>
-                                <td>{{ student.gender ? 'Nam' : 'Nu' }}</td>
+                                <td class="cell-student-id">{{ student.id }}</td>
+                                <td class="cell-student-firstName">{{ student.firstName }}</td>
+                                <td class="cell-student-lastName">{{ student.lastName }}</td>
+                                <td class="cell-student-class">{{ student.class }}</td>
+                                <td class="cell-student-gender">{{ student.gender ? 'Nam' : 'Nu' }}</td>
                                 <td>
                                     <button
                                         class="btn btn-danger btn-delete-student"
@@ -85,7 +85,8 @@
                                         data-studentLastName="{{ student.lastName }}"
                                         data-studentClassId="{{ student.class }}"
                                         data-studentPhone="{{ student.phone }}"
-                                        data-studentGender="{{ student.gender }}">
+                                        data-studentGender="{{ student.gender }}"
+                                        data-rowId="row-student-{{ loop.index }}">
                                         <i class="fa fa-pencil"></i>
                                     </button>
                                 </td>
@@ -248,6 +249,18 @@
                     },
                     success: function({ success, payload, message }){
                         if (success) {
+                            var rowId = button.attr('data-rowId');
+                            $(`#${rowId} .cell-student-firstName`).textContent = payload.firstName;
+                            $(`#${rowId} .cell-student-lastName`).textContent = payload.lastName;
+                            $(`#${rowId} .cell-student-gender`).textContent = payload.gender;
+                            $(`#${rowId} .cell-student-class`).textContent = payload.class;
+
+                            button.attr('data-studentFirstName', payload.firstName);
+                            button.attr('data-studentLastName', payload.lastName);
+                            button.attr('data-studentPhone', payload.firstName);
+                            button.attr('data-studentClassId', payload.classId);
+                            button.attr('data-studentGender', payload.gender);
+
                             $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Cap nhat thanh cong'});
                             $('#modal-update-student').modal('hide');
                         } else {
@@ -291,13 +304,13 @@
                             } else {
                                 html = students.map((student, index) => {
                                     return `
-                                        <tr>
+                                        <tr class="row-student" id="row-student-{{ loop.index }}">
                                             <td>${++index}</td>
-                                            <td>${student.id}</td>
-                                            <td>${student.firstName}</td>
-                                            <td>${student.lastName}</td>
-                                            <td>${student.class}</td>
-                                            <td>${student.gender ? 'Nam' : 'Nu'}</td>
+                                            <td class="cell-student-id">${student.id}</td>
+                                            <td class="cell-student-firstName">${student.firstName}</td>
+                                            <td class="cell-student-lastName">${student.lastName}</td>
+                                            <td class="cell-student-class">${student.class}</td>
+                                            <td class="cell-student-gender">${student.gender ? 'Nam' : 'Nu'}</td>
                                             <td>
                                                 <button
                                                     class="btn btn-danger btn-delete-student"
@@ -311,7 +324,8 @@
                                                     data-studentLastName=${student.lastName}
                                                     data-studentClassId=${student.class}
                                                     data-studentPhone=${student.phone}
-                                                    data-studentGender=${student.gender}>
+                                                    data-studentGender=${student.gender}
+                                                    data-rowId="row-student-${index}">>
                                                     <i class="fa fa-pencil"></i>
                                                 </button>
                                             </td>
