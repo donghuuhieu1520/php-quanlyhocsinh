@@ -70,8 +70,15 @@
     <!-- Top Menu Items -->
     <div class="collapse navbar-collapse navbar-ex1-collapse" style="border: none;" >
         <ul class="nav navbar-nav">
+            <li class="7">
+                <a href="{{ routes.showDashboard }}"><span class="fa-stack fa-xs">
+                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#9b59b6 " ></i>
+                        <i class="fa fa-dashboard fa-stack-1x i-content" style="color: #fff" ></i>
+                    </span> Tổng quan hệ thống
+                </a>
+            </li>
             <li class="1">
-                <a href="timkiemvipham.php" >
+                <a href="{{ routes.showSearchRulesPage }}" >
                     <span class="fa-stack fa-xs">
                         <i class="fa fa-circle fa-stack-2x i-background" style="color:#1abc9c " ></i>
                         <i class="fa fa-search fa-stack-1x i-content" style="color: #fff" ></i>
@@ -95,13 +102,6 @@
                     </span> Quản lý tin nhắn SMS
                 </a>
             </li>
-            <li class="7">
-                <a href="{{ routes.showDashboard }}"><span class="fa-stack fa-xs">
-                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#9b59b6 " ></i>
-                        <i class="fa fa-dashboard fa-stack-1x i-content" style="color: #fff" ></i>
-                    </span> Tổng quan hệ thống
-                </a>
-            </li>
             <li class="3">
                 <a href="/admin/students" class="dropdown-toggle" data-toggle="dropdown"><span class="fa-stack fa-xs">
                         <i class="fa fa-circle fa-stack-2x i-background" style="color:#e67e22 " ></i>
@@ -119,9 +119,6 @@
                     </li>
                     <li>
                         <a href="{{ routes.adminAddStudentToClass}}"><i class="fa fa-user-plus" aria-hidden="true"></i> Thêm học sinh mới</a>
-                    </li>
-                    <li>
-                        <a href="quanlyhocsinh_chinhsuahocsinh.php"><i class="fa fa-flag" aria-hidden="true"></i> Cập nhật thông tin</a>
                     </li>
                 </ul>
             </li>

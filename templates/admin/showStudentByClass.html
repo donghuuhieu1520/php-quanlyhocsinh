@@ -65,7 +65,7 @@
                         </thead>
                         <tbody id="tbody-students">
                         {% for student in students %}
-                            <tr class="row-student" id="row-student-{{ loop.index }}">
+                            <tr class="row-student" id="row-student-{{ student.id }}">
                                 <td>{{ loop.index }}</td>
                                 <td class="cell-student-id">{{ student.id }}</td>
                                 <td class="cell-student-firstName">{{ student.firstName }}</td>
@@ -85,8 +85,7 @@
                                         data-studentLastName="{{ student.lastName }}"
                                         data-studentClassId="{{ student.class }}"
                                         data-studentPhone="{{ student.phone }}"
-                                        data-studentGender="{{ student.gender }}"
-                                        data-rowId="row-student-{{ loop.index }}">
+                                        data-studentGender="{{ student.gender }}">
                                         <i class="fa fa-pencil"></i>
                                     </button>
                                 </td>
@@ -153,7 +152,10 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btn-modal-update-student"><i class="fa fa-save"></i> Cap nhat</button>
+                <button type="button"
+                        class="btn btn-info"
+                        id="btn-modal-update-student"
+                        data-rowId="row-student-1"><i class="fa fa-save"></i> Cap nhat</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
         </div>
@@ -218,6 +220,7 @@
             $('#se-modal-class option[value='+ button.attr('data-studentClassId') +']').attr('selected','selected');
             $('#se-modal-gender option[value='+ button.attr('data-studentGender') +']').attr('selected','selected');
             $('#btn-modal-update-student').attr('data-studentId', button.attr('data-studentId'));
+            $('#btn-modal-update-student').attr('data-rowId', `row-student-${button.attr('data-studentId')}`);
             $('#modal-update-student').modal();
         });
 
@@ -250,16 +253,16 @@
                     success: function({ success, payload, message }){
                         if (success) {
                             var rowId = button.attr('data-rowId');
-                            $(`#${rowId} .cell-student-firstName`).textContent = payload.firstName;
-                            $(`#${rowId} .cell-student-lastName`).textContent = payload.lastName;
-                            $(`#${rowId} .cell-student-gender`).textContent = payload.gender;
-                            $(`#${rowId} .cell-student-class`).textContent = payload.class;
+                            $(`#${rowId} .cell-student-firstName`).html(payload.firstName);
+                            $(`#${rowId} .cell-student-lastName`).html(payload.lastName);
+                            $(`#${rowId} .cell-student-gender`).html(payload.gender ? 'Nam' : 'Nu');
+                            $(`#${rowId} .cell-student-class`).html(payload.class);
 
-                            button.attr('data-studentFirstName', payload.firstName);
-                            button.attr('data-studentLastName', payload.lastName);
-                            button.attr('data-studentPhone', payload.firstName);
-                            button.attr('data-studentClassId', payload.classId);
-                            button.attr('data-studentGender', payload.gender);
+                            $(`#${rowId} .btn-update-student`).attr('data-studentFirstName', payload.firstName);
+                            $(`#${rowId} .btn-update-student`).attr('data-studentLastName', payload.lastName);
+                            $(`#${rowId} .btn-update-student`).attr('data-studentPhone', payload.phone);
+                            $(`#${rowId} .btn-update-student`).attr('data-studentClassId', payload.classId);
+                            $(`#${rowId} .btn-update-student`).attr('data-studentGender', payload.gender);
 
                             $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Cap nhat thanh cong'});
                             $('#modal-update-student').modal('hide');
@@ -304,7 +307,7 @@
                             } else {
                                 html = students.map((student, index) => {
                                     return `
-                                        <tr class="row-student" id="row-student-{{ loop.index }}">
+                                        <tr class="row-student" id="row-student-${student.id}">
                                             <td>${++index}</td>
                                             <td class="cell-student-id">${student.id}</td>
                                             <td class="cell-student-firstName">${student.firstName}</td>
@@ -319,13 +322,12 @@
                                                 </button>
                                                 <button
                                                     class="btn btn-info btn-update-student"
-                                                    data-studentId=${student.id}
-                                                    data-studentFirstName=${student.firstName}
-                                                    data-studentLastName=${student.lastName}
-                                                    data-studentClassId=${student.class}
-                                                    data-studentPhone=${student.phone}
-                                                    data-studentGender=${student.gender}
-                                                    data-rowId="row-student-${index}">>
+                                                    data-studentId="${student.id}"
+                                                    data-studentFirstName="${student.firstName}"
+                                                    data-studentLastName="${student.lastName}"
+                                                    data-studentClassId="${student.class}"
+                                                    data-studentPhone="${student.phone}"
+                                                    data-studentGender="${student.gender}">
                                                     <i class="fa fa-pencil"></i>
                                                 </button>
                                             </td>
