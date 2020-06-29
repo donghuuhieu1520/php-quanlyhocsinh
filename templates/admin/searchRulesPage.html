@@ -84,6 +84,24 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        function renderTableResult(payload) {
+            var html = '';
+            html += payload.map((student, index) => {
+                return `
+                    <tr>
+                        <td>${++index}</td>
+                        <td>${student.name }</td>
+                        <td>${student.class }</td>
+                        <td>${student.rule }</td>
+                        <td>${student.createdAt }</td>
+                        <td>${student.updatedBy }</td>
+                        <td>${student.hasSendSms }</td>
+                    </tr>
+                `;
+            });
+            $('#tbody-result').html(html).hide().fadeIn();
+        }
+
         $('#select-range').change(function(){
             var select_range = $(this).val();
             if (select_range == '1') {
@@ -94,90 +112,59 @@
                 $('#div-select-class').show();
             }
         });
-        $('#inp-student-name').keyup(_.throttle(function(){
+
+        $('#inp-student-name').keyup(_.throttle(function() {
             $('#inp-student-name').attr('data-tr-mahs', '');
             $('#inp-student-name').css('color','');
 
             var student_name = $(this).val().trim();
-            if (student_name != '') {
+            if (!_.isEmpty(student_name)) {
                 $.ajax({
-                    url: "timkiemvipham_backend.php",
+                    url: "{{ routes.doSearchRule }}",
                     type: "POST",
-                    dataType: "text",
+                    dataType: "json",
                     data: {
-                        flag: "1",
-                        student_name: student_name
+                        searchBy: "student",
+                        data: student_name
                     },
-                    success: function(ketqua){
-                        $('#tbl-search-suggestion').html(ketqua);
-                        $('#div-search-suggesstion').show();
+                    beforeSend: function () {
+                        $('#btn-search').attr('disabled', 'disabled')
+                        $('#btn-search').html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Tìm')
+                        $('#span-hoten-loading').html('<i class="fa fa-pulse fa-spinner fa-fw"></i>')
+                    },
+                    success: function({ success, payload, message }){
+                        if (success) {
+                            renderTableResult(payload);
+                        }
+                    },
+                    complete: function () {
+                        $('#btn-search').removeAttr('disabled');
+                        $('#btn-search').html('Tìm');
+                        $('#span-hoten-loading').html('');
                     }
-                })
+                });
             }
-        }, 1000));
+        }, 1000, { trailling: true }));
 
         $('#select-class').change(function(){
-            $('#btn-search').click()    ;
+            $.ajax({
+                url: "timkiemvipham_backend.php",
+                type: "POST",
+                dataType: "text",
+                data: {
+                    flag: "search",
+                    student_class_name: 'a'
+                },
+                success: function(ketqua){
+                    $('#tbody-result').html(ketqua).hide().fadeIn();
+                    $('#btn-search').removeAttr('disabled')
+                    $('#span-lop-loading').html('')
+                }, beforeSend: function(){
+                    $('#btn-search').attr('disabled', 'disabled')
+                    $('#span-lop-loading').html('<i class="fa fa-pulse fa-spinner fa-fw"></i>')
+                }
+            });
         });
-        $('#btn-search').click(function(){
-            var select_range = $('#select-range').val();
-            if (select_range == '1')
-            {
-                var mahs = $('#inp-student-name').attr('data-tr-mahs');
-                if (mahs != '')
-                {
-                    $.ajax({
-                        url: "timkiemvipham_backend.php",
-                        type: "POST",
-                        dataType: "text",
-                        data: {
-                            flag: "search",
-                            student_id: mahs
-                        },
-                        success: function(ketqua){
-                            $('#tbody-result').html(ketqua).hide().fadeIn();
-                            $('#btn-search').removeAttr('disabled')
-                            $('#btn-search').html('Tìm')
-                            $('#span-hoten-loading').html('')
-                        }, beforeSend: function(){
-                            $('#btn-search').attr('disabled', 'disabled')
-                            $('#btn-search').html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Tìm')
-                            $('#span-hoten-loading').html('<i class="fa fa-pulse fa-spinner fa-fw"></i>')
-                        }
-                    })
-                }else{
-
-                    $.snackbar({content: '<span class="fa-stack fa-xs"><i class="fa fa-circle fa-stack-2x i-background" ></i><i class="fa fa-times fa-stack-1x i-content text-danger"></i></span> Vui lòng nhập tên học sinh.'})
-                }
-            }else if(select_range == '2')
-            {
-                var class_name  = $('#select-class').val();
-                if (class_name != '')
-                {
-                    $.ajax({
-                        url: "timkiemvipham_backend.php",
-                        type: "POST",
-                        dataType: "text",
-                        data: {
-                            flag: "search",
-                            student_class_name: class_name
-                        },
-                        success: function(ketqua){
-                            $('#tbody-result').html(ketqua).hide().fadeIn();
-                            $('#btn-search').removeAttr('disabled')
-                            $('#span-lop-loading').html('')
-                        }, beforeSend: function(){
-                            $('#btn-search').attr('disabled', 'disabled')
-                            $('#span-lop-loading').html('<i class="fa fa-pulse fa-spinner fa-fw"></i>')
-                        }
-                    })
-                }else{
-
-                    $.snackbar({content: '<span class="fa-stack fa-xs"><i class="fa fa-circle fa-stack-2x i-background" ></i><i class="fa fa-times fa-stack-1x i-content text-danger"></i></span> Vui lòng chọn lớp.'})
-                }
-            }
-
-        })
     })
 </script>
 {% endblock %}

@@ -148,4 +148,20 @@ class Students
   {
     $this->gender = $gender;
   }
+
+  /**
+   * @return mixed
+   */
+  public function getStudentsToRules()
+  {
+    return $this->studentsToRules;
+  }
+
+  /**
+   * @param mixed $studentsToRules
+   */
+  public function setStudentsToRules($studentsToRules): void
+  {
+    $this->studentsToRules = $studentsToRules;
+  }
 }

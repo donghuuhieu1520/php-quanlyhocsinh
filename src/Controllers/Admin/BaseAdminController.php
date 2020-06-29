@@ -34,6 +34,13 @@ class BaseAdminController extends BaseController
     }, $_SESSION['manage_classes']);
   }
 
+  protected function getManagedClassIds()
+  {
+    return array_map(function ($class) {
+      return $class['id'];
+    }, $_SESSION['manage_classes']);
+  }
+
   protected function checkAccessOnClass($classId)
   {
     foreach ($_SESSION['manage_classes'] as $class) {
