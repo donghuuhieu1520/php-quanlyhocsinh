@@ -9,6 +9,7 @@ use App\Entities\Accounts;
 use App\Entities\Roles;
 use App\Entities\Classes;
 use Doctrine\ORM\EntityManager;
+use App\Helper\Alfred;
 
 class Login extends BaseController
 {
@@ -37,9 +38,10 @@ class Login extends BaseController
           ->findOneBy(['username' => $body['account']]);
 
       if ($account !== NULL) {
-        if ($account->getPassword() == $body['password']) {
+        if (Alfred::verifyPassword($body['password'], $account->getPassword())) {
           $_SESSION['account_login'] = [
               'id' => $account->getId(),
+              'username' => $account->getUsername(),
               'name' => $account->getName()
           ];
           $classesToAccount = $account->getClassesToAccounts();

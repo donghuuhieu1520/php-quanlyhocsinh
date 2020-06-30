@@ -26,6 +26,7 @@ class AdminTwigRenderer implements IAdminRenderer
       }, $_SESSION['manage_classes']),
       'account' => [
         'id' => $_SESSION['account_login']['id'],
+        'username' => $_SESSION['account_login']['username'],
         'name' => $_SESSION['account_login']['name'],
       ],
       'routes' => $this->routes
