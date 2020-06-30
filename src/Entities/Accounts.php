@@ -100,4 +100,14 @@ class Accounts
     return $this->classesToAccounts;
   }
 
+  /**
+   * @param mixed $password
+   * @return Accounts
+   */
+  public function setPassword($password)
+  {
+    $this->password = $password;
+    return $this;
+  }
+
 }

@@ -50,4 +50,9 @@ class BaseAdminController extends BaseController
     }
     return false;
   }
+
+  protected function getAccountId()
+  {
+    return $_SESSION['account_login']['id'];
+  }
 }

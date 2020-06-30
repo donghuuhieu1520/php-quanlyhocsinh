@@ -82,4 +82,14 @@ class Alfred
     $res->setHeader('Content-type', 'Application/json');
     return $res->setContent(json_encode($data));
   }
+
+  public static function hashPassword(string $plainPassword) : string
+  {
+    return password_hash($plainPassword, PASSWORD_BCRYPT, [ 'cost' => 11 ]);
+  }
+
+  public static function verifyPassword(string $plainPassword, string $hashPassword) : bool
+  {
+    return password_verify($plainPassword, $hashPassword);
+  }
 }
