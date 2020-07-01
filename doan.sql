@@ -30,7 +30,8 @@ SELECT * FROM ACLs;
 
 INSERT INTO ACLs (can_create_rule, can_read_rule, can_delete_rule, can_update_rule, can_read_student, can_create_student, can_delete_student, can_update_student) VALUES
 (true, true, true, true, true, true, true, true),
-(false, true, false, false, true, false, false, false);
+(false, true, false, false, true, false, false, true),
+(false, true, false, false, true, false, false, true);
 
 UPDATE Accounts SET acl_id = 1 WHERE id = 1;
 UPDATE Accounts SET acl_id = 2 WHERE id = 2;
