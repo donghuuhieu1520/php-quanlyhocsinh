@@ -33,6 +33,22 @@ class StudentsToRules
      * @ORM\JoinColumn(name="student_id", referencedColumnName="id", nullable=false)
      */
     private $student;
+    public function setStudent(Students $student): void
+    {
+        $this->student = $student;
+    }
+    public function setAccount(Accounts $account): void
+    {
+        $this->account = $account;
+    }
+    public function setRule(Rules $rule): void
+    {
+        $this->rule = $rule;
+    }
+    public function setCreateAt(): void
+    {
+        $this->created_at = new \DateTime("now");
+    }
     public function getRawData()
     {
         return [

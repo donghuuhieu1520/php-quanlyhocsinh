@@ -54,6 +54,10 @@ class Rules
   {
     return $this->is_bad;
   }
+  public function getId()
+  {
+    return $this->id;
+  }
 
   /**
    * @param mixed $is_bad

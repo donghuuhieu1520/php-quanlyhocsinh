@@ -66,8 +66,7 @@
                   <tr>
 
                     <th>Mã học sinh</th>
-                    <th>Họ và tên lót</th>
-                    <th>Tên</th>
+                    <th>Họ và tên</th>
                     <th>Lớp</th>
                     <th>Giới tính</th>
                     <th style="text-align: center">Cập nhật nhanh</th>
@@ -105,7 +104,7 @@
             <p><i class="fa fa-spinner fa-pulse fa-fw"></i>Đang tải...</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-close">Đóng</button>
           </div>
         </div>
 
@@ -145,8 +144,7 @@
                 $('.table-students-content').append(`
                   <tr>
                     <td>${student.id}</td>
-                    <td>${student.firstName}</td>
-                    <td>${student.lastName}</td>
+                    <td>${student.name}</td>
                     <td>${student.class}</td>
                     <td>${student.gender ? 'Nam' : 'Nu'}</td>
                     <td style="text-align: center">
@@ -161,23 +159,20 @@
             }
         },
         complete: function(){
-            $('#btn-search-class').html('<i class="fa fa-search"></i>');
-            $(".btn-capnhat").click(function (e) {
-              console.log($(this).parent().siblings()[1].innerHTML);
-              // var mahs = $(this).val();
-              // $.get("/api/v1/admin/rules/studentToRule/" + mahs, function (data) {
-              //   var str = data.payload;
-              //   $('.modal-title').html(`
-              //     <i class="glyphicon glyphicon-user"></i>
-              //     ${str[0].student_name}
-              //   `)
-              // })
-            });
+          $('#btn-search-class').html('<i class="fa fa-search"></i>');
+          $(".btn-capnhat").click(function () {
+            var studentName = $(this).parent().siblings()[1].innerHTML;
+            var studentId = $(this).parent().siblings()[0].innerHTML
+              $('.modal-title').html(`
+                <i class="glyphicon glyphicon-user" data-id = "${studentId}" id = "student-info"></i>
+                ${studentName}
+              `)
+          });
         }
       })
     })
     $.ajax({
-        url: "/api/v1/admin/rules",
+        url: "/api/v1/rules",
         type: "get",
         dataType: "json",
         data:{
@@ -210,13 +205,41 @@
         complete: function(){
             $('.modal-footer').html(`
               <button type="button" class="btn btn-primary" id="modal_capnhat"><i class="fa fa-edit"></i> Cập nhật</button>
-              <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-close">Đóng</button>
             `)
+            $('#modal_capnhat').click(function() {
+              var studentId = $('#student-info').attr('data-id');
+              var ruleId = $('#modal-se-viphamthanhtich').val();
+              $.ajax({
+                  url: "{{routes.apiAddStudentToRule}}",
+                  type: "post",
+                  dataType: "json",
+                  data:{
+                    studentId,
+                    ruleId
+                  },
+                  beforeSend: function() {
+                      
+                  },
+                  success: function(data){
+                    if (data.success) {
+                      $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã thêm !'})
+                    }
+                    else {
+                      $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Đã xảy ra lỗi !'})
+                    }
+                    $("#btn-close").trigger("click");
+                  },
+                  complete: function(){
+                    $('#lb-chonmuc').html('Chọn mục: ')
+                  }
+              })
+            })
             $('#modal-se-loai').change(function(){
               var se_loai = $(this).val();
               $('#lb-chonmuc').html('Chọn mục: <i class="fa fa-spinner fa-pulse fa-fw"></i>')
               $.ajax({
-                  url: "/api/v1/admin/rules",
+                  url: "/api/v1/rules",
                   type: "get",
                   dataType: "json",
                   data:{
@@ -226,7 +249,6 @@
                       
                   },
                   success: function(data){
-                    console.log(data);
                     if (data.success) {
                       var rules = data.payload
                       var html = rules.map(rule => {
@@ -242,21 +264,6 @@
             })
         }
     })
-    $.ajax({
-      url: "/api/v1/admin/rules/studentToRule/1",
-      type: "get",
-      dataType: "json",
-      data:{
-      },
-      beforeSend: function() {
-      },
-      success: function(data){
-        console.log(data);
-      },
-      complete: function(){
-        
-      }
-  })
     $("#addon-inp-search").click(function () {
       $(this).html('<i class="fa fa-spinner fa-pulse fa-fw"></i>')
       var tenhocsinh = $("#inp_search").val();
@@ -278,6 +285,5 @@
         $('#addon-inp-search').click();
       }
     })
-    
   </script>
 {% endblock %}

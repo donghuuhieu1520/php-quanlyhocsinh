@@ -9,4 +9,5 @@ return (new Router())
     ->post('/', 'App\Controllers\Admin\Rules@add', 'apiAddRules')
     ->get('/', 'App\Controllers\Admin\Rules@getAll', 'apiGetAllRules')
     ->post('/update', 'App\Controllers\Admin\Rules@update', 'apiUpdateRule')
-    ->delete('/{ruleId}', 'App\Controllers\Admin\Rules@delete');
+    ->delete('/{ruleId}', 'App\Controllers\Admin\Rules@delete')
+    ->post('/addStudentToRule', 'App\Controllers\Admin\StudentsToRules@add', 'apiAddStudentToRule');
