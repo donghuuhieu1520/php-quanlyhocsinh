@@ -1,0 +1,162 @@
+{% extends "admin/BaseAdmin.html" %}
+{% block title %}Cập nhật học sinh vi phạm{% endblock %}
+{% block content %}
+<body>
+  <div id="wrapper">
+    <script type="text/javascript">
+      $('.2').attr('class', 'active');
+    </script>
+    <div id="page-wrapper">
+
+      <div class="container-fluid">
+
+        <!-- Page Heading -->
+
+
+        <div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">
+              <i class="fa fa-edit"></i> Cập nhật học sinh vi phạm
+              <small></small>
+            </h1>
+            <ol class="breadcrumb">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="col-lg-4">
+                    <div class="form-group">
+
+                      <select class="form-control" name="se_class" id="se_class">
+                        <option value="" disabled selected>Chọn lớp</option>
+                        <option value="<?php echo $caclop['hslop'];?>">
+                        </option>
+                      </select>
+
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="form-group input-group">
+                      <input type="text" class="form-control" placeholder="Tìm nhanh học sinh" name="inp_search_student"
+                        id="inp_search" maxlength="100">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" id="addon-inp-search" type="button">
+                          <i class="fa fa-search"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                  <p class="pull-right text-muted p-search-result" style="display: none">Tìm thấy: <strong
+                      class="text-danger strong-search-result">0</strong> kết quả!</p>
+                </div>
+              </div>
+
+            </ol>
+          </div>
+        </div>
+        <!-- /.row -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover table-striped">
+
+                <thead>
+
+                  <tr>
+
+                    <th>Mã học sinh</th>
+                    <th>Họ và tên lót</th>
+                    <th>Tên</th>
+                    <th>Lớp</th>
+                    <th>Giới tính</th>
+                    <th style="text-align: center">Cập nhật nhanh</th>
+                  </tr>
+
+                </thead>
+                <tbody class="result-table">
+                  <tr style="display: none" class="tr-status">
+                    <td colspan="6" style="text-align: center;"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></td>
+                  </tr>
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+
+    </div>
+    <!-- /#page-wrapper -->
+
+    <!-- Modal -->
+    <div id="modalcapnhat" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"><i class="fa fa-spinner fa-pulse fa-fw"></i>Đang tải...</h4>
+          </div>
+          <div class="modal-body">
+            <p><i class="fa fa-spinner fa-pulse fa-fw"></i>Đang tải...</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+
+      </div>
+      <div id="snackbar" style="background-color: green;"><i class="fa fa-check"></i> Cập nhật thành công !</div>
+    </div>
+  </div>
+{%endblock%}
+{% block script %}
+  <script type="text/javascript">
+    var classchoosen = $("#se_class").val();
+    if (classchoosen !== null) {
+      $.post("tbl_getclassmember.php", { tenlop: classchoosen }, function (tblgetclassmember) {
+        $('.tr-status').hide();
+        $(".result-table").html(tblgetclassmember).hide().fadeIn();
+        $('.p-search-result').hide();
+      })
+    }
+    $(".btn-capnhat").click(function () {
+      $('.modal-title').html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Vui lòng đợi.');
+      $('.modal-body').html('<p class="text-muted" style="text-align: center"><i class="fa fa-spinner fa-pulse fa-fw"></i>Đang tải...</p>');
+      var mahs = $(this).val();
+      $.post("modalgetinfo.php", { mahs: mahs }, function (themloivipham) {
+        $(".modal-content").html(themloivipham);
+      })
+    });
+    $("#se_class").change(function () {
+      $('.tr-status').show();
+      var tenlop = $("#se_class").val();
+      $.post("tbl_getclassmember.php", { tenlop: tenlop }, function (tblgetclassmember) {
+        $('.tr-status').hide();
+        $(".result-table").html(tblgetclassmember).hide().fadeIn();
+        $('.p-search-result').hide();
+      })
+    })
+    $("#addon-inp-search").click(function () {
+      $(this).html('<i class="fa fa-spinner fa-pulse fa-fw"></i>')
+      var tenhocsinh = $("#inp_search").val();
+      $.post("tbl_searchclassmember.php", { tenhocsinh: tenhocsinh }, function (tblsearchclassmember) {
+        $('.tr-status').hide();
+        $(".result-table").html(tblsearchclassmember).hide().fadeIn();
+        $('#addon-inp-search').html('<i class="fa fa-search"></i>');
+        var dem = 0;
+        $('.result-table tr button').each(function () {
+          dem++;
+        });
+        $('.strong-search-result').html(dem);
+        $('.p-search-result').show();
+      })
+    })
+    $('#inp_search').keydown(function (e) {
+      var kepressed = e.which;
+      if (kepressed === 13) {
+        $('#addon-inp-search').click();
+      }
+    })
+  </script>
+{% endblock %}
