@@ -163,7 +163,7 @@
         complete: function(){
             $('#btn-search-class').html('<i class="fa fa-search"></i>');
             $(".btn-capnhat").click(function (e) {
-              console.log($(this).parent().parent());
+              console.log($(this).parent().siblings()[1].innerHTML);
               // var mahs = $(this).val();
               // $.get("/api/v1/admin/rules/studentToRule/" + mahs, function (data) {
               //   var str = data.payload;
@@ -177,10 +177,11 @@
       })
     })
     $.ajax({
-        url: "/api/v1/admin/rules?type=1",
+        url: "/api/v1/admin/rules",
         type: "get",
         dataType: "json",
         data:{
+          ruleType: 1
         },
         beforeSend: function() {
             
@@ -215,10 +216,11 @@
               var se_loai = $(this).val();
               $('#lb-chonmuc').html('Chọn mục: <i class="fa fa-spinner fa-pulse fa-fw"></i>')
               $.ajax({
-                  url: "/api/v1/admin/rules?type=" + se_loai,
+                  url: "/api/v1/admin/rules",
                   type: "get",
                   dataType: "json",
                   data:{
+                    ruleType: se_loai
                   },
                   beforeSend: function() {
                       

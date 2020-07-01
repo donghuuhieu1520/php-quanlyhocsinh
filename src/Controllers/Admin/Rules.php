@@ -215,23 +215,6 @@ class Rules extends BaseAdminController
         'message' => 'Search by sclas'
     ];
   }
-  public function getAll($param)
-  { 
-    if (!$this->isLoggedIn()) {
-      return Alfred::apiResponseNotLogin($this->response);
-    }
-    $query = $this->request->getParameters();
-
-    $filter = isset($query['type']) ? ['is_bad' => (int) $query['type']] : [];
-
-    $rules = $this->em->getRepository('App\Entities\Rules')->findBy($filter);
-
-    $data = array_map(function ($rule) {
-      return $rule->getRawData();
-    }, $rules);
-
-    return Alfred::apiResponseWithSuccess($this->response, $data);
-  }
   public function getStudentToRule($param) {
 
     $filter = isset($param['studentId']) ? ['student' => (int) $param['studentId']] : [];
