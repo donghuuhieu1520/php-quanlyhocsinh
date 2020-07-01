@@ -30,4 +30,45 @@ class Rules
      * @ORM\OneToMany(targetEntity="App\Entities\StudentsToRules", mappedBy="rule")
      */
     private $studentsToRules;
+
+  /**
+   * @return mixed
+   */
+  public function getName()
+  {
+    return $this->name;
+  }
+
+  /**
+   * @param mixed $name
+   */
+  public function setName($name): void
+  {
+    $this->name = $name;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getIsBad()
+  {
+    return $this->is_bad;
+  }
+
+  /**
+   * @param mixed $is_bad
+   */
+  public function setIsBad($is_bad): void
+  {
+    $this->is_bad = $is_bad;
+  }
+
+  public function getRawData()
+  {
+    return [
+        'id' => $this->id,
+        'name' => $this->name,
+        'isBad' => $this->is_bad
+    ];
+  }
 }

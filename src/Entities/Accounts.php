@@ -37,9 +37,9 @@ class Accounts
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entities\ACLs", mappedBy="accounts")
+     * @ORM\OneToOne(targetEntity="App\Entities\ACLs")
      */
-    private $aCLs;
+    private $acl;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entities\ClassesToAccounts", mappedBy="account")
@@ -108,6 +108,22 @@ class Accounts
   {
     $this->password = $password;
     return $this;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getAcl()
+  {
+    return $this->acl;
+  }
+
+  /**
+   * @param mixed $acl
+   */
+  public function setAcl($acl): void
+  {
+    $this->acl = $acl;
   }
 
 }

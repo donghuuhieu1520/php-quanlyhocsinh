@@ -1,0 +1,49 @@
+#btn_themmoi, .btn-edit-mistake, .btn-delete-mistake, .btn-save-mistake {
+    border-radius: 0px;
+}
+
+.form-control {
+    border-radius: 0;
+}
+
+.td0 {
+    font-style: bold
+}
+
+#gioitu, #gioiden, #khatu, #khaden, #tbtu, #tbden, #yeutu, #yeuden {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    border-bottom: 3px dotted #ccc;
+    border-radius: 0px;
+    -webkit-transition: 0.5s;
+    -transition: 0.5s;
+    text-align: center;
+}
+
+#gioitu:focus, #gioiden:focus, #khatu:focus, #khaden:focus, #tbtu:focus, #tbden:focus, #yeutu:focus, #yeuden:focus {
+    box-shadow: none;
+    border-radius: 0px;
+    border-bottom: 3px solid #5cb85c;
+    -webkit-transition: 0.5s;
+    -transition: 0.5s;
+}
+
+.btn {
+    border-radius: 0px;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}

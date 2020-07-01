@@ -1,0 +1,322 @@
+{% extends "admin/BaseAdmin.html" %}
+{% block title %}Cấu hình vi phạm{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/css/admin/showManageRulesPage.css">
+{% endblock %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <i class="fa fa-wrench"></i> Cấu hình vi phạm
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="text-success" style="font-weight: bold">1. Thêm mới</p>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead style="background-color: #4caf50; color: #fff">
+                        <tr>
+                            <th><i class="fa fa-tasks"></i></th>
+                            <th>Tên</th>
+                            <th>Loại</th>
+                            <th>Xác nhận</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="" name="" class="form-control" id="inp-them-ten">
+                            </td>
+                            <td>
+                                <select class="form-control" id="select-them-loai">
+                                    <option value="1">Vi phạm</option>
+                                    <option value="0">Thành tích</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" id="btn-add"><i class="fa fa-plus"></i> Thêm</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="text-success" style="font-weight: bold">2. Hiện có <span id="span-hienco-waiting" style="display: none"><i class="text-success fa fa-pulse fa-spinner fa-fw"></i></span> </p>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead style="background-color: #4caf50; color: #fff">
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên</th>
+                            <th>
+                                Loại:
+                                <select class="pull-right" style="background-color: #4caf50; border: 0px; " id="select-type">
+                                    <option value="2">Tất cả</option>
+                                    <option value="1">Vi phạm</option>
+                                    <option value="0">Thành tích</option>
+                                </select>
+                            </th>
+                            <th>Sửa</th>
+                            <th>Xóa</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody-hienco">
+<!--                        <?php-->
+<!--                					$query = mysqli_query($conn, "SELECT * FROM `bangcacloivipham`");-->
+<!--                					if ($query)-->
+<!--                					{-->
+<!--                						if (mysqli_num_rows($query) > 0)-->
+<!--                        {-->
+<!--                        $i = 0;-->
+<!--                        while ($result = mysqli_fetch_array($query, MYSQLI_ASSOC))-->
+<!--                        {-->
+<!--                        $i++;-->
+<!--                        ?>-->
+<!--                        <tr id="tr-hienco-<?php echo $i; ?>">-->
+<!--                            <td><?php echo $i;?></td>-->
+<!--                            <td><?php echo $result['tenvipham'];?></td>-->
+<!--                            <td><?php echo ($result['loai']=='vipham')?('Vi phạm'):('Thành tích');?></td>-->
+<!--                            <td><?php echo ($result['tinhchat']=='nghiemtrong')?('Nghiêm trọng'):('Bình thường');?></td>-->
+<!--                            <td><?php echo $result['diemtru'];?></td>-->
+<!--                            <td><button class="btn btn-success btn-edit" onclick='chinhsua("<?php echo $i.'|'.$result['STT'].'|'.$result['tenvipham'].'|'.$result['loai'].'|'.$result['tinhchat'].'|'.$result['diemtru']; ?>")'><i class="fa fa-edit"></i> Sửa</button></td>-->
+<!--                            <td><button class="btn btn-warning btn-delete" id="btn-delete-<?php echo $result['STT'];?>" data-data="<?php echo $result['STT'];?>" onclick='xoa("<?php echo $result['STT'];?>")'><i class="fa fa-trash"></i> Xóa</button></td>-->
+<!--                        </tr>-->
+<!--                        <?php-->
+<!--                							}-->
+<!--                						}-->
+<!--                					}-->
+<!--                					?>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+    <div id="modal-chinhsuavipham" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #5cb85c; color: #fff">
+                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times" style="color: #fff"></i></button>
+                    <h4><span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-edit fa-stack-1x text-success"></i></span> Chỉnh sửa</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Tên</label>
+                            <input type="text" name="" class="form-control" id="inp-modal-chinhsua-ten">
+                            <label>Loại</label>
+                            <select class="form-control" id="select-modal-chinhsua-loai">
+                                <option value="1">Vi phạm</option>
+                                <option value="0">Thành tích</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="btn-save" data-ruleId=""><i class="fa fa-check"></i> Lưu</button>
+                    <button class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    $('.6').attr('class', 'active');
+</script>
+<script type="text/javascript">
+    function laydanhsachhienco()
+    {
+        var ruleType = $('#select-type').val();
+        $.ajax({
+            url: "{{ routes.apiGetAllRules }}",
+            method: "GET",
+            dataType: "json",
+            data: { ruleType },
+            beforeSend: function() {
+                $('#span-hienco-waiting').show()
+                $('#tbody-hienco').find('button').attr('disabled', 'disabled')
+            },
+            success: function({ success, payload, message }) {
+                var table = `
+                    <tr><td colspan="5">Khong tim thay ket qua</td></tr>
+                `;
+                if (success) {
+                    table = payload.reduce((html, rule, index) => {
+                        html += `
+                            <tr id="tr-hienco-${++index}">
+                                <td>${ index }</td>
+                                <td>${ rule.name }</td>
+                                <td>${ rule.isBad ? 'Vi phạm' : 'Thành tích'}</td>
+                                <td>
+                                    <button
+                                        class="btn btn-success btn-edit"
+                                        data-ruleId="${rule.id}"
+                                        data-ruleName="${rule.name}"
+                                        data-ruleIsBad="${rule.isBad ? 1 : 0}">
+                                        <i class="fa fa-edit"></i> Sửa
+                                    </button>
+                                </td>
+                                <td>
+                                    <button
+                                        class="btn btn-warning btn-delete"
+                                        data-ruleId="${rule.id}">
+                                        <i class="fa fa-trash"></i> Xóa
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        return html;
+                    }, ``);
+                }
+                $('#tbody-hienco').html(table);
+            },
+            complete: function () {
+                $('#span-hienco-waiting').hide();
+                $('#tbody-hienco').find('button').removeAttr('disabled');
+            }
+        })
+    }
+
+    $(document).ready(function(){
+        laydanhsachhienco();
+
+        $(document).on('click', '.btn-edit', function () {
+            var button = $(this);
+            var  ruleId = button.attr('data-ruleId');
+            var  ruleName = button.attr('data-ruleName');
+            var  ruleIsBad = button.attr('data-ruleIsBad');
+            $('#select-modal-chinhsua-loai').val(ruleIsBad);
+            $('#inp-modal-chinhsua-ten').val(ruleName);
+            $('#btn-save').attr('data-ruleId', ruleId);
+            $('#modal-chinhsuavipham').modal();
+        });
+
+        $(document).on('click', '.btn-delete', function () {
+            var button = $(this);
+            var ruleId = button.attr('data-ruleId');
+            swal({
+                title: 'Xác nhận xóa',
+                text: "Bạn có thật sự muốn xóa ?",
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '',
+                confirmButtonText: 'Xóa!',
+                cancelButtonText: 'Hủy bỏ'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: `/api/v1/rules/${ruleId}`,
+                        method: "delete",
+                        beforeSend: function(){
+                            button.attr('disabled', 'disabled')
+                            button.html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Xóa')
+                        },
+                        success: function({ success, message }) {
+                            if (success) {
+                                laydanhsachhienco();
+                                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x text-success"></i></span> Đã xóa !'});
+                            } else {
+                                swal('Đã có lỗi xảy ra!', message, 'error');
+                            }
+                        },
+                        complete: function () {
+                            button.removeAttr('disabled');
+                            button.html('<i class="fa fa-trash"></i> Xóa');
+                        }
+                    })
+                }
+            })
+        });
+
+        $('#btn-add').click(function(){
+            var ten_add = $('#inp-them-ten').val();
+            var loai_add = $('#select-them-loai').val();
+            if(!_.isEmpty(ten_add) && !_.isEmpty(loai_add)) {
+                $.ajax({
+                    url: "{{ routes.apiAddRules }}",
+                    method: "POST",
+                    dataType: "json",
+                    data: { ten_add, loai_add },
+                    beforeSend: function() {
+                        $('#btn-add').html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Đang thực thi')
+                        $('#btn-add').attr('disabled', 'disabled')
+                    },
+                    success: function({ success, message, payload }) {
+                        if(success) {
+                            $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã thêm !'})
+                            $('#inp-them-ten').val('').focus();
+                            $('#select-them-loai').val('vipham');
+                            laydanhsachhienco();
+                        } else {
+                            $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Đã xảy ra lỗi !'})
+                        }
+                    },
+                    complete: function () {
+                        $('#btn-add').html('<i class="fa fa-plus"></i> Thêm')
+                        $('#btn-add').removeAttr('disabled')
+                    }
+                })
+            } else
+            {
+                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> Vui lòng nhập đủ thông tin !'})
+            }
+        });
+
+        $('#select-type').change(function(){
+            laydanhsachhienco();
+        });
+
+        $('#btn-save').click(function(){
+            var ruleName = $('#inp-modal-chinhsua-ten').val();
+            var ruleId = $(this).attr('data-ruleId');
+            var ruleIsBad = $('#select-modal-chinhsua-loai').val();
+
+            if (!_.isEmpty(ruleName) && !_.isEmpty(ruleId) && !_.isEmpty(ruleIsBad)) {
+                $.ajax({
+                    url: "{{ routes.apiUpdateRule }}",
+                    method: "POST",
+                    dataType: "json",
+                    data: { ruleId, ruleName, ruleIsBad },
+                    beforeSend: function() {
+                        $('#btn-save').html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Đang thực thi');
+                        $('#btn-save').attr('disabled', 'disabled');
+                    },
+                    success: function({ success, payload, message }) {
+                        if (success) {
+                            laydanhsachhienco()
+                            $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã lưu !'})
+                        } else {
+                            $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Đã xảy ra lỗi !'})
+                        }
+                    },
+                    complete: function () {
+                        $('#btn-save').html('<i class="fa fa-check"></i> Lưu');
+                        $('#btn-save').removeAttr('disabled');
+                        $('#modal-chinhsuavipham').modal('toggle');
+                    }
+                })
+            } else {
+                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-danger"></i></span> Vui lòng nhập đủ thông tin !'})
+            }
+        });
+
+    })
+</script>
+{% endblock %}

@@ -8,6 +8,7 @@
     <title>{% block title %}{% endblock %}</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://unpkg.com/sweetalert2@7.2.0/dist/sweetalert2.all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link href="/css/snackbar/snackbar.css" rel="stylesheet">
     <link href="/css/snackbar/material.css" rel="stylesheet">
@@ -43,9 +44,11 @@
                 <li class="li-a-doimatkhau">
                     <a href="{{ routes.showChangeAdminPassword }}"><i class="fa fa-fw fa-lock"></i> Đổi mật khẩu</a>
                 </li>
+                {% if acl.canCreateRule and acl.canReadRule %}
                 <li class="6">
-                    <a href="cauhinhvipham.php"><i class="fa fa-fw fa-wrench"></i> Cấu hình vi phạm</a>
+                    <a href="{{ routes.showRuleManage }}"><i class="fa fa-fw fa-wrench"></i> Cấu hình vi phạm</a>
                 </li>
+                {% endif %}
                 <li class="divider"></li>
                 <li>
                     <form action="{{ routes.logout }}" method="post">
@@ -114,9 +117,11 @@
                     <li>
                         <a href="/admin/students/show/{{ manage_classes|first.id }}" id="a-danhsachhocsinh"><i class="fa fa-group" aria-hidden="true"></i> Danh sách học sinh <i class="fa fa-caret-right"></i></a>
                     </li>
+                    {% if acl.canCreateStudent %}
                     <li>
                         <a href="{{ routes.adminAddStudentToClass}}"><i class="fa fa-user-plus" aria-hidden="true"></i> Thêm học sinh mới</a>
                     </li>
+                    {% endif %}
                 </ul>
             </li>
             <li class="4">
