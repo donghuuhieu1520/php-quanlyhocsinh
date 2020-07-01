@@ -65,7 +65,7 @@ class Alfred
   {
     $data = [
         'success' => false,
-        'message' => 'You are not allow'
+        'message' => 'Ban khong co quyen thuc hien thao tac nay!'
     ];
 
     $res->setHeader('Content-type', 'Application/json');

@@ -57,6 +57,12 @@ class Students extends BaseAdminController
       return Alfred::apiResponseNotLogin($this->response);
     }
 
+    $accountACLs = $this->getAcl();
+
+    if (!$accountACLs['canCreateStudent']) {
+      return Alfred::apiResponseNotAllow($this->response);
+    }
+
     $studentInfo = $this->request->getParameters();
 
     $hasAccess = $this->checkAccessOnClass($studentInfo['classId']);
@@ -91,6 +97,12 @@ class Students extends BaseAdminController
   {
     if (!$this->isLoggedIn()) {
       return Alfred::apiResponseNotLogin($this->response);
+    }
+
+    $accountACLs = $this->getAcl();
+
+    if (!$accountACLs['canUpdateStudent']) {
+      return Alfred::apiResponseNotAllow($this->response);
     }
 
     $studentId = $param['studentId'];
@@ -129,9 +141,16 @@ class Students extends BaseAdminController
     return Alfred::apiResponseWithSuccess($this->response, $myStudent->getRawData());
   }
 
-  public function delete ($param) {
+  public function delete ($param)
+  {
     if (!$this->isLoggedIn()) {
       return Alfred::apiResponseNotLogin($this->response);
+    }
+
+    $accountACLs = $this->getAcl();
+
+    if (!$accountACLs['canDeleteStudent']) {
+      return Alfred::apiResponseNotAllow($this->response);
     }
 
     $studentId = (int)$param['studentId'];
