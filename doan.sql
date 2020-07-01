@@ -22,7 +22,7 @@ INSERT INTO ClassesToAccounts (account_id, class_id ) VALUES
 INSERT INTO Students (first_name, last_name, gender, phone,class_id) VALUES
 ("Dong Huu", "Hieu", true, "0981925281", 1),
 ("Nguyen Cuu Nhat", "Thanh", true, "0981925282", 1),
-("Nguyen Ba Nhat", "Long", true, "0981925283", 1)
+("Nguyen Ba Nhat", "Long", true, "0981925283", 1);
 
 SELECT * FROM Accounts;
 
