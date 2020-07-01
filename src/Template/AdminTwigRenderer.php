@@ -8,6 +8,7 @@ use App\Helper\Router;
 class AdminTwigRenderer implements IAdminRenderer
 {
   private $renderer;
+  private array $routes;
 
   public function __construct(Environment $renderer, Router $router)
   {
@@ -29,7 +30,8 @@ class AdminTwigRenderer implements IAdminRenderer
         'username' => $_SESSION['account_login']['username'],
         'name' => $_SESSION['account_login']['name'],
       ],
-      'routes' => $this->routes
+      'routes' => $this->routes,
+      'acl' => $_SESSION['account_login']['acl']
     ]);
     return $this->renderer->render("admin/$template.html", $data);
   }

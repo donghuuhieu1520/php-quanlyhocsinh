@@ -39,11 +39,26 @@ class Login extends BaseController
 
       if ($account !== NULL) {
         if (Alfred::verifyPassword($body['password'], $account->getPassword())) {
+          $accountAcl = $account->getAcl();
           $_SESSION['account_login'] = [
               'id' => $account->getId(),
               'username' => $account->getUsername(),
               'name' => $account->getName()
           ];
+
+          if ($accountAcl != null) {
+            $_SESSION['account_login']['acl'] = [
+                'canReadRule' => $accountAcl->getCanReadRule(),
+                'canCreateRule' => $accountAcl->getCanCreateRule(),
+                'canUpdateRule' => $accountAcl->getCanUpdateRule(),
+                'canDeleteRule' => $accountAcl->getCanDeleteRule(),
+                'canReadStudent' => $accountAcl->getCanReadStudent(),
+                'canCreateStudent' => $accountAcl->getCanCreateStudent(),
+                'canUpdateStudent' => $accountAcl->getCanUpdateStudent(),
+                'canDeleteStudent' => $accountAcl->getCanDeleteStudent()
+            ];
+          }
+
           $classesToAccount = $account->getClassesToAccounts();
           $_SESSION['manage_classes'] = $classesToAccount
               ->map(function ($classToAccount) {

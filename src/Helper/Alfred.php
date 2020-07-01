@@ -90,6 +90,7 @@ class Alfred
 
   public static function verifyPassword(string $plainPassword, string $hashPassword) : bool
   {
-    return password_verify($plainPassword, $hashPassword);
+//    return $plainPassword == $hashPassword;
+     return password_verify($plainPassword, $hashPassword);
   }
 }
