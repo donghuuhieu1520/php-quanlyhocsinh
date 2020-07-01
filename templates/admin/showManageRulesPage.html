@@ -13,16 +13,16 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">
-                    <i class="fa fa-wrench"></i> Cấu hình vi phạm
+                    <i class="fa fa-wrench"></i> Thiet lap ne nep
                 </h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <p class="text-success" style="font-weight: bold">1. Thêm mới</p>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
-                        <thead style="background-color: #4caf50; color: #fff">
+                        <thead style="">
                         <tr>
                             <th><i class="fa fa-tasks"></i></th>
                             <th>Tên</th>
@@ -73,31 +73,6 @@
                         </tr>
                         </thead>
                         <tbody id="tbody-hienco">
-<!--                        <?php-->
-<!--                					$query = mysqli_query($conn, "SELECT * FROM `bangcacloivipham`");-->
-<!--                					if ($query)-->
-<!--                					{-->
-<!--                						if (mysqli_num_rows($query) > 0)-->
-<!--                        {-->
-<!--                        $i = 0;-->
-<!--                        while ($result = mysqli_fetch_array($query, MYSQLI_ASSOC))-->
-<!--                        {-->
-<!--                        $i++;-->
-<!--                        ?>-->
-<!--                        <tr id="tr-hienco-<?php echo $i; ?>">-->
-<!--                            <td><?php echo $i;?></td>-->
-<!--                            <td><?php echo $result['tenvipham'];?></td>-->
-<!--                            <td><?php echo ($result['loai']=='vipham')?('Vi phạm'):('Thành tích');?></td>-->
-<!--                            <td><?php echo ($result['tinhchat']=='nghiemtrong')?('Nghiêm trọng'):('Bình thường');?></td>-->
-<!--                            <td><?php echo $result['diemtru'];?></td>-->
-<!--                            <td><button class="btn btn-success btn-edit" onclick='chinhsua("<?php echo $i.'|'.$result['STT'].'|'.$result['tenvipham'].'|'.$result['loai'].'|'.$result['tinhchat'].'|'.$result['diemtru']; ?>")'><i class="fa fa-edit"></i> Sửa</button></td>-->
-<!--                            <td><button class="btn btn-warning btn-delete" id="btn-delete-<?php echo $result['STT'];?>" data-data="<?php echo $result['STT'];?>" onclick='xoa("<?php echo $result['STT'];?>")'><i class="fa fa-trash"></i> Xóa</button></td>-->
-<!--                        </tr>-->
-<!--                        <?php-->
-<!--                							}-->
-<!--                						}-->
-<!--                					}-->
-<!--                					?>-->
                         </tbody>
                     </table>
                 </div>

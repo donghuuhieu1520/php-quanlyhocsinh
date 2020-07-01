@@ -56,6 +56,26 @@ class ACLs
     private $can_update_student;
 
   /**
+   * @ORM\Column(type="boolean", nullable=false, options={"default":false})
+   */
+  private $can_read_account;
+
+  /**
+   * @ORM\Column(type="boolean", nullable=false, options={"default":false})
+   */
+  private $can_create_account;
+
+  /**
+   * @ORM\Column(type="boolean", nullable=false, options={"default":false})
+   */
+  private $can_delete_account;
+
+  /**
+   * @ORM\Column(type="boolean", nullable=false, options={"default":false})
+   */
+  private $can_update_account;
+
+  /**
    * @return mixed
    */
   public function getId()
@@ -197,5 +217,87 @@ class ACLs
   public function setCanUpdateStudent($can_update_student): void
   {
     $this->can_update_student = $can_update_student;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getCanReadAccount()
+  {
+    return $this->can_read_account;
+  }
+
+  /**
+   * @param mixed $can_read_account
+   */
+  public function setCanReadAccount($can_read_account): void
+  {
+    $this->can_read_account = $can_read_account;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getCanCreateAccount()
+  {
+    return $this->can_create_account;
+  }
+
+  /**
+   * @param mixed $can_create_account
+   */
+  public function setCanCreateAccount($can_create_account): void
+  {
+    $this->can_create_account = $can_create_account;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getCanDeleteAccount()
+  {
+    return $this->can_delete_account;
+  }
+
+  /**
+   * @param mixed $can_delete_account
+   */
+  public function setCanDeleteAccount($can_delete_account): void
+  {
+    $this->can_delete_account = $can_delete_account;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getCanUpdateAccount()
+  {
+    return $this->can_update_account;
+  }
+
+  /**
+   * @param mixed $can_update_account
+   */
+  public function setCanUpdateAccount($can_update_account): void
+  {
+    $this->can_update_account = $can_update_account;
+  }
+  
+  public function getRawData()
+  {
+    return [
+        'canReadRule' => $this->getCanReadRule(),
+        'canCreateRule' => $this->getCanCreateRule(),
+        'canUpdateRule' => $this->getCanUpdateRule(),
+        'canDeleteRule' => $this->getCanDeleteRule(),
+        'canReadStudent' => $this->getCanReadStudent(),
+        'canCreateStudent' => $this->getCanCreateStudent(),
+        'canUpdateStudent' => $this->getCanUpdateStudent(),
+        'canDeleteStudent' => $this->getCanDeleteStudent(),
+        'canReadAccount' => $this->getCanReadAccount(),
+        'canCreateAccount' => $this->getCanCreateAccount(),
+        'canUpdateAccount' => $this->getCanUpdateAccount(),
+        'canDeleteAccount' => $this->getCanDeleteAccount()
+    ];
   }
 }

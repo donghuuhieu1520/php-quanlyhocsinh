@@ -46,7 +46,7 @@
                 </li>
                 {% if acl.canCreateRule and acl.canReadRule %}
                 <li class="6">
-                    <a href="{{ routes.showRuleManage }}"><i class="fa fa-fw fa-wrench"></i> Cấu hình vi phạm</a>
+                    <a href="{{ routes.showRuleManage }}"><i class="fa fa-fw fa-wrench"></i> Thiet lap ne nep</a>
                 </li>
                 {% endif %}
                 <li class="divider"></li>
@@ -124,6 +124,7 @@
                     {% endif %}
                 </ul>
             </li>
+            {% if acl.canReadAccount %}
             <li class="4">
                 <a href="quanlytaikhoan.php"><span class="fa-stack fa-xs">
                         <i class="fa fa-circle fa-stack-2x i-background" style="color:#ff7979" ></i>
@@ -131,12 +132,7 @@
                     </span> Quản lý tài khoản
                 </a>
             </li>
-            <li class="thongtinhocsinh">
-                <a href="thongtinhocsinh.php" ><span class="fa-stack fa-xs">
-                        <i class="fa fa-circle fa-stack-2x i-background" style="color:#f0932b" ></i>
-                        <i class="fa fa-group fa-stack-1x i-content" style="color: #fff" ></i>
-                    </span> Thông tin học sinh</a>
-            </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
