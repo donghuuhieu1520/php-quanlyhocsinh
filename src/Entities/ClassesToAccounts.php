@@ -38,4 +38,24 @@ class ClassesToAccounts
   {
     return $this->account;
   }
+
+  /**
+   * @param mixed $class
+   * @return ClassesToAccounts
+   */
+  public function setClass($class)
+  {
+    $this->class = $class;
+    return $this;
+  }
+
+  /**
+   * @param mixed $account
+   * @return ClassesToAccounts
+   */
+  public function setAccount($account)
+  {
+    $this->account = $account;
+    return $this;
+  }
 }

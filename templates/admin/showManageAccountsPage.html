@@ -1,0 +1,455 @@
+{% extends "admin/BaseAdmin.html" %}
+{% block title %}Quản lý tài khoản{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/css/admin/showManageAccountsPage.css">
+{% endblock %}
+
+{% block content %}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <i class="fa fa-database" aria-hidden="true"></i> Quản lý tài khoản
+                </h1>
+            </div>
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb">
+                    <li>
+                        <button class="btn btn-primary" style="border-radius: 0px;" id="btn-show-modal-add-account">
+                            <i class="glyphicon glyphicon-user"></i> Thêm tài khoản
+                        </button>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="text-info"><i class="fa fa-list"></i> Tài khoản quản trị <i class="fa fa-caret-down"></i></p>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="tbl_account">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Ten nguoi so huu</th>
+                            <th>Email</th>
+                            <th style="text-align: center">Hanh dong</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-accounts">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+    <div id="snackbar"><i class="fa fa-check"></i> Thêm tài khoản thành công!</div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3071A9; color: #ffffff">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-plus-circle"></i> Thêm tài khoản quản trị</h4>
+                </div>
+                <div class="modal-body" style="background-color: #F9F9F9">
+                    <div class="row">
+                        <ul class="nav nav-tabs">
+                            <li class="tab-modal-add active" data-tableId="table-info">
+                                <a><i class="fa fa-user"></i> Thong tin chung</a>
+                            </li>
+                            <li class="tab-modal-add" data-tableId="table-class">
+                                <a><i class="fa fa-group"></i> Lop quan ly</a>
+                            </li>
+                            <li class="tab-modal-add" data-tableId="table-acl">
+                                <a><i class="fa fa-lock"></i> Phan quyen</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row" style="padding: 10px">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-in-tab" id="table-info">
+                                <tbody>
+                                    <tr>
+                                        <td>Tên tài khoản:</td>
+                                        <td>
+                                            <input type="text" maxlength="100" id="input-add-account-username" class="form-control">
+                                            <small class="form-text text-muted">Duoc su dung de dang nhap he thong</small>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mật khẩu:</td>
+                                        <td><input type="password" maxlength="30" id="input-add-account-password" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email nguoi so huu:</td>
+                                        <td><input type="email" id="input-add-account-email" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ten nguoi so huu:</td>
+                                        <td><input type="text" id="input-add-account-name" class="form-control"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered table-hover table-in-tab" style="display: none" id="table-class">
+                                <thead>
+                                    <th>Ma lop</th>
+                                    <th>Ten lop</th>
+                                    <th style="text-align: center">Quan ly</th>
+                                </thead>
+                                <tbody>
+                                {% for class in manage_classes %}
+                                    <tr>
+                                        <td>{{ class.id }}</td>
+                                        <td>{{ class.name }}</td>
+                                        <td style="text-align: center">
+                                            <div class="checkbox-custom">
+                                                <input type="checkbox" class="checkbox-add-account-classes" name="checkbox-classes" value="{{ class.id }}" id="switch-{{ loop.index }}" /><label for="switch-{{ loop.index }}">Toggle</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered table-hover table-in-tab" style="display: none" id="table-acl">
+                                <tbody>
+                                {% for acl in acls %}
+                                    <tr>
+                                        <td>{{ loop.index }}. {{ acl.text }}</td>
+                                        <td style="text-align: center">
+                                            <div class="checkbox-custom">
+                                                <input type="checkbox" class="checkbox-add-account-acls" name="checkbox-acls" id="switch-acl-{{ loop.index }}" value="{{ acl.name }}" {{ (acl.default) ? 'checked' : '' }} /><label for="switch-acl-{{ loop.index }}">Toggle</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <hr>
+                            <span class="text-danger" id="span-add-account-info" style="display: none;"><i class="fa fa-info-circle text-danger"></i> Không được để trống</span>
+                            <button class="btn btn-primary pull-right" id="btn-add-account"><i class="fa fa-check"></i> Thêm</button>
+                            <button class="btn btn-success pull-right" style="display: none" id="btn-update-account"><i class="fa fa-edit"></i> Cap nhat</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    $(document).on('ready', function () {
+
+        $('.4').attr('class', 'active');
+        const { isEmpty } = _;
+        const accountsInfo = [];
+        function laydanhsachhienco() {
+            $.ajax({
+                url: '{{ routes.apiGetAllAccounts }}',
+                method: 'GET',
+                type: 'json',
+                beforeSend() {
+                    $('#table-accounts').html(`
+                        <tr>
+                            <td colspan="5" style="text-align: center" class="text-muted">
+                                <i class="fa fa-spinner fa-pulse fa-fw"></i>
+                            </td>
+                        </tr>
+                    `);
+                },
+                success ({ success, payload, message }) {
+                    if (success) {
+                        if (isEmpty(payload)) {
+                            $('#table-accounts').html(`
+                                <tr>
+                                    <td colspan="5" style="text-align: center" class="text-muted">
+                                        <p>Khong tim thay tai khoan</p>
+                                    </td>
+                                </tr>
+                            `);
+                        } else {
+                            var html = payload.reduce((result, account, index) => {
+                                accountsInfo[account.id] = {
+                                    acls: account.acls,
+                                    managedClasses: account.managedClasses
+                                };
+                                result += `
+                                    <tr>
+                                        <td>${++index}</td>
+                                        <td>${account.username}</td>
+                                        <td>${account.name}</td>
+                                        <td>${account.email || 'Khong co email'}</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-delete-account"
+                                                data-accountId="${account.id}">
+                                                <i class="fa fa-trash"></i> Xoa
+                                            </button>
+                                            <button
+                                                class="btn btn-success btn-view-account"
+                                                data-accountId="${account.id}"
+                                                data-accountUsername="${account.username}"
+                                                data-accountName="${account.name}"
+                                                data-accountEmail="${account.email}">
+                                                <i class="fa fa-folder-open"></i> Chi tiet
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                                return result;
+                            }, '');
+                            $('#table-accounts').html(html);
+                        }
+                    } else {
+                        $('#table-accounts').html(`
+                            <tr>
+                                <td colspan="5" style="text-align: center" class="text-muted">
+                                    <p>Khong tim thay tai khoan</p>
+                                </td>
+                            </tr>
+                        `);
+                    }
+                }
+            });
+        }
+
+        laydanhsachhienco();
+        // Switch between tabs on modal add accounts
+        $('.tab-modal-add').click(function () {
+            var tableId = $(this).attr('data-tableId');
+            $('.tab-modal-add').removeClass('active');
+            $(this).addClass('active');
+            $('.table-in-tab').hide();
+            $(`#${tableId}`).show();
+        });
+
+        $('#btn-show-modal-add-account').click(function () {
+            $('#myModal .modal-header').css({ backgroundColor: '#3071A9' })
+            $('#myModal .modal-title').html(`<i class="fa fa-plus-circle"></i> Thêm tài khoản quản trị`);
+            $('#btn-add-account').show();
+            $('#btn-update-account').hide();
+            $('#input-add-account-name').val('');
+            $('#input-add-account-email').val('');
+            $('#input-add-account-password').val('');
+            $('#input-add-account-username').val('');
+            $('input[name="checkbox-acls"]:checked').prop('checked', false);
+            $('input[name="checkbox-classes"]:checked').prop('checked', false);
+            $('#myModal').modal('show');
+        });
+
+        $('#btn-add-account').click(function () {
+           var username = $('#input-add-account-username').val();
+           var password = $('#input-add-account-password').val();
+           var email = $('#input-add-account-email').val();
+           var name = $('#input-add-account-name').val();
+           var managedClasses = [];
+           var acls = [];
+
+           $('input[name="checkbox-classes"]:checked').each(function () {
+               managedClasses.push($(this).val());
+           });
+
+           $('input[name="checkbox-acls"]:checked').each(function () {
+               acls.push($(this).val());
+           });
+
+           if (isEmpty(username) ||
+               isEmpty(password) ||
+               isEmpty(email) ||
+               isEmpty(name) ||
+               isEmpty(managedClasses) ||
+               isEmpty(acls)) {
+               $('#span-add-account-info').show();
+               return;
+           } else {
+               $('#span-add-account-info').hide();
+           }
+
+           $.ajax({
+               url: '{{ routes.apiAddNewAccount }}',
+               method: 'post',
+               type: 'json',
+               data: {
+                   username, email, password, name, managedClasses, acls
+               },
+               beforeSend () {
+                   $('#btn-add-account')
+                        .html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Thêm')
+                        .prop('disabled', true);
+               },
+               success ({ success, message, payload }) {
+                   if (success) {
+                       $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã thêm tài khoản '+ payload.username +'!'});
+                       $('#input-add-account-name').val('');
+                       $('#input-add-account-email').val('');
+                       $('#input-add-account-password').val('');
+                       $('#input-add-account-username').val('');
+                       $('input[name="checkbox-acls"]:checked').prop('checked', false);
+                       $('input[name="checkbox-classes"]:checked').prop('checked', false);
+                       laydanhsachhienco();
+                   } else {
+                       swal('Da co loi xay ra!', message, 'error');
+                   }
+               },
+               complete () {
+                   $('#myModal').modal('hide');
+                   $('#btn-add-account')
+                       .html('<i class="fa fa-check"></i> Thêm')
+                       .prop('disabled', false);
+               }
+           });
+
+        });
+
+        $('#btn-update-account').click(function () {
+            var accountId = $(this).attr('data-accountId');
+            var username = $('#input-add-account-username').val();
+            var password = $('#input-add-account-password').val();
+            var email = $('#input-add-account-email').val();
+            var name = $('#input-add-account-name').val();
+            var managedClasses = [];
+            var acls = [];
+
+            $('input[name="checkbox-classes"]:checked').each(function () {
+                managedClasses.push($(this).val());
+            });
+
+            $('input[name="checkbox-acls"]:checked').each(function () {
+                acls.push($(this).val());
+            });
+
+            if (isEmpty(username) ||
+                isEmpty(email) ||
+                isEmpty(name) ||
+                isEmpty(managedClasses) ||
+                isEmpty(acls)) {
+                $('#span-add-account-info').show();
+                return;
+            } else {
+                $('#span-add-account-info').hide();
+            }
+
+            $.ajax({
+                url: '/api/v1/accounts/' + accountId + '/update',
+                method: 'post',
+                type: 'json',
+                data: {
+                    username, email, password, name, managedClasses, acls
+                },
+                beforeSend () {
+                    $('#btn-update-account')
+                        .html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Cap nhat')
+                        .prop('disabled', true);
+                },
+                success ({ success, message, payload }) {
+                    if (success) {
+                        $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã cap nhat tài khoản '+ payload.username +'!'});
+                        $('#input-add-account-name').val('');
+                        $('#input-add-account-email').val('');
+                        $('#input-add-account-password').val('');
+                        $('#input-add-account-username').val('');
+                        $('input[name="checkbox-acls"]:checked').prop('checked', false);
+                        $('input[name="checkbox-classes"]:checked').prop('checked', false);
+                        laydanhsachhienco();
+                    } else {
+                        swal('Da co loi xay ra!', message, 'error');
+                    }
+                },
+                complete () {
+                    $('#myModal').modal('hide');
+                    $('#btn-update-account')
+                        .html('<i class="fa fa-edit"></i> Cap nhat')
+                        .prop('disabled', false);
+                }
+            });
+
+        });
+
+        $(document).on('click', '.btn-view-account', function () {
+            var button = $(this);
+            var accountId = button.attr('data-accountId');
+            var accountUsername = button.attr('data-accountUsername');
+            var accountName = button.attr('data-accountName');
+            var accountEmail = button.attr('data-accountEmail');
+            var accountAcls = accountsInfo[accountId].acls;
+            var accountManagedClasses = accountsInfo[accountId].managedClasses;
+            $('#myModal .modal-header').css({ backgroundColor: '#27ae60' })
+            $('#myModal .modal-title').html(`<i class="fa fa-pencil-square"></i> Cap nhat tai khoản`);
+            $('#btn-add-account').hide();
+            $('#btn-update-account').show().attr('data-accountId', accountId);
+            $('#input-add-account-name').val(accountName);
+            $('#input-add-account-email').val(accountEmail);
+            $('#input-add-account-password').val('');
+            $('#input-add-account-username').val(accountUsername);
+
+            const aclKeys = Object.keys(accountAcls);
+            aclKeys.map(acl => {
+                if (accountAcls[acl]) {
+                    $('input[name="checkbox-acls"][value="' + acl + '"]').prop('checked', true);
+                } else {
+                    $('input[name="checkbox-acls"][value="' + acl + '"]').prop('checked', false);
+                }
+            });
+
+            $('input[name="checkbox-classes"]').prop('checked', false);
+            accountManagedClasses.map(cl => {
+                $('input[name="checkbox-classes"][value="' + cl.id + '"]').prop('checked', true);
+            });
+
+            $('#myModal').modal('show');
+
+        });
+
+        $(document).on('click', '.btn-delete-account', function () {
+            var button = $(this);
+            var accountId = button.attr('data-accountId');
+            swal({
+                title: 'Xác nhận xóa',
+                text: "Bạn có thật sự muốn xóa ?",
+                type: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '',
+                confirmButtonText: 'Xóa!',
+                cancelButtonText: 'Hủy bỏ'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: `/api/v1/accounts/${accountId}`,
+                        method: "delete",
+                        beforeSend: function(){
+                            button.attr('disabled', 'disabled')
+                            button.html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Xóa')
+                        },
+                        success: function({ success, message }) {
+                            if (success) {
+                                laydanhsachhienco();
+                                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-trash fa-stack-1x text-success"></i></span> Đã xóa ' + payload.username + ' !'});
+                            } else {
+                                swal('Đã có lỗi xảy ra!', message, 'error');
+                            }
+                        },
+                        complete: function () {
+                            button.removeAttr('disabled');
+                            button.html('<i class="fa fa-trash"></i> Xóa');
+                        }
+                    })
+                }
+            })
+        });
+    });
+</script>
+{% endblock %}
