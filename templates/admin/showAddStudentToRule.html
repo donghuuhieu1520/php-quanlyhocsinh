@@ -1,22 +1,15 @@
 {% extends "admin/BaseAdmin.html" %}
-{% block title %}Cập nhật học sinh vi phạm{% endblock %}
+{% block title %}Cập nhật ne nep học sinh{% endblock %}
 {% block content %}
 <body>
   <div id="wrapper">
-    <script type="text/javascript">
-      $('.2').attr('class', 'active');
-    </script>
     <div id="page-wrapper">
-
       <div class="container-fluid">
-
         <!-- Page Heading -->
-
-
         <div class="row">
           <div class="col-lg-12">
             <h1 class="page-header">
-              <i class="fa fa-edit"></i> Cập nhật học sinh vi phạm
+              <i class="fa fa-edit"></i> Cập nhật ne nep học sinh
               <small></small>
             </h1>
             <ol class="breadcrumb">
@@ -47,8 +40,6 @@
                       </span>
                     </div>
                   </div>
-                  <p class="pull-right text-muted p-search-result" style="display: none">Tìm thấy: <strong
-                      class="text-danger strong-search-result">0</strong> kết quả!</p>
                 </div>
               </div>
 
@@ -115,7 +106,97 @@
 {%endblock%}
 {% block script %}
   <script type="text/javascript">
-    
+    $('.2').attr('class', 'active');
+    $.ajax({
+      url: "/api/v1/rules",
+      type: "get",
+      dataType: "json",
+      data:{
+        ruleType: 1
+      },
+      beforeSend: function() {
+
+      },
+      success: function(data){
+        $('.modal-body').html(`
+          <div class="form-group">
+            <label id="lb-capnhat">Cập nhật:</label>
+            <select class="form-control" id="modal-se-loai">
+              <option value="1">Vi phạm</option>
+              <option value="0">Thành tích</option>
+            </select>
+            <label id="lb-chonmuc">Chọn mục:</label>
+            <select class="form-control" id="modal-se-viphamthanhtich">
+            </select>
+          </div>
+          `)
+        if (data.success) {
+          var rules = data.payload;
+          var html = rules.map(rule => {
+            return `<option value="${rule.id}">${rule.name}</option>`
+          })
+          $('#modal-se-viphamthanhtich').html(html);
+        }
+      },
+      complete: function(){
+        $('.modal-footer').html(`
+              <button type="button" class="btn btn-primary" id="modal_capnhat"><i class="fa fa-edit"></i> Cập nhật</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-close">Đóng</button>
+            `);
+        $('#modal_capnhat').click(function() {
+          var studentId = $('#student-info').attr('data-id');
+          var ruleId = $('#modal-se-viphamthanhtich').val();
+          $.ajax({
+            url: "{{routes.apiAddStudentToRule}}",
+            type: "post",
+            dataType: "json",
+            data:{ studentId, ruleId },
+            beforeSend: function() {
+            },
+            success: function(data){
+              if (data.success) {
+                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã thêm !'})
+              }
+              else {
+                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Đã xảy ra lỗi !'})
+              }
+              $("#btn-close").trigger("click");
+            },
+            complete: function(){
+              $('#lb-chonmuc').html('Chọn mục: ')
+            }
+          })
+        })
+        $('#modal-se-loai').change(function(){
+          var se_loai = $(this).val();
+          $('#lb-chonmuc').html('Chọn mục: <i class="fa fa-spinner fa-pulse fa-fw"></i>')
+          $.ajax({
+            url: "/api/v1/rules",
+            type: "get",
+            dataType: "json",
+            data:{
+              ruleType: se_loai
+            },
+            beforeSend: function() {
+
+            },
+            success: function(data){
+              if (data.success) {
+                var rules = data.payload
+                var html = rules.map(rule => {
+                  return `<option value="${rule.id}">${rule.name}</option>`
+                })
+                $('#modal-se-viphamthanhtich').html(html);
+              }
+            },
+            complete: function(){
+              $('#lb-chonmuc').html('Chọn mục: ')
+            }
+          })
+        })
+      }
+    })
+
     $("#se_class").change(function () {
       $('.tr-status').show();
       var tenlop = $("#se_class").val();
@@ -170,115 +251,69 @@
           });
         }
       })
-    })
-    $.ajax({
-        url: "/api/v1/rules",
-        type: "get",
-        dataType: "json",
-        data:{
-          ruleType: 1
+    });
+
+    $("#addon-inp-search").click(function () {
+      var button = $(this);
+      var tenhocsinh = $("#inp_search").val();
+
+      if (_.isEmpty(tenhocsinh)) {
+        return;
+      }
+
+      $.ajax({
+        url: '{{ routes.apiSearchStudent }}',
+        method: 'post',
+        type: 'json',
+        data: { studentName: tenhocsinh },
+        beforeSend () {
+          $('.tr-status').show();
+          button.html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
         },
-        beforeSend: function() {
-            
+        complete () {
+          $('.tr-status').hide();
+          button.html('<i class="fa fa-search"></i>');
+          $(".btn-capnhat").click(function () {
+            var studentName = $(this).parent().siblings()[1].innerHTML;
+            var studentId = $(this).parent().siblings()[0].innerHTML
+            $('.modal-title').html(`
+                <i class="glyphicon glyphicon-user" data-id = "${studentId}" id = "student-info"></i>
+                ${studentName}
+              `)
+          });
         },
         success: function(data){
-          $('.modal-body').html(`
-          <div class="form-group">
-            <label id="lb-capnhat">Cập nhật:</label>
-            <select class="form-control" id="modal-se-loai">
-              <option value="1">Vi phạm</option>
-              <option value="0">Thành tích</option>
-            </select>
-            <label id="lb-chonmuc">Chọn mục:</label>
-            <select class="form-control" id="modal-se-viphamthanhtich">
-            </select>
-          </div>
-          `)
           if (data.success) {
-            var rules = data.payload;
-            var html = rules.map(rule => {
-              return `<option value="${rule.id}">${rule.name}</option>`
+            const students = data.payload;
+            $('.table-students-content').html(`
+              <tr style="display: none" class="tr-status">
+                <td colspan="6" style="text-align: center;"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></td>
+              </tr>
+              `);
+            if (students.length === 0) {
+              $('.table-students-content').html(`<tr><td colspan="7" style="text-align: center">No students found</td></tr>`)
+            }
+            students.forEach((student) => {
+              $('.table-students-content').append(`
+                  <tr>
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td>${student.class}</td>
+                    <td>${student.gender ? 'Nam' : 'Nu'}</td>
+                    <td style="text-align: center">
+                        <button class="btn btn-primary btn-capnhat" style="border-radius: 0px;" name="btncapnhat" data-toggle="modal" data-target="#modalcapnhat" value="${student.id}">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    </td>
+                  </tr>
+                `);
+              $
             })
-            $('#modal-se-viphamthanhtich').html(html);
           }
-        },
-        complete: function(){
-            $('.modal-footer').html(`
-              <button type="button" class="btn btn-primary" id="modal_capnhat"><i class="fa fa-edit"></i> Cập nhật</button>
-              <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-close">Đóng</button>
-            `)
-            $('#modal_capnhat').click(function() {
-              var studentId = $('#student-info').attr('data-id');
-              var ruleId = $('#modal-se-viphamthanhtich').val();
-              $.ajax({
-                  url: "{{routes.apiAddStudentToRule}}",
-                  type: "post",
-                  dataType: "json",
-                  data:{
-                    studentId,
-                    ruleId
-                  },
-                  beforeSend: function() {
-                      
-                  },
-                  success: function(data){
-                    if (data.success) {
-                      $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã thêm !'})
-                    }
-                    else {
-                      $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Đã xảy ra lỗi !'})
-                    }
-                    $("#btn-close").trigger("click");
-                  },
-                  complete: function(){
-                    $('#lb-chonmuc').html('Chọn mục: ')
-                  }
-              })
-            })
-            $('#modal-se-loai').change(function(){
-              var se_loai = $(this).val();
-              $('#lb-chonmuc').html('Chọn mục: <i class="fa fa-spinner fa-pulse fa-fw"></i>')
-              $.ajax({
-                  url: "/api/v1/rules",
-                  type: "get",
-                  dataType: "json",
-                  data:{
-                    ruleType: se_loai
-                  },
-                  beforeSend: function() {
-                      
-                  },
-                  success: function(data){
-                    if (data.success) {
-                      var rules = data.payload
-                      var html = rules.map(rule => {
-                        return `<option value="${rule.id}">${rule.name}</option>`
-                      })
-                      $('#modal-se-viphamthanhtich').html(html);
-                    }
-                  },
-                  complete: function(){
-                    $('#lb-chonmuc').html('Chọn mục: ')
-                  }
-              })
-            })
         }
-    })
-    $("#addon-inp-search").click(function () {
-      $(this).html('<i class="fa fa-spinner fa-pulse fa-fw"></i>')
-      var tenhocsinh = $("#inp_search").val();
-      $.post("tbl_searchclassmember.php", { tenhocsinh: tenhocsinh }, function (tblsearchclassmember) {
-        $('.tr-status').hide();
-        $(".result-table").html(tblsearchclassmember).hide().fadeIn();
-        $('#addon-inp-search').html('<i class="fa fa-search"></i>');
-        var dem = 0;
-        $('.result-table tr button').each(function () {
-          dem++;
-        });
-        $('.strong-search-result').html(dem);
-        $('.p-search-result').show();
-      })
-    })
+      });
+    });
+
     $('#inp_search').keydown(function (e) {
       var kepressed = e.which;
       if (kepressed === 13) {

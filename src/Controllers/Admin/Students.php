@@ -10,6 +10,7 @@ use App\Template\IAdminRenderer;
 use Doctrine\ORM\EntityManager;
 use function _\some;
 use App\Helper\Alfred;
+use function Doctrine\ORM\QueryBuilder;
 
 class Students extends BaseAdminController
 {
@@ -177,6 +178,33 @@ class Students extends BaseAdminController
     }
 
     return Alfred::apiResponseWithSuccess($this->response, $studentId);
+  }
+
+  public function search()
+  {
+    if (!$this->isLoggedIn()) {
+      return Alfred::apiResponseNotLogin($this->response);
+    }
+
+    $searchData = $this->request->getParameters();
+    $managedClassIds = $this->getManagedClassIds();
+
+    $qb = $this->em->createQueryBuilder();
+    $q = $qb->select('s')
+      ->from('\App\Entities\Students', 's')
+      ->where('s.first_name LIKE :name')
+      ->orWhere('s.last_name LIKE :name')
+      ->andWhere($qb->expr()->in('s.class', $managedClassIds))
+      ->setParameter('name', '%' . $searchData['studentName'] . '%')
+      ->getQuery();
+
+    $students = $q->getResult();
+
+    $payload = array_map(function ($student) {
+      return $student->getRawData();
+    }, $students);
+
+    return Alfred::apiResponseWithSuccess($this->response, $payload);
   }
 
   /**
