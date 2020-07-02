@@ -37,17 +37,17 @@ class Accounts
     private $email;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entities\ACLs")
+     * @ORM\OneToOne(targetEntity="App\Entities\ACLs", cascade={"remove"})
      */
     private $acl;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entities\ClassesToAccounts", mappedBy="account")
+     * @ORM\OneToMany(targetEntity="App\Entities\ClassesToAccounts", mappedBy="account", cascade={"remove"})
      */
     private $classesToAccounts;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entities\StudentsToRules", mappedBy="account")
+     * @ORM\OneToMany(targetEntity="App\Entities\StudentsToRules", mappedBy="account", cascade={"remove"})
      */
     private $studentsToRules;
 
@@ -120,10 +120,66 @@ class Accounts
 
   /**
    * @param mixed $acl
+   * @return Accounts
    */
-  public function setAcl($acl): void
+  public function setAcl($acl)
   {
     $this->acl = $acl;
+    return $this;
+  }
+
+  /**
+   * @param mixed $username
+   * @return Accounts
+   */
+  public function setUsername($username)
+  {
+    $this->username = $username;
+    return $this;
+  }
+
+  /**
+   * @param mixed $name
+   * @return Accounts
+   */
+  public function setName($name)
+  {
+    $this->name = $name;
+    return $this;
+  }
+
+  /**
+   * @param mixed $email
+   * @return Accounts
+   */
+  public function setEmail($email)
+  {
+    $this->email = $email;
+    return $this;
+  }
+
+  /**
+   * @param mixed $classesToAccounts
+   * @return Accounts
+   */
+  public function setClassesToAccounts($classesToAccounts)
+  {
+    $this->classesToAccounts = $classesToAccounts;
+    return $this;
+  }
+
+  public function getRawData()
+  {
+    return [
+        'id' => $this->getId(),
+        'email' => $this->getEmail(),
+        'username' => $this->getUsername(),
+        'name' => $this->getName(),
+        'managedClasses' => array_map(function ($classToAccount) {
+          return $classToAccount->getClass()->getRawData();
+        }, $this->getClassesToAccounts()->toArray()),
+        'acls' => $this->getAcl()->getRawData()
+    ];
   }
 
 }

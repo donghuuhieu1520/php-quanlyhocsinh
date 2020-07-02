@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use Doctrine\ORM\ORMException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Http\Request;
 use Http\Response;
 use App\Template\IAdminRenderer;

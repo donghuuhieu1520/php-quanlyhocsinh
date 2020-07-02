@@ -101,10 +101,12 @@ class ACLs
 
   /**
    * @param mixed $can_create_rule
+   * @return ACLs
    */
-  public function setCanCreateRule($can_create_rule): void
+  public function setCanCreateRule($can_create_rule)
   {
     $this->can_create_rule = $can_create_rule;
+    return $this;
   }
 
   /**
@@ -117,10 +119,12 @@ class ACLs
 
   /**
    * @param mixed $can_read_rule
+   * @return ACLs
    */
-  public function setCanReadRule($can_read_rule): void
+  public function setCanReadRule($can_read_rule)
   {
     $this->can_read_rule = $can_read_rule;
+    return $this;
   }
 
   /**
@@ -133,10 +137,12 @@ class ACLs
 
   /**
    * @param mixed $can_delete_rule
+   * @return ACLs
    */
-  public function setCanDeleteRule($can_delete_rule): void
+  public function setCanDeleteRule($can_delete_rule)
   {
     $this->can_delete_rule = $can_delete_rule;
+    return $this;
   }
 
   /**
@@ -149,10 +155,12 @@ class ACLs
 
   /**
    * @param mixed $can_update_rule
+   * @return ACLs
    */
-  public function setCanUpdateRule($can_update_rule): void
+  public function setCanUpdateRule($can_update_rule)
   {
     $this->can_update_rule = $can_update_rule;
+    return $this;
   }
 
   /**
@@ -165,10 +173,12 @@ class ACLs
 
   /**
    * @param mixed $can_read_student
+   * @return ACLs
    */
-  public function setCanReadStudent($can_read_student): void
+  public function setCanReadStudent($can_read_student)
   {
     $this->can_read_student = $can_read_student;
+    return $this;
   }
 
   /**
@@ -181,10 +191,12 @@ class ACLs
 
   /**
    * @param mixed $can_create_student
+   * @return ACLs
    */
-  public function setCanCreateStudent($can_create_student): void
+  public function setCanCreateStudent($can_create_student)
   {
     $this->can_create_student = $can_create_student;
+    return $this;
   }
 
   /**
@@ -197,10 +209,12 @@ class ACLs
 
   /**
    * @param mixed $can_delete_student
+   * @return ACLs
    */
-  public function setCanDeleteStudent($can_delete_student): void
+  public function setCanDeleteStudent($can_delete_student)
   {
     $this->can_delete_student = $can_delete_student;
+    return $this;
   }
 
   /**
@@ -213,10 +227,12 @@ class ACLs
 
   /**
    * @param mixed $can_update_student
+   * @return ACLs
    */
-  public function setCanUpdateStudent($can_update_student): void
+  public function setCanUpdateStudent($can_update_student)
   {
     $this->can_update_student = $can_update_student;
+    return $this;
   }
 
   /**
@@ -229,10 +245,12 @@ class ACLs
 
   /**
    * @param mixed $can_read_account
+   * @return ACLs
    */
-  public function setCanReadAccount($can_read_account): void
+  public function setCanReadAccount($can_read_account)
   {
     $this->can_read_account = $can_read_account;
+    return $this;
   }
 
   /**
@@ -245,10 +263,12 @@ class ACLs
 
   /**
    * @param mixed $can_create_account
+   * @return ACLs
    */
-  public function setCanCreateAccount($can_create_account): void
+  public function setCanCreateAccount($can_create_account)
   {
     $this->can_create_account = $can_create_account;
+    return $this;
   }
 
   /**
@@ -261,10 +281,12 @@ class ACLs
 
   /**
    * @param mixed $can_delete_account
+   * @return ACLs
    */
-  public function setCanDeleteAccount($can_delete_account): void
+  public function setCanDeleteAccount($can_delete_account)
   {
     $this->can_delete_account = $can_delete_account;
+    return $this;
   }
 
   /**
@@ -277,12 +299,14 @@ class ACLs
 
   /**
    * @param mixed $can_update_account
+   * @return ACLs
    */
-  public function setCanUpdateAccount($can_update_account): void
+  public function setCanUpdateAccount($can_update_account)
   {
     $this->can_update_account = $can_update_account;
+    return $this;
   }
-  
+
   public function getRawData()
   {
     return [

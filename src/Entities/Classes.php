@@ -54,4 +54,12 @@ class Classes
   {
     return $this->classesToAccounts;
   }
+
+  public function getRawData()
+  {
+    return [
+        'id' => $this->getId(),
+        'name' => $this->getName(),
+    ];
+  }
 }

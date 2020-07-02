@@ -1,0 +1,62 @@
+input[type=text], input[type=password], input[type=number] {
+  border-radius: 0px;
+}
+
+input[type=text]:focus {
+    border-radius: 0px;
+}
+
+.nav-tabs li a {
+    cursor: pointer;
+}
+
+.checkbox-custom {
+    margin-top: -20px;
+    display: inline-block;
+}
+
+.checkbox-custom input[type=checkbox]{
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+.checkbox-custom label {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 50px;
+    height: 25px;
+    background: #bdc3c7;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+}
+
+.checkbox-custom label:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.checkbox-custom input:checked + label {
+    background: #27ae60;
+}
+
+.checkbox-custom input:checked + label:after {
+    left: calc(100% - 1px);
+    transform: translateX(-100%);
+}
+
+.checkbox-custom label:active:after {
+    width: 10px;
+}
+
+.table-in-tab {
+    margin-top: 20px;
+}
