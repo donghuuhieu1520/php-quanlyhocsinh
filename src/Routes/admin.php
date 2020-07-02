@@ -10,4 +10,5 @@ return (new Router())
     ->get('/students/show/{classId}', 'App\Controllers\Admin\Students@show', 'adminShowStudentByClass')
     ->get('/students/add', 'App\Controllers\Admin\Students@showAdd', 'adminAddStudentToClass')
     ->get('/rules/show', 'App\Controllers\Admin\Rules@showManagePage', 'showRuleManage')
-    ->post('/logout', 'App\Controllers\Admin\Dashboard@logout', 'logout');
+    ->post('/logout', 'App\Controllers\Admin\Dashboard@logout', 'logout')
+    ->get('/addStudentToRule', 'App\Controllers\Admin\Rules@showAddStudentToRule', 'showAddStudentToRule');

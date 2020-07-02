@@ -3,8 +3,9 @@
 
 namespace App\Controllers\Admin;
 
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query\Expr\Join;
+
+use Doctrine\ORM\ORMException;
 use Http\Request;
 use Http\Response;
 use App\Template\IAdminRenderer;
@@ -213,5 +214,26 @@ class Rules extends BaseAdminController
         'success' => false,
         'message' => 'Search by sclas'
     ];
+  }
+  public function getStudentToRule($param) {
+
+    $filter = isset($param['studentId']) ? ['student' => (int) $param['studentId']] : [];
+
+    $rules = $this->em->getRepository('App\Entities\StudentsToRules')->findBy($filter);
+
+    $data = array_map(function ($rule) {
+      return $rule->getRawData();
+    }, $rules);
+
+    return Alfred::apiResponseWithSuccess($this->response, $data);
+  }
+  public function showAddStudentToRule()
+  {
+    if (!$this->isLoggedIn()) {
+      return $this->backToLogin();
+    }
+
+    $html = $this->renderer->render('showAddStudentToRule', []);
+    return $this->response->setContent($html);
   }
 }
