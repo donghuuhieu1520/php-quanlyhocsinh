@@ -1,0 +1,820 @@
+{% extends "admin/BaseAdmin.html" %}
+{% block title %}Quản lý SMS{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/css/admin/showManageMessagesPage.css">
+{% endblock %}
+
+{% block content %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <i class="fa fa-envelope"></i> Quản lý tin nhắn SMS
+                </h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-money fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge" id="panel-1">
+<!--                                    <?php-->
+<!--                                        $data="http://rest.esms.vn/MainService.svc/json/GetBalance/$APIKey/$SecretKey";-->
+<!--                                        $curl = curl_init($data);-->
+<!--                                        curl_setopt($curl, CURLOPT_FAILONERROR, true);-->
+<!--                                        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);-->
+<!--                                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);-->
+<!--                                        $result = curl_exec($curl);-->
+<!--                                        $obj = json_decode($result,true);-->
+<!--                                        if($obj['CodeResponse']==100)-->
+<!--                                        {-->
+<!--                                            $quantity_sms = Floor($obj['Balance']/750);-->
+<!--                                            echo $obj['Balance'].' đ';//.'|'.Floor($obj['Balance']/750).'|'.$obj['UserID'];-->
+
+<!--                                        }-->
+<!--                                        else-->
+<!--                                        {-->
+<!--                                            echo 'Lỗi';-->
+<!--                                        }-->
+<!--                                        ?>-->
+                                </div>
+                                <div>Số dư tài khoản</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#">
+                        <div class="panel-footer">
+                            <span class="pull-left">Chi tiết</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-green">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-envelope fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge" id="panel-2">
+<!--                                    <?php-->
+<!--                                    if(isset($quantity_sms))-->
+<!--                                    {-->
+<!--                                     echo $quantity_sms;-->
+<!--                                    }else-->
+<!--                                    {-->
+<!--                                        echo 'Lỗi';-->
+<!--                                    }-->
+<!--                                     ?>-->
+                                </div>
+                                <div>Số tin nhắn còn lại</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#">
+                        <div class="panel-footer">
+                            <span class="pull-left">Chi tiết</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-yellow">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-user fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge" id="panel-3">
+<!--                                    <?php-->
+<!--                                        $sql = "SELECT * FROM `hs` WHERE `sdt` != ''";-->
+<!--                                        $query = mysqli_query($conn, $sql);-->
+<!--                                        if($query)-->
+<!--                                        {-->
+<!--                                            echo mysqli_num_rows($query);-->
+<!--                                        }else-->
+<!--                                        {-->
+<!--                                            echo 'Lỗi';-->
+<!--                                        }-->
+<!--                                        ?>-->
+                                </div>
+                                <div>Học sinh đăng ký SMS</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="a-modal-detail" data-require-type = '3' data-modal-title = "<i class='fa fa-user'></i> Học sinh đăng ký SMS">
+                        <div class="panel-footer">
+                            <span class="pull-left">Chi tiết</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-red">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-book fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge" id="panel-4">
+<!--                                    <?php-->
+<!--                                        $sql = "SELECT * FROM `SMS`";-->
+<!--                                        $query = mysqli_query($conn, $sql);-->
+<!--                                        if($query)-->
+<!--                                        {-->
+<!--                                            echo mysqli_num_rows($query);-->
+<!--                                        }else-->
+<!--                                        {-->
+<!--                                            echo 'Lỗi';-->
+<!--                                        }-->
+<!--                                        ?>-->
+                                </div>
+                                <div>Lịch sử gửi tin nhắn</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="a-modal-detail-history" data-modal-title="<i class='fa fa-book'></i> Lịch sử gửi tin nhắn">
+                        <div class="panel-footer">
+                            <span class="pull-left">Chi tiết</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <span class="text-info" style="font-weight: bold"><i class="fa fa-tasks"></i> Danh sách gửi tin nhắn hôm nay</span>
+                <ol class="breadcrumb">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-12 col-xs-12 col-md-3">
+                            <label class="text-info"><i class="fa fa-calendar"></i> Chọn ngày:</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="datepicker-ol">
+                                <span class="input-group-btn">
+							        <button type="submit" id="btn-view-date" class="btn btn-success"><i class="fa fa-eye"></i> Xem</button>
+							      </span>
+                            </div>
+                        </div>
+                    </div>
+                </ol>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead>
+                        <th>STT</th>
+                        <th>Học sinh</th>
+                        <th>Lớp</th>
+                        <th>SĐT</th>
+                        <th>Hành động</th>
+                        </thead>
+                        <tbody id="tbody-tinnhanhomnay">
+<!--                        <?php-->
+<!--                                $sql = "SELECT DISTINCT `ID` FROM `bangthongkevipham` WHERE `ngayvipham` = '$today'";-->
+<!--                                $query = mysqli_query($conn, $sql);-->
+<!--                                if($query)-->
+<!--                                {-->
+<!--                                    if (mysqli_num_rows($query)>0)-->
+<!--                        {-->
+<!--                        $i = 0;-->
+<!--                        while($bangthongkevipham = mysqli_fetch_array($query, MYSQLI_ASSOC))-->
+<!--                        {-->
+<!--                        $IDhs = $bangthongkevipham['ID'];-->
+<!--                        $query_hs = mysqli_query($conn, "SELECT * FROM `hs` WHERE `mahs` = '$IDhs' AND `sdt` != ''");-->
+<!--                        if ($query_hs)-->
+<!--                        {-->
+<!--                        if(mysqli_num_rows($query_hs) > 0)-->
+<!--                        {-->
+<!--                        $hs = mysqli_fetch_array($query_hs, MYSQLI_ASSOC);-->
+<!--                        $tenhs = $hs['tenhs'] ;-->
+<!--                        $hslop = $hs['hslop'];-->
+<!--                        $sdt = $hs['sdt'];-->
+<!--                        $query_bangthongkevipham = mysqli_query($conn, "SELECT * FROM `bangthongkevipham` WHERE `ID` = '$IDhs' AND `SMS_STATUS` = '0' AND `ngayvipham` = '$today' ");-->
+<!--                        if ($query_bangthongkevipham)-->
+<!--                        {-->
+<!--                        $i++;-->
+<!--                        if(mysqli_num_rows($query_bangthongkevipham)>0)-->
+<!--                        {-->
+<!--                        ?>-->
+<!--                        <tr>-->
+<!--                            <td><?php echo $i;?></td>-->
+<!--                            <td><a href="quanlyhocsinh_profile.php?mahs=<?php echo $IDhs;?>"><?php echo $tenhs;?></a></td>-->
+<!--                            <td><a style="cursor: pointer;" onclick="direct('<?php echo $hslop; ?>');"><?php echo $hslop;?></a></td>-->
+<!--                            <td><?php echo $sdt;?></td>-->
+<!--                            <td><button class="btn btn-success btn-send-sms" data-sms=<?php echo $IDhs.'|'.$sdt.'|'.$today;?>><i class="fa fa-paper-plane"></i> Gửi SMS</button></td>-->
+<!--                        </tr>-->
+<!--                        <?php-->
+<!--                                                        }else-->
+<!--                                                        {-->
+<!--                                                            ?>-->
+<!--                        <tr>-->
+<!--                            <td><?php echo $i;?></td>-->
+<!--                            <td><a href="quanlyhocsinh_profile.php?mahs=<?php echo $IDhs;?>"><?php echo $tenhs;?></a></td>-->
+<!--                            <td><a style="cursor: pointer;" onclick="direct('<?php echo $hslop; ?>');"><?php echo $hslop;?></a></td>-->
+<!--                            <td><?php echo $sdt;?></td>-->
+<!--                            <td><button class="btn btn-warning" disabled="disabled"><i class="fa fa-check-circle"></i> Đã gửi SMS</button></td>-->
+<!--                        </tr>-->
+<!--                        <?php-->
+<!--                                                        }-->
+<!--                                                    }-->
+<!--                                                }-->
+<!--                                            }-->
+<!--                                        }-->
+
+<!--                                    }else-->
+<!--                                    {-->
+<!--                                        ?>-->
+<!--                        <tr>-->
+<!--                            <td colspan="6" style="text-align: center"><p><i class="fa fa-info-circle text-info"></i></p> <p class="text-info" style="font-weight: bold">Không có vi phạm nào cần gửi SMS !</p></td>-->
+<!--                        </tr>-->
+<!--                        <?php-->
+<!--                                    }-->
+<!--                                }-->
+<!--                                    /*$sql = "SELECT DISTINCT `ID` FROM `bangthongkevipham` WHERE `ngayvipham` = '$today' AND `SMS_STATUS` = '0' ";-->
+<!--                                    $query_send_sms = mysqli_query($conn, $sql);-->
+<!--                                    if($query_send_sms)-->
+<!--                                    {-->
+<!--                                        if(mysqli_num_rows($query_send_sms)>0)-->
+<!--                        {-->
+<!--                        $i = 0;-->
+
+<!--                        while($result = mysqli_fetch_array($query_send_sms, MYSQLI_ASSOC))-->
+<!--                        {-->
+<!--                        $query = mysqli_query($conn, "SELECT * FROM `hs` WHERE `sdt` !='' AND `mahs` = '".$result['ID']."' ");-->
+<!--                        if ($query)-->
+<!--                        {-->
+<!--                        if(mysqli_num_rows($query)==1)-->
+<!--                        {-->
+<!--                        $row = mysqli_fetch_array($query, MYSQLI_ASSOC);-->
+<!--                        $sdt = $row['sdt'];-->
+<!--                        $hslop = $row['hslop'];-->
+<!--                        $tenhs = $row['tenhs'];-->
+<!--                        $mahs = $row['mahs'];-->
+
+<!--                        $i++;-->
+
+<!--                        ?>-->
+
+<!--                        <tr>-->
+<!--                            <td><?php echo $i;?></td>-->
+<!--                            <td><a href="quanlyhocsinh_profile.php?mahs=<?php echo $mahs;?>"><?php echo $tenhs;?></a></td>-->
+<!--                            <td><a style="cursor: pointer;" onclick="direct('<?php echo $hslop; ?>');"><?php echo $hslop;?></a></td>-->
+<!--                            <td><?php echo $sdt;?></td>-->
+<!--                            <td><button class="btn btn-success btn-send-sms" data-sms=<?php echo $mahs.'|'.$sdt.'|'.$today;?>><i class="fa fa-paper-plane"></i> Gửi SMS</button></td>-->
+<!--                        </tr>-->
+<!--                        <?php-->
+<!--                                                	}-->
+<!--                                            	}-->
+<!--                                            }-->
+<!--                                    	}else-->
+<!--                                    	{-->
+<!--	                                        ?>-->
+<!--                        <tr>-->
+<!--                            <td colspan="6" style="text-align: center"><p><i class="fa fa-info-circle text-info"></i></p> <p class="text-info" style="font-weight: bold">Không có vi phạm nào cần gửi SMS !</p></td>-->
+<!--                        </tr>-->
+<!--                        <?php-->
+<!--                                    	}-->
+<!--                                	}-->
+<!--                                    */-->
+<!--                                ?>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+<div id="modal-detail-history" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="padding-bottom: 20px;">
+                    <div class="col-lg-12">
+                        <div class="col-lg-3 col-md-3 col-sm-5 col-xs-4"><input type="number" class="form-control" value="30" id="inp-limit-line"></div>
+                        <div class="col-lg-3 col-md-3 col-sm-5 col-xs-4"><input type="text" class="form-control" id="datepicker-modal"></div>
+                        <div class="col-lg-3 col-md-3 col-sm-2 col-xs-3"><button id="btn-filter" class="btn btn-success"><i class="fa fa-filter"></i> Lọc</button></div>
+                    </div>
+                </div>
+                <div class="row" style="max-height: 500px; overflow: auto">
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Nội dung tin nhắn</th>
+                                    <th>SĐT</th>
+                                    <th>Ngày gửi</th>
+                                    <th>Tình trạng</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbody-history-sms">
+<!--                                <?php-->
+<!--                                $query = mysqli_query($conn, "SELECT * FROM `SMS` LIMIT 30");-->
+<!--                                if ($query)-->
+<!--                                {-->
+<!--                                    if (mysqli_num_rows($query)>0)-->
+<!--                                {-->
+<!--                                $stt = 0;-->
+<!--                                while ($sms = mysqli_fetch_array($query, MYSQLI_ASSOC))-->
+<!--                                {-->
+<!--                                $stt++;-->
+<!--                                ?>-->
+<!--                                <tr>-->
+<!--                                    <td><?php echo $stt;?></td>-->
+<!--                                    <td><?php echo $sms['CONTENT'];?></td>-->
+<!--                                    <td><?php echo $sms['SDT'];?></td>-->
+<!--                                    <td><?php echo $sms['DATE'];?></td>-->
+<!--                                    <td><?php echo ($sms['STATUS']==1)?('<i class="fa fa-check text-success"></i><span class="text-success"></span>'):('<i class="fa fa-times text-danger"></i><span class="text-danger"></span>');?></td>-->
+<!--                                </tr>-->
+<!--                                <?php-->
+<!--                                        }-->
+<!--                                    }-->
+<!--                                }-->
+<!--                                ?>-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal-detail" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12"><span class="text-info" style="font-weight: bold;"><i class="fa fa-phone"></i> Thêm số điện thoại</span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label class="text-success"><i class="fa fa-plus"></i> Chọn lớp:</label>
+                                <select class="form-control" id="select-class">
+                                    <option value="" disabled="disabled" selected="selected">Chọn một lớp</option>
+<!--                                    <?php-->
+<!--                              $query_class = mysqli_query($conn, "SELECT DISTINCT `hslop` FROM `hs`");-->
+<!--                              if($query_class)-->
+<!--                              {-->
+<!--                                while ($row = mysqli_fetch_array($query_class, MYSQLI_ASSOC))-->
+<!--                                {-->
+<!--                                    echo '<option value='.$row['hslop'].'>'.$row['hslop'].'</option>';-->
+<!--                                    }-->
+<!--                                    }-->
+<!--                                    ?>-->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label class="text-success"><i class="fa fa-plus"></i> Chọn học sinh:</label>
+                                <select class="form-control" id="select-student">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label class="text-success"><i class="fa fa-plus"></i> Số điện thoại:</label>
+                                <input type="number" class="form-control" id="inp-sdt"><br>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <button class="btn btn-primary pull-right" id="btn-add-sdt"><i class="fa fa-check"></i> Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <span class="text-info" style="font-weight: bold;"><i class="fa fa-list"></i> Danh sách học sinh đăng ký SĐT</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label class="text-success"><i class="fa fa-plus"></i> Chọn lớp: <i id="i-loading" style="display: none" class="fa fa-pulse fa-spinner fa-fw"></i> </label>
+                                <select class="form-control" id="select-class-view-list">
+                                    <option value="" disabled="disabled" selected="selected">Chọn một lớp</option>
+<!--                                    <?php-->
+<!--                              $query_class = mysqli_query($conn, "SELECT DISTINCT `hslop` FROM `hs`");-->
+<!--                              if($query_class)-->
+<!--                              {-->
+<!--                                while ($row = mysqli_fetch_array($query_class, MYSQLI_ASSOC))-->
+<!--                                {-->
+<!--                                    echo '<option value='.$row['hslop'].'>'.$row['hslop'].'</option>';-->
+<!--                                    }-->
+<!--                                    }-->
+<!--                                    ?>-->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="table-responsive" id="table-modal-detail">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block script %}
+<script>
+    function xoasodienthoai(btnmahs)
+    {
+        swal({
+            title: 'Xác nhận xóa?',
+            text: "Bạn có muốn hủy đăng ký sđt của học sinh này không ?",
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '',
+            confirmButtonText: 'Xác nhận!',
+            cancelButtonText: 'Hủy bỏ'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "quanlytinnhan_ajax.php",
+                    method: "POST",
+                    data: {
+                        xoasodienthoai: btnmahs
+                    },
+                    beforeSend: function(){
+                        $('#btn-delete-sdt-'+btnmahs).attr('disabled', 'disabled')
+                        $('#btn-delete-sdt-'+btnmahs).html('<i class="fa fa-pulse fa-spinner fa-fw"></i>')
+                    },
+                    success: function(xoasodienthoaithanhcong){
+                        if (xoasodienthoaithanhcong = 'delete-success')
+                        {
+                            $('#tr-'+btnmahs).remove()
+                            $('#panel-3').html( parseInt($('#panel-3').text()) - 1)
+                            $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã xóa số điện thoại!'});
+
+                        }else
+                        {
+                            $('#btn-delete-sdt-'+btnmahs).removeAttr('disabled')
+                            $('#btn-delete-sdt-'+btnmahs).html('<i class="fa fa-trash"></i>')
+                            swal(
+                                'Đã có lỗi xảy ra!',
+                                'Thao tác thất bại. Thử lại sau',
+                                'error'
+                            )
+                        }
+
+                    }
+                })
+            }
+        })
+    }
+
+    function luusodienthoai(btnmahs){
+        var sdt_moi = $('#inp-'+btnmahs+'').val()
+        if (validatePhone(sdt_moi) == true)
+        {
+            $.ajax({
+                url: "quanlytinnhan_ajax.php",
+                method: "POST",
+                data:{
+                    themsodienthoai: sdt_moi,
+                    mahocsinh: btnmahs
+                },
+                success: function(themsdtthanhcong){
+                    if (themsdtthanhcong = 'add-success') {
+                        $('#td-'+btnmahs+'').html(sdt_moi)
+                        $('#btn-edit-sdt-'+btnmahs).removeClass('btn-success').addClass('btn-info').html('<i class="fa fa-edit"></i>')
+                        $('#btn-edit-sdt-'+btnmahs).attr('onclick', 'suasodienthoai("'+btnmahs+'|name|'+'class|'+sdt_moi+'")')
+                        $('#btn-edit-sdt-'+btnmahs).removeAttr('disabled')
+                        $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã lưu số diện thoại mới!'});
+
+                    }else
+                    {
+                        $('#btn-edit-sdt-'+btnmahs).removeAttr('disabled')
+                        $('#btn-edit-sdt-'+btnmahs).html('<i class="fa fa-check"></i>')
+                        $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Đã xảy ra lỗi!'});
+
+                    }
+
+                },
+                beforeSend: function(){
+                    $('#btn-edit-sdt-'+btnmahs).html('<i class="fa fa-pulse fa-spinner fa-fw"></i>').attr('disabled', 'disabled')
+
+                }
+            })
+        }
+    }
+    function suasodienthoai(data_info){
+        var data_info = data_info.split('|')
+        $('#td-'+data_info[0]+'').html('<input id="inp-'+data_info[0]+'" class="form-control" value="'+data_info[3]+'">')
+        $('#btn-edit-sdt-'+data_info[0]).removeClass('btn-info').addClass('btn-success').html('<i class="fa fa-check"></i>')
+        $('#btn-edit-sdt-'+data_info[0]).attr('onclick', 'luusodienthoai("'+data_info[0]+'")')
+    }
+    $( function() {
+        $( "#datepicker-ol" ).datepicker({ dateFormat: 'dd/mm/yy' });
+        $('#datepicker-ol').datepicker('setDate', 'today');
+        $( "#datepicker-modal" ).datepicker({ dateFormat: 'dd/mm/yy' });
+    } );
+</script>
+<script type="text/javascript">
+    function validatePhone(numberphone) {
+        var flag = false;
+        numberphone = numberphone.replace('(+84)', '0');
+        numberphone = numberphone.replace('+84', '0');
+        numberphone = numberphone.replace('0084', '0');
+        numberphone = numberphone.replace(/ /g, '');
+        if (numberphone != '') {
+            var firstNumber = numberphone.substring(0, 2);
+            if ((firstNumber == '09' || firstNumber == '08') && numberphone.length == 10) {
+                if (numberphone.match(/^\d{10}/)) {
+                    flag = true;
+                }
+            } else if (firstNumber == '01' && numberphone.length == 11) {
+                if (numberphone.match(/^\d{11}/)) {
+                    flag = true;
+                }
+            }
+        }
+        return flag;
+    }
+    $(document).ready(function(){
+        $('.nav-item-sms').attr('class', 'active');
+        $('.lb-numnotice').load('capnhatvipham_getnumbernotice.php');
+        function getliststudent(class_selected_view_list)
+        {
+            $.ajax({
+                url: 'quanlytinnhan_ajax.php',
+                method: 'post',
+                data: {
+                    hocsinhdangkysms: class_selected_view_list
+                },
+                success: function(ketqua){
+                    $('#i-loading').hide()
+                    $("#table-modal-detail").html(ketqua);
+                },
+                beforeSend: function()
+                {
+                    $("#table-modal-detail").html('');
+                    $('#i-loading').show()
+
+                }
+            })
+        }
+        function panel_require(type){
+            $.ajax({
+                url: "quanlytinnhan_ajax.php",
+                method: "POST",
+                data:{
+                    panel_require: type
+                },
+                success: function(data)
+                {
+
+                    $('#panel-'+type).html(data)
+
+                },
+                beforeSend: function()
+                {
+                    $('#panel-'+type).html('<i class="fa fa-pulse fa-spinner fa-fw"></i>')
+                }
+            })
+        }
+        $('#btn-filter').click(function(){
+            var number_line = parseInt($('#inp-limit-line').val())
+            var date_filter = $('#datepicker-modal').val()
+            if(number_line != 0)
+            {
+                $.ajax({
+                    url: "quanlytinnhan_ajax.php",
+                    method: "POST",
+                    data:{
+                        history_filter: number_line,
+                        date_filter: date_filter
+                    },
+                    success: function(filter_result){
+                        $('#btn-filter').html('<i class="fa fa-filter"></i> Lọc').removeAttr('disabled');
+                        $('#tbody-history-sms').html(filter_result)
+                    },
+                    beforeSend: function()
+                    {
+                        $('#btn-filter').html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Lọc').attr('disabled', 'disabled');
+                    }
+                })
+            }
+        })
+        $('.btn-send-sms').click(function(){
+            var data_sms = $(this).attr('data-sms').split('|');
+            var buttonclick = $(this);
+            $.ajax({
+                url: "quanlytinnhan_ajax.php",
+                method: "POST",
+                dataType:"text",
+                data:{
+                    guitinnhan: "1",
+                    mahs: data_sms[0],
+                    sdt: data_sms[1],
+                    ngay: data_sms[2]
+                },
+                beforeSend: function(){
+                    buttonclick.attr('disabled', 'disabled')
+                    buttonclick.html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Đang thực thi')
+                },
+                success: function(guitinnhanthanhcong){
+                    //if(guitinnhanthanhcong == 'success')
+                    //{
+                    buttonclick.html('<i class="fa fa-check"></i> Đã gửi SMS')
+                    buttonclick.removeClass('btn-success').addClass('btn-warning');
+                    panel_require(1)
+                    panel_require(2)
+                    panel_require(4)
+                    $('#btn-filter').click();
+
+                    //}else
+                    //{
+                    //  buttonclick.html('<i class="fa fa-paper-plane"></i> Gửi SMS')
+                    //buttonclick.removeAttr('disabled')
+                    //swal(
+                    //'Đã có lỗi xảy ra!',
+                    //'Thao tác thất bại. Thử lại sau',
+                    //'error'
+                    //)
+                    //}
+                }
+            })
+
+
+        })
+        $('#btn-view-date').click(function(){
+            var dateselect = $('#datepicker-ol').val()
+            if(dateselect != '')
+            {
+                $.ajax({
+                    url: "quanlytinnhan_ajax.php",
+                    method: "POST",
+                    dataType:"text",
+                    data:{
+                        xemngaykhac: dateselect
+                    },
+                    beforeSend: function(){
+                        $('#btn-view-date').html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Xem')
+                    },
+                    success: function(xemngaykhacthanhcong){
+                        $('#tbody-tinnhanhomnay').html(xemngaykhacthanhcong);
+                        $('#btn-view-date').html('<i class="fa fa-eye fa-fw"></i> Xem')
+                    }
+                })
+            }
+        })
+        function xoasodienthoai(){
+            alert('Hello');
+        }
+        $('#btn-add-sdt').click(function(){
+            var sdt = $('#inp-sdt').val();
+            var mahs = $('#select-student').val()
+            if(mahs != null)
+            {
+                if(validatePhone(sdt) != false)
+                {
+                    $.ajax({
+                        url: "quanlytinnhan_ajax.php",
+                        method: "POST",
+                        data:{
+                            themsodienthoai: sdt,
+                            mahocsinh: mahs
+                        },
+                        success: function(themsdtthanhcong){
+                            if (themsdtthanhcong = 'add-success') {
+                                $('#inp-sdt').removeAttr('disabled')
+                                $('#inp-sdt').val('');
+                                $('#select-student option:selected').remove();
+                                $('#select-class').removeAttr('disabled')
+                                $('#select-student').removeAttr('disabled')
+                                $('#btn-add-sdt').removeAttr('disabled')
+                                $('#btn-add-sdt').html('<i class="fa fa-check"></i> Thêm')
+
+                                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã thêm số điện thoại!'});
+
+                                var class_selected_view_list = $('#select-class-view-list').val();
+                                if(class_selected_view_list == $('#select-class').val())
+                                {
+                                    getliststudent(class_selected_view_list);
+                                }
+                                panel_require(3);
+
+
+                            }else
+                            {
+                                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Đã xảy ra lỗi!'});
+                            }
+
+                        },
+                        beforeSend: function(){
+                            $('#inp-sdt').attr('disabled', 'disabled')
+                            $('#select-class').attr('disabled', 'disabled')
+                            $('#select-student').attr('disabled', 'disabled')
+                            $('#btn-add-sdt').attr('disabled', 'disabled')
+                            $('#btn-add-sdt').html('<i class="fa fa-pulse fa-spinner fa-fw"></i> Đang thực thi')
+                        }
+                    })
+                }else
+                {
+
+                    $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-danger"></i></span> Số điện thoại không hợp lệ!'});
+                }
+            }else{
+                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-danger"></i></span> Vui lòng chọn một học sinh!'});
+
+            }
+
+        })
+        $('#select-class').change(function(){
+            var class_selected = $(this).val()
+            $.ajax({
+                url: "quanlytinnhan_ajax.php",
+                method: "POST",
+                data: {
+                    laydanhsachhocsinh: class_selected
+                },
+                success: function(ketquatrave){
+                    $('#select-student').html(ketquatrave)
+                    $('#select-class').removeAttr('disabled');
+                    $('#inp-sdt').val('');
+                },
+                beforeSend: function(){
+                    $('#select-class').attr('disabled', 'disabled')
+                }
+            })
+        })
+        $('#select-student').change(function(){
+            $('#inp-sdt').val('');
+        })
+        $('.a-modal-detail').click(function(){
+            $('#modal-detail .modal-title').html($(this).attr('data-modal-title'))
+            $('#modal-detail').modal('toggle')
+        })
+        $('.a-modal-detail-history').click(function(){
+            $('#modal-detail-history .modal-title').html($(this).attr('data-modal-title'))
+            $('#modal-detail-history').modal('toggle')
+        })
+        $('#select-class-view-list').change(function(){
+            var class_selected_view_list = $(this).val();
+
+            if(class_selected_view_list!= null)
+            {
+
+                getliststudent(class_selected_view_list);
+            }
+
+        })
+    })
+</script>
+{% endblock %}

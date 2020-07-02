@@ -144,96 +144,9 @@ class Rules extends BaseAdminController
     return Alfred::apiResponseWithSuccess($this->response, []);
   }
 
-  public function showSearchPage()
-  {
-    $html = $this->renderer->render('searchRulesPage', []);
-    return $this->response->setContent($html);
-  }
-
   public function showManagePage()
   {
     $html = $this->renderer->render('showManageRulesPage', []);
-    return $this->response->setContent($html);
-  }
-
-  public function search()
-  {
-    if (!$this->isLoggedIn()) {
-      $this->backToLogin();
-      return;
-    }
-
-    $param = $this->request->getParameters();
-
-    $result = [
-        'success' => false,
-        'message' => 'Internal error'
-    ];
-
-    if ($param['searchBy'] == 'student') {
-      $result = $this->_searchByStudentName($param['data']);
-    } else {
-      $result = $this->_searchByClassId($param['data']);
-    }
-
-    if ($result['success']) {
-      return Alfred::apiResponseWithSuccess($this->response, $result['payload']);
-    }
-
-    return Alfred::apiResponseWithError($this->response, $result['message']);
-  }
-
-  private function _searchByStudentName($data)
-  {
-    $qb = $this->em->createQueryBuilder();
-    $q = $qb->select('s')
-        ->from('App\Entities\Students', 's')
-        ->where($qb->expr()->like('s.first_name', ':name'))
-        ->orWhere($qb->expr()->like('s.last_name', ':name'))
-        ->andWhere($qb->expr()->in('s.class', ':classManagedIds'))
-        ->setParameter('name', "%{$data}%")
-        ->setParameter('classManagedIds', $this->getManagedClassIds())
-        ->getQuery();
-
-    $studentsToRules = array_map(function ($student) {
-    }, $q->getResult());
-
-    exit();
-
-    return [
-        'success' => true,
-        'payload' => array_map(function ($student) {
-          return $student->getRawData();
-        }, $students)
-    ];
-  }
-
-  private function _searchByClassId($data)
-  {
-    return [
-        'success' => false,
-        'message' => 'Search by sclas'
-    ];
-  }
-  public function getStudentToRule($param) {
-
-    $filter = isset($param['studentId']) ? ['student' => (int) $param['studentId']] : [];
-
-    $rules = $this->em->getRepository('App\Entities\StudentsToRules')->findBy($filter);
-
-    $data = array_map(function ($rule) {
-      return $rule->getRawData();
-    }, $rules);
-
-    return Alfred::apiResponseWithSuccess($this->response, $data);
-  }
-  public function showAddStudentToRule()
-  {
-    if (!$this->isLoggedIn()) {
-      return $this->backToLogin();
-    }
-
-    $html = $this->renderer->render('showAddStudentToRule', []);
     return $this->response->setContent($html);
   }
 }

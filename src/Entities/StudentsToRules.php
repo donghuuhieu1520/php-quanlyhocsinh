@@ -52,13 +52,14 @@ class StudentsToRules
     public function getRawData()
     {
         return [
-            'rule_id' => $this->rule->getId(),
-            'rule_name' => $this->rule->getName(),
-            'student_id' => $this->student->getId(),
-            'student_name' => $this->student->getFirstName() . ' ' . $this->student->getLastName(),
-            'class_id' => $this->student->getClass()->getId(),
-            'create_at' => $this->created_at,
-            'create_by' => $this->account->getName()
+            'ruleId' => $this->rule->getId(),
+            'ruleName' => $this->rule->getName(),
+            'studentId' => $this->student->getId(),
+            'studentName' => $this->student->getFirstName() . ' ' . $this->student->getLastName(),
+            'classId' => $this->student->getClass()->getId(),
+            'className' => $this->student->getClass()->getName(),
+            'createdAt' => $this->created_at,
+            'createdBy' => $this->account->getName()
         ];
     }
 }

@@ -8,6 +8,7 @@
     <title>{% block title %}{% endblock %}</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet prefetch" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css">
     <script src="https://unpkg.com/sweetalert2@7.2.0/dist/sweetalert2.all.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link href="/css/snackbar/snackbar.css" rel="stylesheet">
@@ -92,11 +93,11 @@
                 <a href="{{routes.showAddStudentToRule}}"><span class="fa-stack fa-xs">
                         <i class="fa fa-circle fa-stack-2x i-background" style="color:#6ab04c" ></i>
                         <i class="fa fa-edit fa-stack-1x i-content" style="color: #fff" ></i>
-                    </span> Cập nhật vi phạm
+                    </span> Cập nhật ne nep
                 </a>
             </li>
             <li class="nav-item-sms">
-                <a href="quanlytinnhan.php"><span class="fa-stack fa-xs">
+                <a href="{{ routes.showMessageManage }}"><span class="fa-stack fa-xs">
                         <i class="fa fa-circle fa-stack-2x i-background" style="color:#3498db " ></i>
                         <i class="fa fa-envelope fa-stack-1x i-content" style="color: #fff" ></i>
                     </span> Quản lý tin nhắn SMS
@@ -147,7 +148,10 @@
 <script src="/js/bootbox.min.js"></script>
 <script src="/js/lodash.js"></script>
 <script src="/js/snackbar.js"></script>
+<script src="/js/moment.js"></script>
+<script src="/js/date-time-picker.js"></script>
 <script type="text/javascript">
+    moment.locale('vi');
     $( window ).resize(function() {
         $('.second').css('left', $('.first').css('width'));
     });
