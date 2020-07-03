@@ -39,25 +39,31 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td id="td_0"><i class="fa fa-globe"></i> Vi phạm hôm nay ({{ date.today }})</td>
+                            <td id="td_0"><i class="fa fa-globe"></i> Hoat dong hôm nay ({{ date.today }})</td>
                             <td class="text-center text-danger">
-                                10
+                                {{ countS2rToday }}
                             </td>
                             <td class="text-center"><button data-detail="0" class="btn-detail btn btn-success btn-xs">Xem</button></td>
                         </tr>
                         <tr>
                             <td id="td_1"><i class="fa fa-flag"></i> Số lượt học sinh vi phạm</td>
-                            <td class="text-center text-danger">10</td>
+                            <td class="text-center text-danger">
+                                {{ countS2rWeek }}
+                            </td>
                             <td class="text-center"><button data-detail="1" class="btn-detail btn btn-success btn-xs">Xem</button></td>
                         </tr>
                         <tr>
                             <td id="td_2"><i class="fa fa-users"></i> Số lượng học sinh vi phạm</td>
-                            <td class="text-center text-danger">100</td>
+                            <td class="text-center text-danger">
+                                {{ countS2rWeekByStudent }}
+                            </td>
                             <td class="text-center"><button data-detail="2" class="btn-detail btn btn-success btn-xs">Xem</button></td>
                         </tr>
                         <tr>
                             <td id="td_3"><i class="fa fa-university"></i> Số lớp có học sinh vi phạm</td>
-                            <td class="text-center text-danger">10</td>
+                            <td class="text-center text-danger">
+                                {{ s2rOfTheWeekByClass }}
+                            </td>
                             <td class="text-center"><button data-detail="3" class="btn-detail btn btn-success btn-xs">Xem</button></td>
                         </tr>
                     </tbody>
@@ -76,89 +82,6 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-6">
-            <p class="text-info" style="font-weight: bold;"><i class="fa fa-th"></i>
-                    &nbsp;Hạnh kiểm tháng {{ date.month }}</p>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover text-center" id="result-tbl" >
-                    <thead style="background-color: #F1F1F1;">
-                        <tr>
-                            <th>STT</th>
-                            <th>Lớp</th>
-                            <th>Sĩ số</th>
-                            <th>HK yếu</th>
-                            <th>HK trung bình</th>
-                            <th>HK khá</th>
-                            <th>HK tốt</th>
-                        </tr>
-                    </thead>
-                    <tbody class="result-table">
-                        <tr>
-                            <td>1</td>
-                            <td><a style="cursor: pointer;" onclick="">12B1</a></td>
-                            <td class="td_siso_thang">1</td>
-                            <td class="td_yeu_thang"></td>
-                            <td class="td_trungbinh_thang"></td>
-                            <td class="td_kha_thang"></td>
-                            <td class="td_gioi_thang"></td>
-                        </tr>
-                    </tbody>
-                    <tfoot style="background-color: #F1F1F1; font-weight: bold" >
-                        <tr>
-                            <td colspan="2">Tổng số:</td>
-                            <td id="td_siso_thang_tongcong">7</td>
-                            <td id="td_yeu_thang_tongcong">8</td>
-                            <td id="td_trungbinh_thang_tongcong">9</td>
-                            <td id="td_kha_thang_tongcong">10</td>
-                            <td id="td_gioi_thang_tongcong">11</td>
-                        </tr>
-                    </tfoot>
-                </table>
-
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <p class="text-info" style="font-weight: bold;"><i class="fa fa-th"></i>
-                    &nbsp;Hạnh kiểm học kỳ 2</p>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover text-center" id="result-tbl">
-                    <thead style="background-color: #F1F1F1;">
-                        <tr>
-                            <th>STT</th>
-                            <th>Lớp</th>
-                            <th>Sĩ số</th>
-                            <th>HK yếu</th>
-                            <th>HK trung bình</th>
-                            <th>HK khá</th>
-                            <th>HK tốt</th>
-                        </tr>
-                    </thead>
-                    <tbody class="result-table">
-                        <tr>
-                            <td><?php echo $i;?></td>
-                            <td><a style="cursor: pointer;" onclick="">12b1</a></td>
-                            <td class="td_siso_hocky">10</td>
-                            <td class="td_yeu_hocky">10</td>
-                            <td class="td_trungbinh_hocky">10</td>
-                            <td class="td_kha_hocky">10</td>
-                            <td class="td_gioi_hocky">10</td>
-                        </tr>
-                    </tbody>
-                    <tfoot style="background-color: #F1F1F1; font-weight: bold" >
-                        <tr>
-                            <td colspan="2">Tổng số:</td>
-                            <td id="td_siso_hocky_tongcong">7</td>
-                            <td id="td_yeu_hocky_tongcong">8</td>
-                            <td id="td_trungbinh_hocky_tongcong">9</td>
-                            <td id="td_kha_hocky_tongcong">10</td>
-                            <td id="td_gioi_hocky_tongcong">11</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
 </div>
 </div>
 <div id="modal-detail" class="modal fade" role="dialog">
@@ -189,7 +112,66 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        $(function () {
+            var options = {
+                title: {
+                    text: "Lượt cap nhat trong tuần"
+                },
+                animationEnabled: true,
+                data: [
+                    {
+                        type: "column",
+                        dataPoints: [
+                            {% for data in chartData %}
+                                { label: '{{ data.label }}', y: {{ data.y }} },
+                            {% endfor %}
+                        ]
+                    }
+                ]
+
+        };
+
+            var chartusing = options.data[0]['type'];
+
+            $('#ul-charttype li a').each(function(){
+
+                if($(this).attr('data-chart-type') == chartusing){
+
+                    $(this).html($(this).html() + ' <i class="fa fa-check text-success"></i>');
+
+                }
+
+            })
+
+
+
+            //options.data[0]['type'] = 'pie';
+
+
+
+            $("#chartContainer").CanvasJSChart(options);
+
+            $('.a-chart-type').click(function(){
+
+                var chart_type = $(this).attr('data-chart-type');
+
+                $('.a-chart-type').each(function(){
+
+                    $(this).find('i').remove();
+
+                })
+
+                $(this).html($(this).html()+' <i class="fa fa-check text-success"></i>');
+
+                options.data[0]['type'] = chart_type;
+
+                $("#chartContainer").CanvasJSChart(options);
+
+            })
+
+        });
         $('#chartContainer').css('height', $('.col-lg-6').css('height'));
+
         $('.btn-detail').click(function(){
             $('#p-loading').show();
             $('#table-modal-detail').html('');
@@ -197,17 +179,150 @@
             var modal_title = $('#td_'+buttonclicked).html()
             $('#modal-detail .modal-title').html(modal_title);
             $('#modal-detail').modal('show');
+
             $.ajax({
-                url: "tongquanhethong_ajax.php",
-                type: "POST",
-                dataType: "text",
-                data:{
-                    flag: "modal_detail_require",
+                url: "{{ routes.apiDashboardDetail }}",
+                type: "GET",
+                dataType: "json",
+                data: {
                     type: buttonclicked
                 },
-                success: function(success){
+                success: function({ success, payload, message }){
+                    if (success) {
+                        var tableHtml = '';
+                        if (buttonclicked == 0) {
+                            tableHtml = `
+                                <table class="table table-bordered table-hovered">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>ID</th>
+                                            <th>Họ tên</th>
+                                            <th>Lớp</th>
+                                            <th>Hoat dong</th>
+                                            <th>Cập nhật bởi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    ${ payload.reduce((result, s2r, index) => {
+                                        result += `
+                                            <tr>
+                                                <td>${++index}</td>
+                                                <td>${s2r.studentId}</td>
+                                                <td>${s2r.studentName}</td>
+                                                <td>${s2r.className}</td>
+                                                <td>${s2r.ruleName}</td>
+                                                <td>${s2r.createdBy}</td>
+                                            </tr>
+                                        `;
+                                        return result;
+                                        }, '')
+                                    }
+                                    </tbody>
+                                </table>
+                            `;
+                        }
+
+                        if (buttonclicked == '1') {
+                            tableHtml = `
+                                <table class="table table-bordered table-hovered">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>ID</th>
+                                            <th>Họ tên</th>
+                                            <th>Lớp</th>
+                                            <th>Hoat dong</th>
+                                            <th>Ngày ghi nhan</th>
+                                            <th>Cập nhật bởi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    ${ payload.reduce((result, s2r, index) => {
+                                            result += `
+                                                <tr>
+                                                    <td>${++index}</td>
+                                                    <td>${s2r.studentId}</td>
+                                                    <td>${s2r.studentName}</td>
+                                                    <td>${s2r.className}</td>
+                                                    <td>${s2r.ruleName}</td>
+                                                    <td>${moment(s2r.createdAt.date).format('dddd DD-MM-YYYY')}</td>
+                                                    <td>${s2r.createdBy}</td>
+                                                </tr>
+                                            `;
+                                            return result;
+                                        }, '')
+                                    }
+                                    </tbody>
+                                </table>
+                                `;
+                        }
+
+                        if (buttonclicked == '2') {
+                            tableHtml = `
+                            <table class="table table-bordered table-hovered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>ID</th>
+                                        <th>Họ tên</th>
+                                        <th>Lớp</th>
+                                        <th>Số lượt cap nhat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                ${ payload.reduce((result, s2r, index) => {
+                                    result += `
+                                        <tr>
+                                            <td>${++index}</td>
+                                            <td>${s2r.studentId}</td>
+                                            <td>${s2r.studentName}</td>
+                                            <td>${s2r.className}</td>
+                                            <td>${s2r.quantity}</td>
+                                        </tr>
+                                    `;
+                                    return result;
+                                    }, '')
+                                }
+                                </tbody>
+                            </table>
+                            `;
+                        }
+
+                        if (buttonclicked == '3') {
+                            tableHtml = `
+                            <table class="table table-bordered table-hovered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Ma lop</th>
+                                        <th>Lớp</th>
+                                        <th>Số lượt cap nhat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                ${ payload.reduce((result, s2r, index) => {
+                                result += `
+                                        <tr>
+                                            <td>${++index}</td>
+                                            <td>${s2r.classId}</td>
+                                            <td>${s2r.className}</td>
+                                            <td>${s2r.quantity}</td>
+                                        </tr>
+                                    `;
+                                return result;
+                            }, '')
+                            }
+                                </tbody>
+                            </table>
+                            `;
+                        }
+
+                        $('#table-modal-detail').html(tableHtml).hide().fadeIn();
+                    }
+                },
+                complete () {
                     $('#p-loading').hide();
-                    $('#table-modal-detail').html(success).hide().fadeIn();
                 }
             });
         });

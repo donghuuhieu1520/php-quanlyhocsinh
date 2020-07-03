@@ -31,6 +31,8 @@ class StudentsToRules extends BaseAdminController
 
     $ruleId = $data['ruleId'];
 
+    $date = $data['date'];
+
     $accountId = 1;
 
     $student = $this->em->getRepository('App\Entities\Students')
@@ -42,7 +44,7 @@ class StudentsToRules extends BaseAdminController
 
     $newStr = new \App\Entities\StudentsToRules();
 
-    $newStr->setCreateAt();
+    $newStr->setCreateAt($date);
     $newStr->setStudent($student);
     $newStr->setRule($rule);
     $newStr->setAccount($account);
@@ -171,7 +173,16 @@ class StudentsToRules extends BaseAdminController
       return $this->backToLogin();
     }
 
-    $html = $this->renderer->render('showAddStudentToRule', []);
+    $rules = $this->em->getRepository('App\Entities\Rules')
+      ->findAll();
+
+    $rawRules = array_map(function ($rule) {
+      return $rule->getRawData();
+    }, $rules);
+
+    $html = $this->renderer->render('showAddStudentToRule', [
+        'rules' => $rawRules
+    ]);
     return $this->response->setContent($html);
   }
 }
