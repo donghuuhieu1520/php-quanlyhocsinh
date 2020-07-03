@@ -3,12 +3,20 @@
 namespace App\Entities;
 
 use Doctrine\ORM\Mapping as ORM;
+use Moment\Moment;
 
 /**
  * @ORM\Entity
  */
 class StudentsToRules
 {
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
@@ -21,18 +29,17 @@ class StudentsToRules
     private $account;
 
     /**
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="App\Entities\Rules", inversedBy="studentsToRules")
      * @ORM\JoinColumn(name="rule_id", referencedColumnName="id", nullable=false)
      */
     private $rule;
 
     /**
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="App\Entities\Students", inversedBy="studentsToRules")
      * @ORM\JoinColumn(name="student_id", referencedColumnName="id", nullable=false)
      */
     private $student;
+
     public function setStudent(Students $student): void
     {
         $this->student = $student;
@@ -45,15 +52,17 @@ class StudentsToRules
     {
         $this->rule = $rule;
     }
-    public function setCreateAt(): void
+    public function setCreateAt($date): void
     {
-        $this->created_at = new \DateTime("now");
+        $this->created_at = new \DateTime($date);
     }
     public function getRawData()
     {
         return [
+            'id' => $this->id,
             'ruleId' => $this->rule->getId(),
             'ruleName' => $this->rule->getName(),
+            'isBad' => $this->rule->getIsBad(),
             'studentId' => $this->student->getId(),
             'studentName' => $this->student->getFirstName() . ' ' . $this->student->getLastName(),
             'classId' => $this->student->getClass()->getId(),
@@ -62,4 +71,28 @@ class StudentsToRules
             'createdBy' => $this->account->getName()
         ];
     }
+
+  /**
+   * @return mixed
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  /**
+   * @param mixed $id
+   */
+  public function setId($id): void
+  {
+    $this->id = $id;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getCreatedAt()
+  {
+    return $this->created_at;
+  }
 }

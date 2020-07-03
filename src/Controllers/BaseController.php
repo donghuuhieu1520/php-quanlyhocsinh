@@ -51,6 +51,11 @@ class BaseController
     return $this->response->redirect('/login');
   }
 
+  protected function backTo404()
+  {
+    return $this->response->redirect('/404');
+  }
+
   protected function backToAdminDashboard()
   {
     return $this->response->redirect('/admin/dashboard');

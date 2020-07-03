@@ -36,6 +36,22 @@ class Now
         ->format($format);
   }
 
+  public function monthStart(string $format = 'd-m-Y') : string
+  {
+    return $this->moment
+        ->getPeriod('month')
+        ->getStartDate()
+        ->format($format);
+  }
+
+  public function monthEnd(string $format = 'd-m-Y') : string
+  {
+    return $this->moment
+        ->getPeriod('month')
+        ->getEndDate()
+        ->format($format);
+  }
+
   public function day(string $format = 'd-m-Y') : string
   {
     return $this->moment->format($format);

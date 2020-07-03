@@ -242,6 +242,7 @@
                 }
             });
         });
+
         $('#btn-addone').click(function(){
             var firstName = $('#inp-ten').val();
             var lastName = $('#inp-hovatendem').val();
@@ -250,7 +251,6 @@
             var gender = $('#se_gender_field').val();
             if (_.isEmpty(firstName) ||
                 _.isEmpty(lastName) ||
-                _.isEmpty(phone) ||
                 _.isEmpty(classId) ||
                 _.isEmpty(gender)
             ) {

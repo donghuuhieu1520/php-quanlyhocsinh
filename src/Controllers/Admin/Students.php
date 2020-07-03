@@ -2,12 +2,18 @@
 
 namespace App\Controllers\Admin;
 
+use Cassandra\Date;
 use Doctrine\ORM\ORMException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Http\Request;
 use Http\Response;
 use App\Template\IAdminRenderer;
 use Doctrine\ORM\EntityManager;
+use Moment\Moment;
+use function _\find;
+use function _\findIndex;
+use function _\reduce;
+use function _\reduceRight;
 use function _\some;
 use App\Helper\Alfred;
 use function Doctrine\ORM\QueryBuilder;
@@ -33,6 +39,65 @@ class Students extends BaseAdminController
     return array_map(function ($student) {
         return $student->getRawData();
       }, $students);
+  }
+
+  public function showProfile($param)
+  {
+    if (!$this->isLoggedIn()) {
+      return $this->backToLogin();
+    }
+    $studentId = (int)$param['studentId'];
+    $viewDate = $this->request->getParameter('viewDate', new \DateTime('now'));
+
+    if (is_string($viewDate)) {
+      $viewDate = \DateTime::createFromFormat('d-m-Y', $viewDate);
+    }
+
+    $student = $this->em->getRepository('App\Entities\Students')
+      ->findOneBy([ 'id' => $studentId, 'class' => $this->getManagedClassIds() ]);
+
+    if ($student == null) {
+      return $this->backTo404();
+    }
+
+    $now = new Moment($viewDate->format(\DateTime::ATOM));
+    $currentMonth = $viewDate->format('m');
+
+    $payload = [
+        'info' => $student->getRawData(),
+        'studentToRules' => array_map(function ($s2r) {
+          return $s2r->getRawData();
+        }, array_filter($student->getStudentsToRules()->toArray(), function ($s2r) use ($currentMonth) {
+          return $s2r->getCreatedAt()->format('m') == $currentMonth;
+        })),
+        'date' => [
+            'weekStart' => $now->getPeriod('week')->getStartDate()->format('d-m-Y'),
+            'weekEnd' => $now->getPeriod('week')->getEndDate()->format('d-m-Y'),
+            'monthStart' => $now->getPeriod('month')->getStartDate()->format('d-m-Y'),
+            'monthEnd' => $now->getPeriod('month')->getEndDate()->format('d-m-Y'),
+            'today' => $now->format('d-m-Y'),
+            'month' => $now->getMonth()
+        ]
+    ];
+
+    $payload['studenToRulesGroupedByDay'] = reduceRight($payload['studentToRules'], function ($carry, $item) {
+      $day = Moment::fromDateTime($item['createdAt'])->format('d-m-Y');
+
+      $found = findIndex($carry, function ($exist) use ($day) {
+        return $exist['label'] == $day;
+      });
+
+      if ($found != -1) {
+        $carry[$found]['y'] += 1;
+      } else {
+        $carry[] = ['label' => $day, 'y' => 1];
+      }
+
+      return $carry;
+    }, []);
+
+    $html = $this->renderer->render('showStudentProfile', $payload);
+    return $this->response->setContent($html);
   }
 
   public function getAll($param)

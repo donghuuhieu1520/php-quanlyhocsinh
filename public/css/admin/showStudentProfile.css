@@ -1,0 +1,220 @@
+body {
+    padding-top: 70px;
+    background-color:#dddddd;
+}
+.profile {
+    margin: 20px 0;
+}
+
+/* Profile sidebar */
+.profile-sidebar {
+    padding: 20px 0 10px 0;
+    background: #fff;
+
+}
+
+.profile-userpic img {
+    float: none;
+    margin: 0 auto;
+    width: 50%;
+    height: 50%;
+    -webkit-border-radius: 50% !important;
+    -moz-border-radius: 50% !important;
+    border-radius: 50% !important;
+}
+
+.profile-usertitle {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.profile-usertitle-name {
+    color: #5a7391;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.profile-usertitle-job {
+    text-transform: uppercase;
+    color: #5b9bd1;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.profile-userbuttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.profile-userbuttons .btn {
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 15px;
+    margin-right: 5px;
+}
+
+.profile-userbuttons .btn:last-child {
+    margin-right: 0px;
+}
+
+.profile-usermenu {
+    margin-top: 30px;
+}
+
+.profile-usermenu ul li {
+    border-bottom: 1px solid #f0f4f7;
+}
+
+.profile-usermenu ul li:last-child {
+    border-bottom: none;
+}
+
+.profile-usermenu ul li a {
+    color: #93a3b5;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.profile-usermenu ul li a i {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+.profile-usermenu ul li a:hover {
+    background-color: #fafcfd;
+    color: #5b9bd1;
+}
+
+.profile-usermenu ul li.active {
+    border-bottom: none;
+}
+
+.profile-usermenu ul li.active a {
+    color: #5b9bd1;
+    background-color: #f6f9fb;
+    border-left: 2px solid #5b9bd1;
+    margin-left: -2px;
+}
+
+/* Profile Content */
+.profile-content {
+    padding: 20px;
+    background: #fff;
+    min-height: 460px;
+}
+.btn-transparent-success{
+    border: 1px solid #fff;
+    background-color:  transparent;
+    outline-color: none;
+    color: #fff;
+}
+
+.btn-transparent-warning{
+    border: 1px solid #fff;
+    background-color:  transparent;
+    outline-color: none;
+    color: #fff;
+
+}
+.btn-transparent-success:hover{
+    background-color: green;
+    color: #fff;
+}
+.btn-transparent-success:focus{
+    background-color: green;
+    color: #fff;
+}
+
+.btn-transparent-warning:hover{
+    background-color: orange;
+    color: #fff;
+}
+.btn-transparent-warning:focus{
+    background-color: orange;
+    color: #fff;
+}
+
+
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+
+    min-width: 250px; /* Set a default minimum width */
+
+    /* Divide value of min-width by 2 */
+
+    color: #fff; /* White text color */
+
+    text-align: center; /* Centered text */
+
+    border-radius: 2px; /* Rounded borders */
+
+    padding: 16px; /* Padding */
+
+    position: fixed; /* Sit on top of the screen */
+
+    z-index: 99999; /* Add a z-index if needed */
+
+    /* Center the snackbar */
+
+    bottom: 30px; /* 30px from the bottom */
+
+    left: 50%;
+
+    margin: 0 auto;
+
+    background-color: #333;
+
+    opacity: 1;
+
+    transform: translate(-50%);
+}
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+/* Dành cho desktop */
+@media all and (min-width: 1025px) {
+    .baruser{
+        position: fixed;
+    }
+    .barinfo{
+        margin-left: 350px;
+    }
+}
+#menu .navbar-nav li a{
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+}
+#menu .navbar-nav li a:hover {
+    background-color: #e7e7e7;
+
+}
+.btn{
+    border-radius: 0px;
+}
+#pass, #repass {
+    border-radius: 0px;
+}
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 0.8;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 0.8;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom:  30px; opacity: 0.8;}
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom:  30px; opacity: 0.8;}
+    to {bottom: 0; opacity: 0;}
+}

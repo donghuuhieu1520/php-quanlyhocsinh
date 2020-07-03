@@ -92,9 +92,23 @@
             <h4 class="modal-title"><i class="fa fa-spinner fa-pulse fa-fw"></i>Đang tải...</h4>
           </div>
           <div class="modal-body">
-            <p><i class="fa fa-spinner fa-pulse fa-fw"></i>Đang tải...</p>
+            <div class="form-group">
+              <label id="lb-chonmuc">Chọn mục:</label>
+              <select class="form-control" id="modal-se-viphamthanhtich">
+                {% for rule in rules %}
+                  <option value="{{rule.id}}" class="opt-rule" data-isBad="{{ rule.isBad }}">{{rule.name}}</option>
+                {% endfor %}
+              </select>
+              <label>Chon ngày: </label>
+              <div id="datepicker-ngay" class="input-group date" data-date-format="dd-mm-yyyy">
+                <input class="form-control input-date-picker" readonly="" type="text" id="input-date-ngay">
+                <span class="input-group-addon btn-date-time-add-on"><i class="glyphicon glyphicon-calendar"></i></span>
+              </div>
+
+            </div>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="modal_capnhat"><i class="fa fa-edit"></i> Cập nhật</button>
             <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-close">Đóng</button>
           </div>
         </div>
@@ -107,94 +121,42 @@
 {% block script %}
   <script type="text/javascript">
     $('.2').attr('class', 'active');
-    $.ajax({
-      url: "/api/v1/rules",
-      type: "get",
-      dataType: "json",
-      data:{
-        ruleType: 1
-      },
-      beforeSend: function() {
 
-      },
-      success: function(data){
-        $('.modal-body').html(`
-          <div class="form-group">
-            <label id="lb-capnhat">Cập nhật:</label>
-            <select class="form-control" id="modal-se-loai">
-              <option value="1">Vi phạm</option>
-              <option value="0">Thành tích</option>
-            </select>
-            <label id="lb-chonmuc">Chọn mục:</label>
-            <select class="form-control" id="modal-se-viphamthanhtich">
-            </select>
-          </div>
-          `)
-        if (data.success) {
-          var rules = data.payload;
-          var html = rules.map(rule => {
-            return `<option value="${rule.id}">${rule.name}</option>`
-          })
-          $('#modal-se-viphamthanhtich').html(html);
-        }
-      },
-      complete: function(){
-        $('.modal-footer').html(`
-              <button type="button" class="btn btn-primary" id="modal_capnhat"><i class="fa fa-edit"></i> Cập nhật</button>
-              <button type="button" class="btn btn-default" data-dismiss="modal" id="btn-close">Đóng</button>
-            `);
-        $('#modal_capnhat').click(function() {
-          var studentId = $('#student-info').attr('data-id');
-          var ruleId = $('#modal-se-viphamthanhtich').val();
-          $.ajax({
-            url: "{{routes.apiAddStudentToRule}}",
-            type: "post",
-            dataType: "json",
-            data:{ studentId, ruleId },
-            beforeSend: function() {
-            },
-            success: function(data){
-              if (data.success) {
-                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã thêm !'})
-              }
-              else {
-                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Đã xảy ra lỗi !'})
-              }
-              $("#btn-close").trigger("click");
-            },
-            complete: function(){
-              $('#lb-chonmuc').html('Chọn mục: ')
-            }
-          })
-        })
-        $('#modal-se-loai').change(function(){
-          var se_loai = $(this).val();
-          $('#lb-chonmuc').html('Chọn mục: <i class="fa fa-spinner fa-pulse fa-fw"></i>')
-          $.ajax({
-            url: "/api/v1/rules",
-            type: "get",
-            dataType: "json",
-            data:{
-              ruleType: se_loai
-            },
-            beforeSend: function() {
+    $("#datepicker-ngay").datepicker({
+      autoclose: true,
+      todayHighlight: true
+    }).datepicker('update', new Date());
 
-            },
-            success: function(data){
-              if (data.success) {
-                var rules = data.payload
-                var html = rules.map(rule => {
-                  return `<option value="${rule.id}">${rule.name}</option>`
-                })
-                $('#modal-se-viphamthanhtich').html(html);
-              }
-            },
-            complete: function(){
-              $('#lb-chonmuc').html('Chọn mục: ')
-            }
-          })
-        })
+    $('#modal_capnhat').click(function() {
+      var studentId = $('#student-info').attr('data-id');
+      var ruleId = $('#modal-se-viphamthanhtich').val();
+      var date =  moment($('#input-date-ngay').val(), "DD-MM-YYYY").format();
+
+      if (_.isEmpty(ruleId) || _.isEmpty(date) || _.isEmpty(studentId)) {
+        swal("Loi", "Vui long dien du thong tin", 'info');
+        return;
       }
+
+      $.ajax({
+        url: "{{routes.apiAddStudentToRule}}",
+        type: "post",
+        dataType: "json",
+        data:{ studentId, ruleId, date },
+        beforeSend: function() {
+        },
+        success: function(data){
+          if (data.success) {
+            $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-check fa-stack-1x text-success"></i></span> Đã thêm !'})
+          }
+          else {
+            $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-times fa-stack-1x text-danger"></i></span> Đã xảy ra lỗi !'})
+          }
+          $("#btn-close").trigger("click");
+        },
+        complete: function(){
+          $('#lb-chonmuc').html('Chọn mục: ')
+        }
+      })
     })
 
     $("#se_class").change(function () {
