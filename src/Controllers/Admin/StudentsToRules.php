@@ -78,6 +78,10 @@ class StudentsToRules extends BaseAdminController
       $studentIds = $this->_searchByClassId($param['classId']);
     }
 
+    if (count($studentIds) == 0) {
+      return Alfred::apiResponseWithSuccess($this->response, []);
+    }
+
     $qb = $this->em->createQueryBuilder();
     $qb = $qb->select('s2r')
         ->from('\App\Entities\StudentsToRules', 's2r')
@@ -87,7 +91,7 @@ class StudentsToRules extends BaseAdminController
       try {
         $from = new Moment($param['from']);
         $from = $from->format('Y-m-d');
-        $qb = $qb->where($qb->expr()->gte('s2r.created_at', ':from'));
+        $qb = $qb->andWhere($qb->expr()->gte('s2r.created_at', ':from'));
         $qb = $qb->setParameter('from', "{$from} 00:00:00");
       } catch (MomentException $e) {
 
@@ -107,9 +111,12 @@ class StudentsToRules extends BaseAdminController
     }
 
     $query = $qb->getQuery();
+
+    $s2rs = $query->execute();
+
     $payload = array_map(function ($s2r) {
       return $s2r->getRawData();
-    }, $query->getResult());
+    }, $s2rs);
 
     return Alfred::apiResponseWithSuccess($this->response, $payload);
   }
