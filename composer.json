@@ -27,7 +27,10 @@
     "firebase/php-jwt": "^5.2",
     "fightbulc/moment": "^1.32",
     "symfony/dotenv": "^5.1",
-    "lodash-php/lodash-php": "^0.0.6"
+    "lodash-php/lodash-php": "^0.0.6",
+    "guzzlehttp/guzzle": "^7.0",
+    "phpoffice/phpspreadsheet": "^1.14",
+    "davidgorges/human-name-parser": "^1.0"
   },
   "autoload": {
       "psr-4": {

@@ -62,4 +62,12 @@ class Classes
         'name' => $this->getName(),
     ];
   }
+
+  /**
+   * @param mixed $name
+   */
+  public function setName($name): void
+  {
+    $this->name = $name;
+  }
 }

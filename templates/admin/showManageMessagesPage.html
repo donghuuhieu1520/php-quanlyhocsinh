@@ -587,8 +587,43 @@
         return flag;
     }
     $(document).ready(function(){
+
+        $.ajax({
+            url: '{{ routes.apiGetMessageBalance }}',
+            type: 'GET',
+            dataType: 'json',
+            beforeSend () {
+                $('#panel-1').html('<i class="fa fa-pulse fa-spinner fa-fw"></i>');
+                $('#panel-2').html('<i class="fa fa-pulse fa-spinner fa-fw"></i>');
+            },
+            success ({ success, payload, message }) {
+                if (success) {
+                    $('#panel-1').html(payload.balance);
+                    $('#panel-2').html(payload.available);
+                } else {
+                    $('#panel-1').html('Loi');
+                    $('#panel-2').html('Loi');
+                }
+            }
+        });
+        $.ajax({
+            url: '{{ routes.apiGetStudentRegisted }}',
+            type: 'GET',
+            dataType: 'json',
+            beforeSend () {
+                $('#panel-3').html('<i class="fa fa-pulse fa-spinner fa-fw"></i>');
+            },
+            success ({ success, payload, message }) {
+                if (success) {
+                    $('#panel-3').html(payload.length);
+                } else {
+                    $('#panel-3').html('Loi');
+                }
+            }
+        });
+
+
         $('.nav-item-sms').attr('class', 'active');
-        $('.lb-numnotice').load('capnhatvipham_getnumbernotice.php');
         function getliststudent(class_selected_view_list)
         {
             $.ajax({

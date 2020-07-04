@@ -65,10 +65,5 @@ class BaseController
   {
     return $this->response->redirect('/student');
   }
-
-  protected function backToHomePage()
-  {
-    return $this->response->redirect('/');
-  }
 }
 
