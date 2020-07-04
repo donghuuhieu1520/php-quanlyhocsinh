@@ -41,7 +41,16 @@ class Accounts extends BaseAdminController
 
   public function showManagePage()
   {
-    $html = $this->renderer->render('showManageAccountsPage', ['acls' => self::$acls]);
+    $classes = $this->em->getRepository('App\Entities\Classes')->findAll();
+    $classes = array_map(function ($class) {
+      return $class->getRawData();
+    }, $classes);
+
+    $html = $this->renderer->render('showManageAccountsPage', [
+      'acls' => self::$acls,
+      'classes' => $classes
+    ]);
+
     return $this->response->setContent($html);
   }
 

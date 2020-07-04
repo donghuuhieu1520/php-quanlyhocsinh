@@ -309,6 +309,12 @@ class Students extends BaseAdminController
       return Alfred::apiResponseNotLogin($this->response);
     }
 
+    $accountACLs = $this->getAcl();
+
+    if (!$accountACLs['canCreateStudent']) {
+      return Alfred::apiResponseNotAllow($this->response);
+    }
+
     $fileName = $this->request->getParameter('fileName', null);
     $autoCreateClass = $this->request->getParameter('autoCreateClass', false);
 
