@@ -75,7 +75,6 @@
                             <th>Hoạt động</th>
                             <th>Ngày</th>
                             <th>Cập nhật bởi</th>
-                            <th>Đã gửi SMS</th>
                         </tr>
                         </thead>
                         <tbody id="tbody-result">
@@ -144,7 +143,6 @@
                         <td>${s2r.ruleName }</td>
                         <td>${ moment(s2r.createdAt.date).format('dddd DD-MM-YYYY') }</td>
                         <td>${s2r.createdBy }</td>
-                        <td>${s2r.hasSendSms }</td>
                     </tr>
                 `;
             });
