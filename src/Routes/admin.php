@@ -13,5 +13,5 @@ return (new Router())
     ->get('/students/{studentId}', 'App\Controllers\Admin\Students@showProfile')
     ->get('/rules/show', 'App\Controllers\Admin\Rules@showManagePage', 'showRuleManage')
     ->get('/accounts/show', 'App\Controllers\Admin\Accounts@showManagePage', 'showAccountManage')
-    ->get('/addStudentToRule', 'App\Controllers\Admin\StudentsToRules@showAddStudentToRule', 'showAddStudentToRule')
-    ->get('/show-message-management', 'App\Controllers\Admin\Messages@showManagePage', 'showMessageManage');
+    ->get('/addStudentToRule', 'App\Controllers\Admin\StudentsToRules@showAddStudentToRule', 'showAddStudentToRule');
+//    ->get('/show-message-management', 'App\Controllers\Admin\Messages@showManagePage', 'showMessageManage');
