@@ -8,21 +8,60 @@ INSERT INTO Accounts (username, password, name ) VALUES
 
 INSERT INTO Classes (name) VALUES
 ('12B1'),
-('12B2');
+('12B2'),
+('12B3'),
+('12B4'),
+('12B5'),
+('12B6'),
+('12B7'),
+('11B1'),
+('11B2'),
+('11B3'),
+('11B4'),
+('11B5'),
+('11B6'),
+('11B7'),
+('10B1'),
+('10B2'),
+('10B3'),
+('10B4'),
+('10B5'),
+('10B6'),
+('10B7');
 
 SELECT * FROM Accounts;
+
 SELECT * FROM Classes;
 
 INSERT INTO ClassesToAccounts (account_id, class_id ) VALUES
 (1, 1),
 (1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 14),
+(1, 15),
+(1, 16),
+(1, 17),
+(1, 18),
+(1, 19),
+(1, 20),
+(1, 21),
 (2, 2),
 (3, 1);
 
-INSERT INTO Students (first_name, last_name, gender, phone,class_id) VALUES
-("Dong Huu", "Hieu", true, "0981925281", 1),
-("Nguyen Cuu Nhat", "Thanh", true, "0981925282", 1),
-("Nguyen Ba Nhat", "Long", true, "0981925283", 1);
+# INSERT INTO Students (first_name, last_name, gender, phone,class_id) VALUES
+# ("Dong Huu", "Hieu", true, "0981925281", 1),
+# ("Nguyen Cuu Nhat", "Thanh", true, "0981925282", 1),
+# ("Nguyen Ba Nhat", "Long", true, "0981925283", 1);
 
 SELECT * FROM Accounts;
 

@@ -97,7 +97,6 @@
                                         </tr>
                                         </thead>
                                         <tbody id="tbody_showlist_file">
-                                        <?php GETLISTFILE();  ?>
                                         </tbody>
                                     </table>
                                     <button type="button" class="btn btn-success" id="btn-upload" data-toggle ="modal" data-target="#modal-upload"><i class="glyphicon glyphicon-paperclip"></i> Tải lên tệp mới</button>
@@ -124,7 +123,7 @@
 
                                 <div class="form-group">
                                     <label for="exampleInputFile">Chon file</label>
-                                    <input type="file" class="form-control-file"  name="file" id="select-file" aria-describedby="fileHelp">
+                                    <input type="file" class="form-control-file" name="file" id="select-file" aria-describedby="fileHelp">
                                     <small id="fileHelp" class="form-text text-muted">Tệp tải lên bắt buộc phải có định dạng (*.xls), có kích thước dưới 3 mb. Ngoài ra, để hệ thống có thể lọc được thông tin học sinh, tệp bắt buộc phải có cấu trúc giống như mẫu được quy định sẵn. <a class="link" style="cursor: pointer">Tìm hiểu thêm</a></small>
                                     <br>
                                     <div class="progress" style="display: none;">
@@ -160,9 +159,10 @@
                                     <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Họ tên</th>
+                                        <th>Họ tên dem</th>
+                                        <th>Ten</th>
                                         <th>Lớp</th>
-                                        <th>Mật khẩu</th>
+                                        <th>Gioi tinh</th>
                                     </tr>
                                     </thead>
                                     <tbody id="tbody-list">
@@ -173,12 +173,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <form action="quanlyhocsinh_themhocsinh_addmore.php" method="POST">
-                                <label class="text-muted pull-left"><input type="checkbox" name="checkbox-delete" id="checkbox-delete" value="1"> <span style="font-weight: normal">Xóa file này sau khi thêm học sinh</span></label>
-                                <button type="submit" class="btn btn-primary" id="submit-addmore" name="btn-addmore" data-toggle="tooltip" title="Danh sách học sinh trên sẽ được thêm vào CSDL">Thêm</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                            </form>
-
+                            <label class="text-muted pull-left"><input type="checkbox" name="checkbox-delete" id="checkbox-modal-create-new-class" value="1"> <span style="font-weight: normal">Tu dong tao lop neu khong tim thay lop</span></label>
+                            <button type="submit" class="btn btn-primary" id="btn-modal-add-many" data-toggle="tooltip" title="Danh sách học sinh trên sẽ được thêm vào CSDL">Thêm</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                         </div>
                     </div>
 
@@ -200,45 +197,93 @@
 </script>
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#submit-addmore').click(function(){
-            $(this).html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Thêm')
+        $('#btn-modal-add-many').click(function(){
+            var button = $(this);
+            var fileName = button.attr('data-fileName');
+            var autoCreateClass = $('#checkbox-modal-create-new-class').is(':checked');
+
+            if (_.isEmpty(fileName)) {
+                $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> No file name specified'});
+                return;
+            }
+
+            $.ajax({
+                url: '{{ routes.apiAddStudentsFromFile }}',
+                type: 'post',
+                dataType: 'json',
+                data: { fileName, autoCreateClass },
+                beforeSend () {
+                    button.html('<i class="fa fa-spinner fa-pulse fa-fw"></i> Thêm');
+                    button.prop('disabled', true);
+                },
+                success ({ success, payload, message }) {
+                    if (success) {
+                        $.snackbar({content: `<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> Them thanh cong ${payload.count} hoc sinh` });
+                    } else {
+                        $.snackbar({content: `<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> ${message}` });
+                    }
+                    $('#modal-viewlist').modal('hide');
+                },
+                complete () {
+                    button.html('Thêm');
+                    button.prop('disabled', false);
+                }
+            })
         })
 
-        $('.btn-delete-file').click(function(){
-            var filedeletename =  $(this).val();
+        $(document).on('click', '.btn-delete-file', function(){
+            var fileName =  $(this).attr('data-fileName');
             $.ajax({
-                url: "",
+                url: "{{ routes.apiDeleteFileExcel }}",
                 type: "post",
-                dataType: "text",
-                data:
-                    {
-                        filedeletename: filedeletename
-                    },
-                success: function(xoafilexlsthanhcong)
-                {
-
-                    $('#tbody_showlist_file').html(xoafilexlsthanhcong);
+                dataType: "json",
+                data: { fileName },
+                success: function({ success, payload, message }) {
+                    if (success) {
+                        $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> Da xoa'});
+                        listAllFile();
+                    } else {
+                        $.snackbar({content: '<span class="fa-stack fa-sm"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-info fa-stack-1x text-success"></i></span> Da xay ra loi'});
+                    }
                 }
             });
         });
-        $('.btn-view-file').click(function(){
-            $('#tbody-list').html('<tr id="tr-icon-loading" style="display: none;"><td colspan="4" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></td></tr>');
-            var fileviewname =  $(this).val();
+        $(document).on('click', '.btn-view-file', function() {
+            $('#tbody-list').html('<tr id="tr-icon-loading" style="display: none;"><td colspan="5" style="text-align: center;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></td></tr>');
+            var fileName = $(this).attr('data-fileName');
             $('#tr-icon-loading').show();
-            $('#modal-file-title').html('<img src="../img/xls_icon.png" style="width: 7%;" alt="xls"> '+fileviewname);
-            $('#modal-viewlist').modal('toggle');
 
+            $('#modal-file-title').html('<img src="/img/xls_icon.png" style="width: 7%;" alt="xls"> '+ fileName);
+            $('#btn-modal-add-many').attr('data-fileName', fileName);
+
+            $('#modal-viewlist').modal('toggle');
             $.ajax({
-                url: "quanlyhocsinh_xemfilexls.php",
+                url: "{{ routes.apiViewFileExcel }}",
                 type: "post",
-                dataType: "text",
-                data:
-                    {
-                        fileviewname: fileviewname
-                    },
-                success: function(xemfilexls)
-                {
-                    $('#tbody-list').html(xemfilexls);
+                dataType: "json",
+                data: { fileName },
+                success: function({ success, payload, message }) {
+                    var html = '';
+                    if (success) {
+                        html = payload.reduce((result, item, index) => {
+                            return result += `
+                                <tr>
+                                    <td>${++index}</td>
+                                    <td>${item.studentFirstName}</td>
+                                    <td>${item.studentLastName}</td>
+                                    <td>${item.studentClassName}</td>
+                                    <td>${item.studentGender ? "Nam" : "Nu" }</td>
+                                </tr>
+                            `;
+                        }, ``);
+                    } else {
+                        html = `
+                            <tr>
+                                <td colspan="5">${message}</td>
+                            </tr>
+                        `;
+                    }
+                    $('#tbody-list').html(html);
                 }
             });
         });
@@ -286,6 +331,7 @@
         })
 
     })
+
     $('input[type="file"]').change(function(e){
         var fileName = e.target.files[0].name;
 
@@ -310,6 +356,49 @@
         }
     });
 
+    function listAllFile () {
+        $.ajax({
+            url: '{{ routes.apiListFileExcel }}',
+            dataType: 'json',
+            type: 'get',
+            beforeSend () {
+                $('#tbody_showlist_file').html(`
+                    <tr><td colspan="4" style="text-align: center" class="text-muted"><i class="fa fa-spinner fa-pulse fa-fw"></i></td></tr>
+                `);
+            },
+            success ({ success, payload, message }) {
+                var html = ``;
+                if (success) {
+                    html = payload.reduce((result, item) => {
+                        result += `
+                            <tr>
+                                <td>${item.fileName}</td>
+                                <td>${item.fileCreatedAt}</td>
+                                <td>
+                                    <button class="btn btn-success btn-view-file" data-fileName="${item.fileName}">
+                                        <i class="fa fa-folder-open"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-delete-file" data-fileName="${item.fileName}">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        return result;
+                    }, ``);
+                } else {
+                    html = `
+                        <tr><td colspan="4">Not found any files</td></tr>
+                    `;
+                }
+                $('#tbody_showlist_file').html(html);
+            }
+        })
+    }
+
+    listAllFile();
 
     var bar = document.getElementById('bar')
     var percent = document.getElementById('percent')
@@ -339,7 +428,7 @@
 
             // xhr dung de goi data bang ajax
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'quanlyhocsinh_xulyfileupload.php', true);
+            xhr.open('POST', '{{ routes.apiUploadExcel }}', true);
 
             xhr.upload.onprogress = function(e) {
                 if (e.lengthComputable) {
@@ -353,9 +442,18 @@
             };
             xhr.onload = function() {
                 if (this.status == 200) {
-                    span_notification.innerHTML = this.response;
-                    span_notification.setAttribute('class', 'text-success');
-                    $('#tbody_showlist_file').load('quanlyhocsinh_listfile.php');
+                    var response = JSON.parse(this.response);
+                    if (!response.success) {
+                        span_notification.innerHTML = `
+                            <span class="text-danger"><i class="glyphicon glyphicon-remove-sign"></i> ${response.message}</span>
+                        `;
+                    } else {
+                        span_notification.innerHTML = `
+                            <span class="text-success"><i class="glyphicon glyphicon-ok-sign"></i> Tải lên hoàn tất!</span>
+                        `;
+                        $('#modal-upload').modal('hide');
+                        listAllFile();
+                    }
                 };
             };
 
