@@ -170,7 +170,16 @@
             })
 
         });
-        $('#chartContainer').css('height', $('.col-lg-6').css('height'));
+        $('#chartContainer').css('height', $('.col-lg-6').css('height'))
+
+        $('#btn-modal-download').click(function(e){
+
+            $("#table-modal-detail table").table2excel({
+                name: "Worksheet Name",
+                filename: 'Ket xuat.xls'
+            });
+
+        })
 
         $('.btn-detail').click(function(){
             $('#p-loading').show();

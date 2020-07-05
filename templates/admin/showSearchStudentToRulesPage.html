@@ -64,8 +64,8 @@
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-12">
-                <button class="pull-right btn" style="background-color: transparent; color: gray"><i class="fa fa-download"></i></button>
-                <div class="table-responsive" >
+                <button class="pull-right btn btn-success" id="btn-download-file"><i class="fa fa-download"></i> Tai ve danh sach</button>
+                <div class="table-responsive" id="table-result" >
                     <table class="table table-bordered table-hover table-striped" id="table">
                         <thead>
                         <tr>
@@ -115,6 +115,15 @@
             autoclose: true,
             todayHighlight: true
         });
+
+        $('#btn-download-file').click(function(e){
+
+            $("#table-result table").table2excel({
+                name: "Worksheet Name",
+                filename: 'Ket xuat.xls'
+            });
+
+        })
 
         function parseDate() {
             var from = $('#input-date-from').val();
